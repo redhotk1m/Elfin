@@ -2,5 +2,6 @@
     <string name="app_name">Elfin</string>
     <string name="startMainTitle">Hvor skal du?</string>
     <string name="startSubTitle">Fasiliteter</string>
+    <string name="choosenCar">EB 12342  VW e-Golf</string>
 
 </resources>
