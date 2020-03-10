@@ -3,5 +3,15 @@
     <string name="startMainTitle">Hvor skal du?</string>
     <string name="startSubTitle">Fasiliteter</string>
     <string name="choosenCar">EB 12342  VW e-Golf</string>
+    <string name="to">Til:</string>
+    <string name="driveNow">Kjør nå</string>
+    <string name="thunderCharger">Lynlader</string>
+    <string name="wc">Toalett</string>
+    <string name="resturant">Resturant</string>
+    <string name="freeParking">Gratis parkering</string>
+    <string name="shoppingCenter">Kjøpesenter</string>
+    <string name="trondheim">Trondheim</string>
+
+
 
 </resources>
