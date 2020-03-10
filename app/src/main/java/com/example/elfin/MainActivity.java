@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.example.elfin.API.CarInfoAPI;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
