@@ -36,21 +36,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chooseCar" />
 
-    <TextView
-        android:id="@+id/facilities"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/startSubTitle"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.118"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rectangleTo" />
-
     <View
         android:id="@+id/rectangleTo"
-        android:layout_width="340dp"
+        android:layout_width="320dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
@@ -88,11 +76,44 @@
         app:layout_constraintTop_toTopOf="@+id/rectangleTo"
         android:importantForAutofill="no" />
 
+    <ImageView
+        android:id="@+id/imageViewSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/search"
+        app:layout_constraintBottom_toBottomOf="@+id/rectangleTo"
+        app:layout_constraintEnd_toEndOf="@+id/rectangleTo"
+        app:layout_constraintHorizontal_bias="0.015"
+        app:layout_constraintStart_toStartOf="@+id/rectangleTo"
+        app:layout_constraintTop_toTopOf="@+id/rectangleTo"
+        app:layout_constraintVertical_bias="0.538"
+        app:srcCompat="@drawable/baseline_search_black_24dp" />
+
+
+
+    <TextView
+        android:id="@+id/facilities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/startSubTitle"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.118"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rectangleTo" />
+
+
+
+
+
+
     <CheckBox
         android:id="@+id/checkBoxCharger"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/facilities" />
@@ -104,7 +125,8 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxCharger" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxCharger"
+        />
 
     <CheckBox
         android:id="@+id/checkBoxResturant"
@@ -255,6 +277,7 @@
         app:srcCompat="@drawable/baseline_shopping_cart_black_24dp" />
 
     <ImageButton
+        android:onClick="nextActivity"
         android:id="@+id/imageButtonDriveNow"
         android:layout_width="320dp"
         android:layout_height="30dp"
@@ -288,6 +311,87 @@
         app:layout_constraintStart_toStartOf="@+id/imageButtonDriveNow"
         app:layout_constraintTop_toTopOf="@+id/imageButtonDriveNow"
         app:srcCompat="@drawable/ic_directions_car_black_24dp" />
+
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxCharger"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/facilities"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxWC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxCharger"
+        app:layout_constraintVertical_bias="0.851" />
+
+
+    <View
+        android:id="@+id/line3"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxResturant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxWC"
+        app:layout_constraintVertical_bias="0.851" />
+
+
+    <View
+        android:id="@+id/line4"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxParkering"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxResturant"
+        app:layout_constraintVertical_bias="0.829" />
+
+
+    <View
+        android:id="@+id/line5"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxShopping"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxParkering"
+        app:layout_constraintVertical_bias="0.851" />
+
+
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

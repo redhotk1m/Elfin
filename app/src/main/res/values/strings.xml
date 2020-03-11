@@ -7,10 +7,12 @@
     <string name="driveNow">Kjør nå</string>
     <string name="thunderCharger">Lynlader</string>
     <string name="wc">Toalett</string>
-    <string name="resturant">Resturant</string>
+    <string name="resturant">Restaurant</string>
     <string name="freeParking">Gratis parkering</string>
     <string name="shoppingCenter">Kjøpesenter</string>
     <string name="trondheim">Trondheim</string>
+    <string name="search">Søk</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
