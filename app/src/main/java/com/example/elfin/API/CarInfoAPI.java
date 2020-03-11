@@ -29,7 +29,6 @@ public class CarInfoAPI extends AsyncTask<String, Void, String> {
             return "error";
         }
     }
-
     private JSONObject getJSONFromURL(String identifier) throws JSONException, IOException {
         int minimumChassieNumberLength = 17;
         /*
