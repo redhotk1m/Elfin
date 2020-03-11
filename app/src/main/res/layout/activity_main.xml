@@ -245,7 +245,7 @@
         app:layout_constraintEnd_toStartOf="@+id/textView11"
         app:layout_constraintStart_toStartOf="@+id/button5"
         app:layout_constraintTop_toTopOf="@+id/button5"
-        app:srcCompat="@drawable/ic_directions_car_black_24dp" />
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
