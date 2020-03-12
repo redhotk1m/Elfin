@@ -1,5 +1,7 @@
 package com.example.elfin;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -19,6 +21,7 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        System.out.println("Pos er " + position);
         switch (position){
             case 0:
                 return new ChargingStationList();
@@ -34,8 +37,11 @@ public class PageAdapter extends FragmentPagerAdapter {
         return numberOfTabs;
     }
 
+
+
+    @NonNull
     @Override
-    public int getItemPosition(@NonNull Object object) {
-        return POSITION_NONE;
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        return super.instantiateItem(container, position);
     }
 }

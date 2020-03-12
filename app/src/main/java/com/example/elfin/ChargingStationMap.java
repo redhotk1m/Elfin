@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class ChargingStationMap extends Fragment {
 
         mMapView = rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
-
+        System.out.println("Kjører onCreateView");
         mMapView.onResume();//Get map to display instantly
 
         try {
@@ -52,6 +53,7 @@ public class ChargingStationMap extends Fragment {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
+                System.out.println("Kjører onMapReady ASYNC i onCreateView");
 
                 // For showing a move to my location button
                 googleMap.setMyLocationEnabled(true);
@@ -72,6 +74,7 @@ public class ChargingStationMap extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("onResume","Er i onResume Charging Stations MAP");
         mMapView.onResume();
     }
 
