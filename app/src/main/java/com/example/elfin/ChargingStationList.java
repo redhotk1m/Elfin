@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,4 +29,11 @@ public class ChargingStationList extends Fragment {
         return inflater.inflate(R.layout.fragment_charging_station_list, container, false);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("onResume","Er i onResume Charging Stations LIST");
+
+    }
 }

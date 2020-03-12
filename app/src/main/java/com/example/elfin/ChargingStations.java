@@ -2,6 +2,7 @@ package com.example.elfin;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.widget.TableLayout;
 
 import androidx.annotation.Nullable;
@@ -32,12 +33,11 @@ public class ChargingStations extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
                 if (tab.getPosition() == 0){
                     pagerAdapter.notifyDataSetChanged();
+                    System.out.println("tab Pos = 0");
                 }
                 else if (tab.getPosition() == 1){
                     pagerAdapter.notifyDataSetChanged();
-                }
-                else if (tab.getPosition() == 2){
-                    pagerAdapter.notifyDataSetChanged();
+                    System.out.println("tab Pos = 1");
                 }
             }
 
@@ -52,5 +52,11 @@ public class ChargingStations extends AppCompatActivity {
             }
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("onResume","Er i onResume Charging Stations");
     }
 }
