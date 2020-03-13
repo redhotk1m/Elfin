@@ -7,6 +7,9 @@
     <color name="blackColor">#4F4F4F</color>
     <color name="whiteColor">#FFFFFF</color>
 
+    <color name="grey3">#828282</color>
+    <color name="grey6">#F2F2F2</color>
+
 
 
 </resources>
