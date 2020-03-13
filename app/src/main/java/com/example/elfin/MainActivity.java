@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.google.android.gms.location.LocationRequest;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Spinner dropdown = findViewById(R.id.chooseCar);
+        ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
+        final EditText editText = findViewById(R.id.editTextToAPlace);
         //dropdown.setPrompt("EB12342 VW e-Golf");
         String[] items = new String[]{"EB 12342 VW e-Golf", "Legg til bil"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -41,7 +45,27 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         dropdown.setPrompt("EB12342 VW e-Golf");
 
 
+        /*
+        //Hvis den skal funke
+        imageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Geolocation geolocation = new Geolocation();
+                geolocation.getAdress(editText.getText().toString(), getApplicationContext(), new GeoHandler());
+
+            }
+        });
+        */
+
+
+
+
+
+
+
         //swapview
+
 
 
 
