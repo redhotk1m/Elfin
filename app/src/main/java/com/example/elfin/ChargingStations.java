@@ -23,7 +23,7 @@ public class ChargingStations extends AppCompatActivity {
         TabItem mapTab = findViewById(R.id.mapTab);
         final ViewPager viewPager = findViewById(R.id.viewPager);
 
-        final PagerAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+        final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
 
 
@@ -34,9 +34,14 @@ public class ChargingStations extends AppCompatActivity {
                 if (tab.getPosition() == 0){
                     pagerAdapter.notifyDataSetChanged();
                     System.out.println("tab Pos = 0");
+                    pagerAdapter.getItem(0).onResume();//Kjører onresume i Listen,
+                    // dersom listen er valgt fra Map.
+                    // Lager ikke nytt objekt siden det allerede eksisterer
+                    // Bør skje dersom noe er blitt endret i kriterier, sharedPrefs?
                 }
                 else if (tab.getPosition() == 1){
                     pagerAdapter.notifyDataSetChanged();
+                    getSupportFragmentManager().findFragmentById(0);
                     System.out.println("tab Pos = 1");
                 }
             }

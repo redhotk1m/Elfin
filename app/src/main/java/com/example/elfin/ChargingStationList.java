@@ -34,6 +34,11 @@ public class ChargingStationList extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("onResume","Er i onResume Charging Stations LIST");
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("ON PAUSE LIST");
     }
 }
