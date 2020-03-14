@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.adapter;
 
 import android.os.Bundle;
 import android.view.View;

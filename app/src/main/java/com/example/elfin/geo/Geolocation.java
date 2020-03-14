@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.geo;
 
 import android.content.Context;
 import android.location.Address;

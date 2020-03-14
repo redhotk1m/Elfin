@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.testing;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 
+import com.example.elfin.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FilterTestActivity extends AppCompatActivity {

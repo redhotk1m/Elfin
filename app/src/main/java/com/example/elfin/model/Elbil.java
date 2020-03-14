@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.model;
 
 public class Elbil {
 
