@@ -1,8 +1,10 @@
 package com.example.elfin.testing;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,97 +12,111 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.elfin.R;
-import com.example.elfin.model.Elbil;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddCarActivity extends AppCompatActivity {
 
-    EditText txtMerke, txtLader, txtBatteri;
+    private final String TAG = "AddCarActivity";
+
+    private final String KEY_MERKE = "merke";
+    private final String KEY_LADER = "lader";
+    private final String KEY_BATTERI = "batteri";
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private DocumentReference elRef = db.document("Elbiler/EL 1");
+
+    EditText editTextMerke, editTextLader, editTextBatteri;
+    TextView textViewMerke, textViewType, textViewBatteri;
     Button btnSave, btnRetrive;
-    TextView tvMerke, tvType;
-
-    DatabaseReference dbReff;
-
-    Elbil elbil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_car);
 
-        tvMerke = findViewById(R.id.tvMerke);
-        tvType = findViewById(R.id.tvType);
+        findViewsById();
+    }
+
+    private void findViewsById() {
+
+        editTextMerke = findViewById(R.id.edit_text_merke);
+        editTextLader = findViewById(R.id.edit_text_lader);
+        editTextBatteri = findViewById(R.id.edit_text_batteri);
+
+        textViewMerke = findViewById(R.id.text_view_merke);
+        textViewType = findViewById(R.id.text_view_type);
+        textViewBatteri = findViewById(R.id.text_view_batteri);
+
+        btnSave = findViewById(R.id.btnSave);
         btnRetrive = findViewById(R.id.btnRetrive);
+    }
 
-        btnRetrive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    public void saveCar(View view) {
 
-                dbReff = FirebaseDatabase.getInstance().getReference().child("elfin-electric-cars").child("1");
+        String merke = editTextMerke.getText().toString();
+        String lader = editTextLader.getText().toString();
+        String batteri = editTextBatteri.getText().toString();
 
-                // Write a message to the database
-                //FirebaseDatabase database = FirebaseDatabase.getInstance();
-                //DatabaseReference myRef = database.getReference("elbiler");
+        Map<String, Object> elbil = new HashMap<>();
 
+        elbil.put(KEY_MERKE, merke);
+        elbil.put(KEY_LADER, lader);
+        elbil.put(KEY_BATTERI, batteri);
 
-                dbReff.addValueEventListener(new ValueEventListener() {
+        elRef.set(elbil)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        String merke = dataSnapshot.child("merke").getValue().toString();
-                        //String age = dataSnapshot.child("type").getValue().toString();
-
-                        Toast.makeText(getApplicationContext(),
-                                dataSnapshot.child("merke").getValue().toString() + " retrieved!",
-                                Toast.LENGTH_SHORT).show();
-
-                        tvMerke.setText(merke);
-                        //tvType.setText(age);
-
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(AddCarActivity.this, "Car saved!", Toast.LENGTH_SHORT).show();
                     }
-
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(), "Failed to read value!", Toast.LENGTH_SHORT).show();
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AddCarActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+
+    public void loadCar(View view) {
+
+        elRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            String merke = documentSnapshot.getString(KEY_MERKE);
+                            String lader = documentSnapshot.getString(KEY_LADER);
+                            String batteri = documentSnapshot.getString(KEY_BATTERI);
+
+                            //Map<String, Object> elbil = documentSnapshot.getData();
+
+                            textViewMerke.setText(merke);
+                            textViewType.setText(lader);
+                            textViewBatteri.setText(batteri);
+                        } else {
+                            Toast.makeText(AddCarActivity.this, "Document does not exist", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AddCarActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, e.toString());
                     }
                 });
 
-            }
-        });
-
-
-
-
-        /*
-        txtMerke = findViewById(R.id.txtMerke);
-        txtLader = findViewById(R.id.txtLader);
-        txtBatteri = findViewById(R.id.txtBatteri);
-        btnSave = findViewById(R.id.btnSave);
-
-        elbil = new Elbil();
-
-        //Reference variable to connect to database
-        dbRef = FirebaseDatabase.getInstance().getReference();
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                elbil.setMerke(txtMerke.getText().toString().trim());
-                elbil.setHurtiglader(txtLader.getText().toString().trim());
-                elbil.setBatterikapasitet(txtBatteri.getText().toString().trim());
-
-                //push value and define database table name as "elbil"
-                dbRef.push().setValue(elbil);
-
-                Toast.makeText(getApplicationContext(), "data inserted successfully!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        */
-
-
     }
+
+
 }

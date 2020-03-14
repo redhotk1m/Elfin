@@ -7,7 +7,7 @@
     tools:context=".testing.AddCarActivity">
 
     <EditText
-        android:id="@+id/txtMerke"
+        android:id="@+id/edit_text_merke"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -19,19 +19,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/txtLader"
+        android:id="@+id/edit_text_lader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:hint="Hurtiglading"
+        android:hint="Hurtiglading / Effekt"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMerke" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_merke" />
 
     <EditText
-        android:id="@+id/txtBatteri"
+        android:id="@+id/edit_text_batteri"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -40,43 +40,21 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLader" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_lader" />
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="420dp"
+        android:layout_marginBottom="408dp"
+        android:onClick="saveCar"
         android:text="SAVE"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/txtBatteri"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/tvMerke"
-        android:layout_width="185dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.963"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtBatteri" />
-
-    <TextView
-        android:id="@+id/tvType"
-        android:layout_width="185dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.963"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMerke" />
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_batteri"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_batteri"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_batteri"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"
@@ -85,35 +63,82 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="25dp"
-        android:text="Type"
-        app:layout_constraintEnd_toStartOf="@+id/tvMerke"
+        android:text="Hurtiglader/Effekt:"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_merke"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="185dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="52dp"
+        android:text="Batterikapasitet:"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_type"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/text_view_merke"
+        android:layout_width="185dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.963"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRetrive" />
+
+    <TextView
+        android:id="@+id/text_view_batteri"
+        android:layout_width="185dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_type" />
+
+    <TextView
+        android:id="@+id/text_view_type"
+        android:layout_width="185dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.757"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_merke" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="185dp"
         android:layout_height="27dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="25dp"
-        android:text="Merke"
-        app:layout_constraintEnd_toStartOf="@+id/tvMerke"
+        android:text="Bilmerke:"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_merke"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtBatteri" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRetrive" />
 
     <Button
         android:id="@+id/btnRetrive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="100dp"
+        android:onClick="loadCar"
         android:text="Retrieve"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tvType"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/textView4" />
+        app:layout_constraintEnd_toStartOf="@+id/text_view_merke"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/btnSave"
+        app:layout_constraintVertical_bias="0.18" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
