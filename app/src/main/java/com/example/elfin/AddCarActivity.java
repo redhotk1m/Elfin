@@ -26,13 +26,8 @@ public class AddCarActivity extends AppCompatActivity {
 
     private final String TAG = "AddCarActivity";
 
-    private final String KEY_MERKE = "merke";
-    private final String KEY_LADER = "lader";
-    private final String KEY_BATTERI = "batteri";
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference elbilRef = db.collection("Elbiler");
-    private DocumentReference bilRef = db.document("Elbiler/EL 1");
 
     EditText editTextMerke, editTextLader, editTextBatteri;
     TextView textViewData;
@@ -53,7 +48,7 @@ public class AddCarActivity extends AppCompatActivity {
         elbilRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot querySnapshot, FirebaseFirestoreException e) {
-                if (e != null){
+                if (e != null) {
                     //leave method if there's an exception
                     Toast.makeText(AddCarActivity.this, "Error while loading!", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, e.toString());
@@ -62,7 +57,7 @@ public class AddCarActivity extends AppCompatActivity {
 
                 String data = "";
                 //Todo: Add to ArrayList instead of String
-                for (DocumentSnapshot documentSnapshot : querySnapshot){
+                for (DocumentSnapshot documentSnapshot : querySnapshot) {
                     Elbil elbil = documentSnapshot.toObject(Elbil.class);
 
                     String merke = elbil.getMerke();
@@ -89,32 +84,28 @@ public class AddCarActivity extends AppCompatActivity {
 
 
     public void loadCars(View view) {
+        elbilRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshot) {
+                String data = "";
 
-        elbilRef.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshot) {
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshot) {
+                    Elbil elbil = documentSnapshot.toObject(Elbil.class);
 
-                        String data = "";
+                    String merke = elbil.getMerke();
+                    String lader = elbil.getLader();
+                    String batteri = elbil.getBatteri();
 
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshot){
-                            Elbil elbil = documentSnapshot.toObject(Elbil.class);
+                    data += "Merke: " + merke + "\nLadetype: " + lader + "\nBatterikapasitet: " + batteri + "\n\n";
+                }
 
-                            String merke = elbil.getMerke();
-                            String lader = elbil.getLader();
-                            String batteri = elbil.getBatteri();
-
-                            data += "Merke: " + merke + "\nLadetype: " + lader + "\nBatterikapasitet: " + batteri + "\n\n";
-                        }
-
-                        textViewData.setText(data);
-                    }
-                });
+                textViewData.setText(data);
+            }
+        });
     }
 
 
     private void findViewsById() {
-
         editTextMerke = findViewById(R.id.edit_text_merke);
         editTextLader = findViewById(R.id.edit_text_lader);
         editTextBatteri = findViewById(R.id.edit_text_batteri);
