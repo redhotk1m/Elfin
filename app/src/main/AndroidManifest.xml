@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".testing.AddCarActivity"></activity>
+        <activity android:name=".AddCarActivity"></activity>
         <activity android:name=".testing.FilterTestActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

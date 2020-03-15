@@ -2,34 +2,28 @@ package com.example.elfin.model;
 
 public class Elbil {
 
-    private String Merke, Hurtiglader, Batterikapasitet;
+    private String merke, lader, batteri;
 
 
     public Elbil(){
+        //public no-arg constructor needed for firestore database
+    }
 
+    public Elbil(String merke, String lader, String batteri) {
+        this.merke = merke;
+        this.lader = lader;
+        this.batteri = batteri;
     }
 
     public String getMerke() {
-        return Merke;
+        return merke;
     }
 
-    public void setMerke(String merke) {
-        Merke = merke;
+    public String getLader() {
+        return lader;
     }
 
-    public String getHurtiglader() {
-        return Hurtiglader;
-    }
-
-    public void setHurtiglader(String hurtiglader) {
-        Hurtiglader = hurtiglader;
-    }
-
-    public String getBatterikapasitet() {
-        return Batterikapasitet;
-    }
-
-    public void setBatterikapasitet(String batterikapasitet) {
-        Batterikapasitet = batterikapasitet;
+    public String getBatteri() {
+        return batteri;
     }
 }
