@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Spinner dropdown = findViewById(R.id.chooseCar);
         ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
         final EditText editText = findViewById(R.id.editTextToAPlace);
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setPrompt("EB12342 VW e-Golf");
+
+
 
 
         /*
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
         */
+
 
 
 
