@@ -28,7 +28,6 @@ public class AboutCharger extends AppCompatActivity {
                 if (mapIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(mapIntent);
                 }
-
             }
         });
 

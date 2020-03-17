@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class AddCarActivity extends AppCompatActivity {
 
     private final String TAG = "AddCarActivity";
+    public static Elbil elbil = new Elbil();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference elbilRef = db.collection("Elbiler");

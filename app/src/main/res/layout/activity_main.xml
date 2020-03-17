@@ -28,23 +28,27 @@
         android:id="@+id/headerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
         android:text="@string/startMainTitle"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chooseCar" />
 
     <View
         android:id="@+id/rectangleTo"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="32dp"
         android:background="@color/whiteColor"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerText" />
 
@@ -52,215 +56,201 @@
         android:id="@+id/textTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="@string/to"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/rectangleTo"
-        app:layout_constraintEnd_toEndOf="@+id/rectangleTo"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toStartOf="@+id/rectangleTo"
-        app:layout_constraintTop_toBottomOf="@+id/headerText"
-        app:layout_constraintVertical_bias="0.678" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/editTextToAPlace"
+        app:layout_constraintStart_toEndOf="@+id/imageViewSearch" />
 
     <EditText
         android:id="@+id/editTextToAPlace"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:background="@null"
         android:ems="10"
+        android:hint="@string/trondheim"
+        android:importantForAutofill="no"
         android:inputType="text"
+
         app:layout_constraintBottom_toBottomOf="@+id/rectangleTo"
         app:layout_constraintEnd_toEndOf="@+id/rectangleTo"
         app:layout_constraintStart_toEndOf="@+id/textTo"
-
-        android:hint="@string/trondheim"
-        app:layout_constraintTop_toTopOf="@+id/rectangleTo"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toTopOf="@+id/rectangleTo" />
 
     <ImageView
         android:id="@+id/imageViewSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:contentDescription="@string/search"
         app:layout_constraintBottom_toBottomOf="@+id/rectangleTo"
-        app:layout_constraintEnd_toEndOf="@+id/rectangleTo"
-        app:layout_constraintHorizontal_bias="0.015"
         app:layout_constraintStart_toStartOf="@+id/rectangleTo"
         app:layout_constraintTop_toTopOf="@+id/rectangleTo"
-        app:layout_constraintVertical_bias="0.538"
         app:srcCompat="@drawable/baseline_search_black_24dp" />
-
 
 
     <TextView
         android:id="@+id/facilities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="48dp"
         android:text="@string/startSubTitle"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.118"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rectangleTo" />
 
 
-
-
-
-
     <CheckBox
         android:id="@+id/checkBoxCharger"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/line"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/line"
         app:layout_constraintTop_toBottomOf="@+id/facilities" />
 
     <CheckBox
         android:id="@+id/checkBoxWC"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxCharger"
-        />
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/line2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/line2"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxCharger" />
 
     <CheckBox
         android:id="@+id/checkBoxResturant"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/line3"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="@+id/line3"
         app:layout_constraintTop_toBottomOf="@+id/checkBoxWC" />
 
     <CheckBox
         android:id="@+id/checkBoxParkering"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/line4"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/line4"
         app:layout_constraintTop_toBottomOf="@+id/checkBoxResturant" />
 
     <CheckBox
         android:id="@+id/checkBoxShopping"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/line5"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="@+id/line5"
         app:layout_constraintTop_toBottomOf="@+id/checkBoxParkering" />
 
     <TextView
         android:id="@+id/textViewThunderCharger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="@string/thunderCharger"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/checkBoxCharger"
-        app:layout_constraintEnd_toEndOf="@+id/checkBoxCharger"
-        app:layout_constraintHorizontal_bias="0.386"
-        app:layout_constraintStart_toStartOf="@+id/checkBoxCharger"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxCharger"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toEndOf="@+id/imageViewCharger"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxCharger" />
 
     <TextView
         android:id="@+id/textViewWc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="@string/wc"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/checkBoxWC"
-        app:layout_constraintEnd_toEndOf="@+id/checkBoxWC"
-        app:layout_constraintHorizontal_bias="0.367"
-        app:layout_constraintStart_toStartOf="@+id/checkBoxWC"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxWC"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintStart_toEndOf="@+id/imageViewWc"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxWC" />
 
     <TextView
         android:id="@+id/textViewResturant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="@string/resturant"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/checkBoxResturant"
-        app:layout_constraintEnd_toEndOf="@+id/checkBoxResturant"
-        app:layout_constraintHorizontal_bias="0.406"
-        app:layout_constraintStart_toStartOf="@+id/checkBoxResturant"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxResturant"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintStart_toEndOf="@+id/imageViewResturant"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxResturant" />
 
     <TextView
         android:id="@+id/textViewFreeParking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="@string/freeParking"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/checkBoxParkering"
-        app:layout_constraintEnd_toEndOf="@+id/checkBoxParkering"
-        app:layout_constraintHorizontal_bias="0.547"
-        app:layout_constraintStart_toStartOf="@+id/checkBoxParkering"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxParkering"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toEndOf="@+id/imageViewParking"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxParkering" />
 
     <TextView
         android:id="@+id/textViewShopping"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="@string/shoppingCenter"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/checkBoxShopping"
-        app:layout_constraintEnd_toEndOf="@+id/checkBoxShopping"
-        app:layout_constraintHorizontal_bias="0.45"
-        app:layout_constraintStart_toStartOf="@+id/checkBoxShopping"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxShopping"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintStart_toEndOf="@+id/imageViewShoppig"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxShopping" />
 
     <ImageView
         android:id="@+id/imageViewCharger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:contentDescription="@string/thunderCharger"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewThunderCharger"
-        app:layout_constraintEnd_toStartOf="@+id/textViewThunderCharger"
+        app:layout_constraintBottom_toBottomOf="@+id/checkBoxCharger"
         app:layout_constraintStart_toStartOf="@+id/checkBoxCharger"
-        app:layout_constraintTop_toTopOf="@+id/textViewThunderCharger"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxCharger"
         app:srcCompat="@drawable/baseline_battery_charging_full_black_24dp" />
 
     <ImageView
         android:id="@+id/imageViewWc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:contentDescription="@string/wc"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewWc"
-        app:layout_constraintEnd_toStartOf="@+id/textViewWc"
+        app:layout_constraintBottom_toBottomOf="@+id/checkBoxWC"
         app:layout_constraintStart_toStartOf="@+id/checkBoxWC"
-        app:layout_constraintTop_toTopOf="@+id/textViewWc"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxWC"
         app:srcCompat="@drawable/baseline_wc_black_24dp" />
 
     <ImageView
         android:id="@+id/imageViewResturant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:contentDescription="@string/resturant"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewResturant"
-        app:layout_constraintEnd_toStartOf="@+id/textViewResturant"
+        app:layout_constraintBottom_toBottomOf="@+id/checkBoxResturant"
         app:layout_constraintStart_toStartOf="@+id/checkBoxResturant"
-        app:layout_constraintTop_toTopOf="@+id/textViewResturant"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxResturant"
         app:srcCompat="@drawable/baseline_restaurant_black_24dp" />
 
     <ImageView
         android:id="@+id/imageViewParking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:contentDescription="@string/freeParking"
         app:layout_constraintBottom_toBottomOf="@+id/checkBoxParkering"
-        app:layout_constraintEnd_toStartOf="@+id/textViewFreeParking"
         app:layout_constraintStart_toStartOf="@+id/checkBoxParkering"
         app:layout_constraintTop_toTopOf="@+id/checkBoxParkering"
         app:srcCompat="@drawable/baseline_local_parking_black_24dp" />
@@ -269,45 +259,47 @@
         android:id="@+id/imageViewShoppig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:contentDescription="@string/shoppingCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewShopping"
-        app:layout_constraintEnd_toStartOf="@+id/textViewShopping"
+        app:layout_constraintBottom_toBottomOf="@+id/checkBoxShopping"
         app:layout_constraintStart_toStartOf="@+id/checkBoxShopping"
-        app:layout_constraintTop_toTopOf="@+id/textViewShopping"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxShopping"
         app:srcCompat="@drawable/baseline_shopping_cart_black_24dp" />
 
     <ImageButton
-        android:onClick="nextActivity"
         android:id="@+id/imageButtonDriveNow"
-        android:layout_width="320dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="24dp"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/blackColor"
         android:contentDescription="@string/driveNow"
+        android:onClick="nextActivity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxShopping"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textViewDriveNow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="@string/driveNow"
         android:textColor="@color/whiteColor"
         app:layout_constraintBottom_toBottomOf="@+id/imageButtonDriveNow"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonDriveNow"
-        app:layout_constraintHorizontal_bias="0.222"
-        app:layout_constraintStart_toStartOf="@+id/imageButtonDriveNow"
-        app:layout_constraintTop_toTopOf="@+id/imageButtonDriveNow"
-        app:layout_constraintVertical_bias="0.454" />
+        app:layout_constraintStart_toEndOf="@+id/imageViewDriveNow"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonDriveNow" />
 
     <ImageView
         android:id="@+id/imageViewDriveNow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:contentDescription="@string/driveNow"
         app:layout_constraintBottom_toBottomOf="@+id/imageButtonDriveNow"
-        app:layout_constraintEnd_toStartOf="@+id/textViewDriveNow"
         app:layout_constraintStart_toStartOf="@+id/imageButtonDriveNow"
         app:layout_constraintTop_toTopOf="@+id/imageButtonDriveNow"
         app:srcCompat="@drawable/ic_directions_car_black_24dp" />
@@ -315,81 +307,83 @@
 
     <View
         android:id="@+id/line"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:alpha="0.2"
         android:background="@color/blackColor"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/checkBoxCharger"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/facilities"
-        app:layout_constraintVertical_bias="1.0" />
-
+        app:layout_constraintTop_toBottomOf="@+id/facilities" />
 
     <View
         android:id="@+id/line2"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:alpha="0.2"
         android:background="@color/blackColor"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/checkBoxWC"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxCharger"
-        app:layout_constraintVertical_bias="0.851" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxCharger" />
 
 
     <View
         android:id="@+id/line3"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:alpha="0.2"
         android:background="@color/blackColor"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/checkBoxResturant"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.594"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxWC"
-        app:layout_constraintVertical_bias="0.851" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxWC" />
 
 
     <View
         android:id="@+id/line4"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:alpha="0.2"
         android:background="@color/blackColor"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/checkBoxParkering"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxResturant"
-        app:layout_constraintVertical_bias="0.829" />
-
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxResturant" />
 
     <View
         android:id="@+id/line5"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:alpha="0.2"
         android:background="@color/blackColor"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/checkBoxShopping"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxParkering"
-        app:layout_constraintVertical_bias="0.851" />
-
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxParkering" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
