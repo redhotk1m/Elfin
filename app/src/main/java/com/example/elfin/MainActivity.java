@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.elfin.API.CarInfoAPI;
 import com.google.android.gms.location.LocationRequest;
@@ -32,15 +33,20 @@ import rebus.permissionutils.PermissionUtils;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
+    public EditText editText;
+    DisplaySuggestions displaySuggestions;
+    TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        textView = findViewById(R.id.textViewSuggest);
 
         Spinner dropdown = findViewById(R.id.chooseCar);
         ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
-        final EditText editText = findViewById(R.id.editTextToAPlace);
+        editText = findViewById(R.id.editTextToAPlace);
         //dropdown.setPrompt("EB12342 VW e-Golf");
         String[] items = new String[]{"EB 12342 VW e-Golf", "Legg til bil"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -64,21 +70,27 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
         */
-
-
-
-
-
-
-
-
         //swapview
 
 
-
-
-
     }
+
+    public void displaySuggestions(View view){
+        displaySuggestions = new DisplaySuggestions(getBaseContext(), new AsyncResponse() {
+            @Override
+            public void processFinish(String s) {
+                textView.setText(s);
+            }
+        });
+        displaySuggestions.execute("");
+    }
+
+
+    public void addDestination(View view){
+        editText.setText(textView.getText());
+        textView.setText("");
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
