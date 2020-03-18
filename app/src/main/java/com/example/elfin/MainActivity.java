@@ -11,10 +11,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -35,14 +37,19 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public EditText editText;
     DisplaySuggestions displaySuggestions;
-    TextView textView;
+    //TextView textView;
+    ListView listViewSuggest;
+    ArrayAdapter<String> arrayAdapterSuggestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = findViewById(R.id.textViewSuggest);
+        //textView = findViewById(R.id.textViewSuggest);
+        listViewSuggest=findViewById(R.id.listViewSuggest);
+        listViewSuggest.setVisibility(View.INVISIBLE);
+
 
         Spinner dropdown = findViewById(R.id.chooseCar);
         ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
@@ -77,19 +84,29 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void displaySuggestions(View view){
         displaySuggestions = new DisplaySuggestions(getBaseContext(), new AsyncResponse() {
+            ArrayList<String> list = new ArrayList<>();
+
             @Override
-            public void processFinish(String s) {
-                textView.setText(s);
+            public void processFinish(ArrayList<ArrayList<String>> lists) {
+                list.add(lists.get(0).get(0));
+                list.add(lists.get(0).get(1));
+                list.add(lists.get(0).get(2));
+                listViewSuggest.setVisibility(View.VISIBLE);
+                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
+                listViewSuggest.setAdapter(arrayAdapterSuggestions);
+                //textView.setText(lists.get(0).get(0));
             }
         });
         displaySuggestions.execute("");
+        listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                editText.setText(listViewSuggest.getItemAtPosition(position).toString());
+                listViewSuggest.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
-
-    public void addDestination(View view){
-        editText.setText(textView.getText());
-        textView.setText("");
-    }
 
 
     @Override

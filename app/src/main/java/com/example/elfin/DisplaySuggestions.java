@@ -15,8 +15,8 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
     Context context;
     AsyncResponse asyncResponse = null;
 
-    ArrayList<String> names = new ArrayList<>();
-
+    //ArrayList<> names = new ArrayList<>();
+    ArrayList<ArrayList<String>> lists= new ArrayList<>();
     public DisplaySuggestions(Context context, AsyncResponse asyncResponse){
         this.asyncResponse =asyncResponse;
         this.context = context;
@@ -55,8 +55,8 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         JsonToString jsonToString = new JsonToString();
-        names = jsonToString.convertJsonToArrayListString(s);
-        asyncResponse.processFinish(names.get(0));
+         lists = jsonToString.convertJsonToArrayListString(s);
+         asyncResponse.processFinish(lists);
     }
 
 

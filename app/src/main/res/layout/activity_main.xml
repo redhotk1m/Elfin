@@ -275,16 +275,15 @@
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
         android:background="@color/blackColor"
         android:contentDescription="@string/driveNow"
         android:onClick="nextActivity"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxShopping"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxShopping" />
 
     <TextView
         android:id="@+id/textViewDriveNow"
@@ -389,17 +388,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkBoxParkering" />
 
-    <TextView
-        android:id="@+id/textViewSuggest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:textSize="18sp"
+    <ListView
+        android:id="@+id/listViewSuggest"
+        android:background="@color/whiteColor"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.709"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rectangleTo"
-        android:onClick="addDestination"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/rectangleTo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

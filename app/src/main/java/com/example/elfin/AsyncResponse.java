@@ -1,5 +1,7 @@
 package com.example.elfin;
 
+import java.util.ArrayList;
+
 public interface AsyncResponse {
-    void processFinish(String s);
+    void processFinish(ArrayList<ArrayList<String>> lists);
 }
