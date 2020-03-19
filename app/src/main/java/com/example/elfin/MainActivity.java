@@ -11,11 +11,14 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.elfin.API.CarInfoAPI;
 import com.example.elfin.API.Nobil;
@@ -33,15 +36,25 @@ import rebus.permissionutils.PermissionUtils;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
+    public EditText editText;
+    DisplaySuggestions displaySuggestions;
+    //TextView textView;
+    ListView listViewSuggest;
+    ArrayAdapter<String> arrayAdapterSuggestions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //textView = findViewById(R.id.textViewSuggest);
+        listViewSuggest=findViewById(R.id.listViewSuggest);
+        listViewSuggest.setVisibility(View.INVISIBLE);
+
 
         Spinner dropdown = findViewById(R.id.chooseCar);
         ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
-        final EditText editText = findViewById(R.id.editTextToAPlace);
+        editText = findViewById(R.id.editTextToAPlace);
         //dropdown.setPrompt("EB12342 VW e-Golf");
         String[] items = new String[]{"EB 12342 VW e-Golf", "Legg til bil"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -66,21 +79,37 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
         */
-
-
-
-
-
-
-
-
         //swapview
 
 
-
-
-
     }
+
+    public void displaySuggestions(View view){
+        displaySuggestions = new DisplaySuggestions(getBaseContext(), new AsyncResponse() {
+            ArrayList<String> list = new ArrayList<>();
+
+            @Override
+            public void processFinish(ArrayList<ArrayList<String>> lists) {
+                list.add(lists.get(0).get(0));
+                list.add(lists.get(0).get(1));
+                list.add(lists.get(0).get(2));
+                listViewSuggest.setVisibility(View.VISIBLE);
+                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
+                listViewSuggest.setAdapter(arrayAdapterSuggestions);
+                //textView.setText(lists.get(0).get(0));
+            }
+        });
+        displaySuggestions.execute("");
+        listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                editText.setText(listViewSuggest.getItemAtPosition(position).toString());
+                listViewSuggest.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
