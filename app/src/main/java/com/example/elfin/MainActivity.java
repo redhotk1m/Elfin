@@ -27,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import rebus.permissionutils.AskAgainCallback;
 import rebus.permissionutils.FullCallback;
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setPrompt("EB12342 VW e-Golf");
-        Nobil a = new Nobil(this);
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
 
@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
                 //textView.setText(lists.get(0).get(0));
             }
+
         });
         displaySuggestions.execute("");
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {

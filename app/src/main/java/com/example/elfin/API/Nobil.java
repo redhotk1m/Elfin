@@ -4,8 +4,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.elfin.AsyncResponse;
+import com.example.elfin.ChargingStationMap;
+import com.example.elfin.ChargingStations;
 import com.example.elfin.R;
+import com.example.elfin.staticMethods.Distance;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,21 +23,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class Nobil extends AsyncTask<String, Void, String> {
+public class Nobil extends AsyncTask<Void, Void, ArrayList<String>>{
     InputStreamReader in;
     BufferedReader reader;
     InputStream is;
+    AsyncResponse asyncResponse;
+    GoogleMap googleMap;
+    ChargingStationMap chargingStationMap;
+    ArrayList points;
 
-    public Nobil(Context context){
+    public Nobil(ChargingStationMap chargingStationMap,ArrayList arrayList){
+        points = arrayList;
         String responseString="";
         // Create an InputStream object. From API
-        is = context.getResources().openRawResource(R.raw.nobil);
+        is = ChargingStations.chargingStationContext.getResources().openRawResource(R.raw.nobil);
         // Create a BufferedReader object to read values from CSV file.
         in = new InputStreamReader(is);
         reader = new BufferedReader(in);
+        googleMap = chargingStationMap.getgMapStatic();
+        this.chargingStationMap = chargingStationMap;
     }
 
     private String requestDirection(){
@@ -70,7 +85,8 @@ public class Nobil extends AsyncTask<String, Void, String> {
 
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected ArrayList<String> doInBackground(Void... arrayLists) {
+        ArrayList<String> chargingStationCoordinates = new ArrayList<>();
         try {
             JSONArray latlngJSONArray = new JSONObject(
                     requestDirection())
@@ -78,23 +94,55 @@ public class Nobil extends AsyncTask<String, Void, String> {
             //.getJSONObject(0)
             //        .getJSONObject("csmd");
             for (int i = 0; i < latlngJSONArray.length(); i++){
-                String[] latlng = latlngJSONArray.getJSONObject(i)
+                String latlng = latlngJSONArray.getJSONObject(i)
                         .getJSONObject("csmd")
                         .getString("Position")
                         .replace("(","")
                         .replace(")","")
-                        .trim()
-                        .split(",");
-                System.out.println("lat: " + latlng[0] + " lon: " + latlng[1] + " element nr: " + i);
+                        .trim();
+                chargingStationCoordinates.add(latlng);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return null;
+        return chargingStationCoordinates;
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPostExecute(ArrayList<String> arrayList) {
+        HashSet<LatLng> chargingStationsEnroute = new HashSet<LatLng>();
+        //todo Iterere gjennom dobbelt, sånn at den ikke viser antall i forhold til den minste listen
+        int i = 0;
+        double lat1, lon1;
+        if (points.size() <= arrayList.size()){
+            for (Object point : points){
+                String[] a = arrayList.get(i++).split(",");
+                lat1 = Double.parseDouble(a[0]);
+                lon1 = Double.parseDouble(a[1]);
+                //googleMap.addCircle(new CircleOptions().center(new LatLng(((LatLng) point).latitude,((LatLng) point).longitude)).radius(500));
+                if (Distance.distanceBetweenKM(lat1, lon1, ((LatLng) point).latitude, ((LatLng) point).longitude) < 1.1) {
+                    chargingStationsEnroute.add(new LatLng(lat1, lon1));
+                }
+                //googleMap.addMarker(new MarkerOptions().position(new LatLng(((LatLng) point).latitude,((LatLng) point).longitude)).title("point"));
+            }
+        }else {
+            for (String latlng : arrayList) {
+                String[] a = latlng.split(",");
+                LatLng latLng = (LatLng) points.get(i++);
+                lat1 = Double.parseDouble(a[0]);
+                lon1 = Double.parseDouble(a[1]);
+                //googleMap.addMarker(new MarkerOptions().position(new LatLng(lat1,lon1)).title("test").snippet("testDesc"));
+                if (Distance.distanceBetweenKM(lat1, lon1, latLng.latitude, latLng.longitude) < 1) {
+                    chargingStationsEnroute.add(new LatLng(lat1, lon1));
+                }
+            }
+        }
+        for (LatLng latLng : chargingStationsEnroute) {
+            chargingStationMap.addAllChargingStations(latLng);
+            //googleMap.addMarker(new MarkerOptions().position(latLng).title("test123").snippet("test9321"));
+        }
+        //asyncResponse.processFinishSet(set);
     }
+
+
 }

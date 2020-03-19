@@ -36,19 +36,6 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
         try {
             while ((line = reader.readLine()) != null) {
                 stringBuffer.append(line);
-                // Split the line into different tokens (using the comma as a separator).
-                /*String[] tokens = line.split(",");
-                // Only add the right latlng points to a desired line by color.
-                if (tokens[0].trim().equals(lineKeyword) && tokens[1].trim().equals(ENCODED_POINTS)) {
-                    // Use PolyUtil to decode the polylines path into list of LatLng objects.
-                    latLngList.addAll(PolyUtil.decode(tokens[2].trim().replace("\\\\", "\\")));
-                    Log.d(LOG_TAG + lineKeyword, tokens[2].trim());
-                    for (LatLng lat : latLngList) {
-                        Log.d(LOG_TAG + lineKeyword, lat.latitude + ", " + lat.longitude);
-                    }
-                } else {
-                    Log.d(LOG_TAG, "null");
-                }*/
             }
             responseString = stringBuffer.toString();
             reader.close();

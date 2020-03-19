@@ -3,6 +3,7 @@ package com.example.elfin;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
+import com.example.elfin.API.Nobil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -48,7 +49,12 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
         }
         if (polylineOptions != null){
             System.out.println("FERDIG@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            ChargingStationMap.gMapStatic.addPolyline(polylineOptions);
+            ChargingStationMap chargingStationMap = ChargingStationMap.chargingStationMap;
+            chargingStationMap.setPolylineOptions(polylineOptions);
+            chargingStationMap.drawAllPolyLines();
+            //chargingStationMap.addAllChargingStations();
+            Nobil nobil = new Nobil(chargingStationMap,points);
+            nobil.execute();
         }
     }
 }

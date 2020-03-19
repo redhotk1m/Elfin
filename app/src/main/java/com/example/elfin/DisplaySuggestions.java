@@ -18,7 +18,7 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
     //ArrayList<> names = new ArrayList<>();
     ArrayList<ArrayList<String>> lists= new ArrayList<>();
     public DisplaySuggestions(Context context, AsyncResponse asyncResponse){
-        this.asyncResponse =asyncResponse;
+        this.asyncResponse = asyncResponse;
         this.context = context;
 
     }

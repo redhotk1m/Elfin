@@ -60,6 +60,7 @@ public class CarInfoAPI extends AsyncTask<String, Void, String> {
         if (isError(reponse))
             return; //Gi beskjed til bruker om at feil har oppstått
         System.out.println(reponse + " er responsen vi fikk");
+
     }
 
     private boolean isError(String s){
