@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     //TextView textView;
     ListView listViewSuggest;
     ArrayAdapter<String> arrayAdapterSuggestions;
+    ArrayList<String> placeIdList = new ArrayList<>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +66,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         dropdown.setPrompt("EB12342 VW e-Golf");
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
-
-
-
 
         /*
         //Hvis den skal funke
@@ -90,24 +90,36 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
-                list.add(lists.get(0).get(0));
-                list.add(lists.get(0).get(1));
-                list.add(lists.get(0).get(2));
+
+                for (int i = 0; i <lists.size() ; i++) {
+                    for (int j = 0; j <lists.get(i).size() ; j++) {
+                        if(i == 0){
+                            list.add(lists.get(i).get(j));
+                        }else {
+                            placeIdList.add(lists.get(i).get(j));
+                        }
+                    }
+                }
                 listViewSuggest.setVisibility(View.VISIBLE);
                 arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
-                //textView.setText(lists.get(0).get(0));
             }
-
         });
         displaySuggestions.execute("");
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
+                sendPlaceId(placeIdList.get(position));
                 listViewSuggest.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+
+    public void sendPlaceId(String placeId){
+        System.out.println(placeId);
+
     }
 
 
