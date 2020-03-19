@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.example.elfin.API.CarInfoAPI;
+import com.example.elfin.API.Nobil;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setPrompt("EB12342 VW e-Golf");
+        Nobil a = new Nobil(this);
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
 
