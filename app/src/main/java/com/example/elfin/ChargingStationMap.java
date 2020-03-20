@@ -2,6 +2,7 @@ package com.example.elfin;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.elfin.API.Nobil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,7 +26,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 
 /**
@@ -33,10 +39,23 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class ChargingStationMap extends Fragment {
 
     MapView mMapView;
-    static GoogleMap gMapStatic;
+    public static GoogleMap gMapStatic;
+    static ChargingStationMap chargingStationMap;
+    private String destinationID;
 
-    public ChargingStationMap() {
-        // Required empty public constructor
+    public void setPolylineOptions(PolylineOptions polylineOptions) {
+        this.polylineOptions = polylineOptions;
+    }
+
+    PolylineOptions polylineOptions;
+
+    public ChargingStationMap(Bundle bundle) {
+        chargingStationMap = this;
+        destinationID = bundle.getString("destinationID");
+    }
+
+    public GoogleMap getgMapStatic(){
+        return gMapStatic;
     }
 
 
@@ -64,7 +83,7 @@ public class ChargingStationMap extends Fragment {
         //Denne metoden kjører når kartet er klart, og googleMap != null
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(GoogleMap googleMap) {
+            public void onMapReady(final GoogleMap googleMap) {
                 System.out.println("Kjører onMapReady ASYNC i onCreateView");
                 gMapStatic = googleMap;
                 // For showing a move to my location button
@@ -75,25 +94,27 @@ public class ChargingStationMap extends Fragment {
                 googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(4).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
-                String origin = "59.967771,10.731879";
-                String destination = "59.913622,10.753237";
-                String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
-                String mode = "driving";
-                String depertureTime = "now";
-                String parameters = googleURLDirection + "origin=" + origin + "&destination=" + destination + "&mode=" + mode + "&departure_time=" + depertureTime + "&key=" + key;
-                System.out.println(parameters);
-                TaskRequestDirections taskRequestDirections = new TaskRequestDirections(view.getContext());
-                taskRequestDirections.execute("");
 
+                TaskRequestDirections taskRequestDirections = new TaskRequestDirections(view.getContext());
+                taskRequestDirections.execute(destinationID);
+                //Nobil a = new Nobil(chargingStationMap);
+                //a.execute("");
             }
         });
+
+
+
+    }
+
+    public void addAllChargingStations(LatLng latLng){
+        gMapStatic.addMarker(new MarkerOptions().position(latLng).title("test123").snippet("test9321"));
     }
 
 
-    private void drawAllPolyLines(GoogleMap googleMap){
+    public void drawAllPolyLines(){
+        gMapStatic.addPolyline(polylineOptions);
         //googleMap.addPolyline(new PolylineOptions().color(getResources().getColor(R.color.blackColor)).width(5f).clickable(false).addAll(Utils.readEncodedPolyLinePointsFromCSV(this,)));
     }
 

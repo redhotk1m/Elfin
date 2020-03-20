@@ -11,18 +11,23 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.elfin.API.CarInfoAPI;
+import com.example.elfin.API.Nobil;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import rebus.permissionutils.AskAgainCallback;
 import rebus.permissionutils.FullCallback;
@@ -32,15 +37,29 @@ import rebus.permissionutils.PermissionUtils;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
+    public EditText editText;
+    DisplaySuggestions displaySuggestions;
+    //TextView textView;
+    ListView listViewSuggest;
+    ArrayAdapter<String> arrayAdapterSuggestions;
+    ArrayList<String> placeIdList = new ArrayList<>();
+    String destinationID;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //textView = findViewById(R.id.textViewSuggest);
+        listViewSuggest=findViewById(R.id.listViewSuggest);
+        listViewSuggest.setVisibility(View.INVISIBLE);
+
 
         Spinner dropdown = findViewById(R.id.chooseCar);
         ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
-        final EditText editText = findViewById(R.id.editTextToAPlace);
+        editText = findViewById(R.id.editTextToAPlace);
         //dropdown.setPrompt("EB12342 VW e-Golf");
         String[] items = new String[]{"EB 12342 VW e-Golf", "Legg til bil"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -48,9 +67,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         dropdown.setPrompt("EB12342 VW e-Golf");
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
-
-
-
 
         /*
         //Hvis den skal funke
@@ -64,21 +80,49 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
         */
-
-
-
-
-
-
-
-
         //swapview
 
 
-
-
-
     }
+
+    public void displaySuggestions(View view){
+        displaySuggestions = new DisplaySuggestions(getBaseContext(), new AsyncResponse() {
+            ArrayList<String> list = new ArrayList<>();
+
+            @Override
+            public void processFinish(ArrayList<ArrayList<String>> lists) {
+
+                for (int i = 0; i <lists.size() ; i++) {
+                    for (int j = 0; j <lists.get(i).size() ; j++) {
+                        if(i == 0){
+                            list.add(lists.get(i).get(j));
+                        }else {
+                            placeIdList.add(lists.get(i).get(j));
+                        }
+                    }
+                }
+                listViewSuggest.setVisibility(View.VISIBLE);
+                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
+                listViewSuggest.setAdapter(arrayAdapterSuggestions);
+            }
+        });
+        displaySuggestions.execute("");
+        listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                editText.setText(listViewSuggest.getItemAtPosition(position).toString());
+                setDestinationID(placeIdList.get(position));
+                listViewSuggest.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+
+    public void setDestinationID(String destinationID){
+        this.destinationID = destinationID;
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -94,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void startChargingStationActivity() {
         Intent intent = new Intent(this,ChargingStations.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("destinationID",destinationID);
+        intent.putExtra("bundle",bundle);
         startActivity(intent);
     }
 

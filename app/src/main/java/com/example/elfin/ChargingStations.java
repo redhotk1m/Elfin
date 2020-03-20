@@ -1,5 +1,6 @@
 package com.example.elfin;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -11,6 +12,8 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 public class ChargingStations extends AppCompatActivity {
+
+    public static Context chargingStationContext;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,8 +22,9 @@ public class ChargingStations extends AppCompatActivity {
         TabItem listTab = findViewById(R.id.listTab);
         TabItem mapTab = findViewById(R.id.mapTab);
         final ViewPager viewPager = findViewById(R.id.viewPager);
+        chargingStationContext = this;
 
-        final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+        final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),getIntent().getBundleExtra("bundle"));
         viewPager.setAdapter(pagerAdapter);
 
 

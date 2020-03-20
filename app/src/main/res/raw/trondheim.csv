@@ -1,0 +1,186 @@
+{
+   "predictions" : [
+      {
+         "description" : "Trondheim, Norge",
+         "id" : "cfec8bbd9d8b77b7823465cd1c151060ca9a5901",
+         "matched_substrings" : [
+            {
+               "length" : 9,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "ChIJU34DR5cxbUYR1PM8jyjI9ws",
+         "reference" : "ChIJU34DR5cxbUYR1PM8jyjI9ws",
+         "structured_formatting" : {
+            "main_text" : "Trondheim",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 9,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Norge"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Trondheim"
+            },
+            {
+               "offset" : 11,
+               "value" : "Norge"
+            }
+         ],
+         "types" : [ "locality", "political", "geocode" ]
+      },
+      {
+         "description" : "Trondheimsveien, Oslo, Norge",
+         "id" : "657fdf577b11000d253b020b8912f16e3549cd2b",
+         "matched_substrings" : [
+            {
+               "length" : 9,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "EhxUcm9uZGhlaW1zdmVpZW4sIE9zbG8sIE5vcmdlIi4qLAoUChIJ_SC6wSFwQUYRBHm-qWY3eqkSFAoSCXEGy8AybkFGEbN998XfkGQV",
+         "reference" : "EhxUcm9uZGhlaW1zdmVpZW4sIE9zbG8sIE5vcmdlIi4qLAoUChIJ_SC6wSFwQUYRBHm-qWY3eqkSFAoSCXEGy8AybkFGEbN998XfkGQV",
+         "structured_formatting" : {
+            "main_text" : "Trondheimsveien",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 9,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Oslo, Norge"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Trondheimsveien"
+            },
+            {
+               "offset" : 17,
+               "value" : "Oslo"
+            },
+            {
+               "offset" : 23,
+               "value" : "Norge"
+            }
+         ],
+         "types" : [ "route", "geocode" ]
+      },
+      {
+         "description" : "Trondheimsgatan, Kista, Sverige",
+         "id" : "c8df26a44781b027a9bd74017f532f2b5a0f4772",
+         "matched_substrings" : [
+            {
+               "length" : 9,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "Eh9Ucm9uZGhlaW1zZ2F0YW4sIEtpc3RhLCBTdmVyaWdlIi4qLAoUChIJnT2ifeSeX0YRjiFRsjPOZckSFAoSCfHwNW05slxGEWJvrY2i67gi",
+         "reference" : "Eh9Ucm9uZGhlaW1zZ2F0YW4sIEtpc3RhLCBTdmVyaWdlIi4qLAoUChIJnT2ifeSeX0YRjiFRsjPOZckSFAoSCfHwNW05slxGEWJvrY2i67gi",
+         "structured_formatting" : {
+            "main_text" : "Trondheimsgatan",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 9,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Kista, Sverige"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Trondheimsgatan"
+            },
+            {
+               "offset" : 17,
+               "value" : "Kista"
+            },
+            {
+               "offset" : 24,
+               "value" : "Sverige"
+            }
+         ],
+         "types" : [ "route", "geocode" ]
+      },
+      {
+         "description" : "Trondheimsvegen - Jessheim, Jessheim, Norge",
+         "id" : "faea510e2525c83093d7595044f897101470456b",
+         "matched_substrings" : [
+            {
+               "length" : 9,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "EitUcm9uZGhlaW1zdmVnZW4gLSBKZXNzaGVpbSwgSmVzc2hlaW0sIE5vcmdlIi4qLAoUChIJlaZMd5iBQUYRCJlsDtRbQeESFAoSCW3QTTa9gUFGET7HWSFQBT4N",
+         "reference" : "EitUcm9uZGhlaW1zdmVnZW4gLSBKZXNzaGVpbSwgSmVzc2hlaW0sIE5vcmdlIi4qLAoUChIJlaZMd5iBQUYRCJlsDtRbQeESFAoSCW3QTTa9gUFGET7HWSFQBT4N",
+         "structured_formatting" : {
+            "main_text" : "Trondheimsvegen - Jessheim",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 9,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Jessheim, Norge"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Trondheimsvegen - Jessheim"
+            },
+            {
+               "offset" : 28,
+               "value" : "Jessheim"
+            },
+            {
+               "offset" : 38,
+               "value" : "Norge"
+            }
+         ],
+         "types" : [ "route", "geocode" ]
+      },
+      {
+         "description" : "Trondheimgasse, Wien, Østerrike",
+         "id" : "e7ad89f0b5322afe6df963eac1be1bcddb736a20",
+         "matched_substrings" : [
+            {
+               "length" : 9,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "EiBUcm9uZGhlaW1nYXNzZSwgV2llbiwgw5hzdGVycmlrZSIuKiwKFAoSCYfgYw4eAW1HEdviHC7TYs60EhQKEgmfyjZRngdtRxFGW6JRiuXC_Q",
+         "reference" : "EiBUcm9uZGhlaW1nYXNzZSwgV2llbiwgw5hzdGVycmlrZSIuKiwKFAoSCYfgYw4eAW1HEdviHC7TYs60EhQKEgmfyjZRngdtRxFGW6JRiuXC_Q",
+         "structured_formatting" : {
+            "main_text" : "Trondheimgasse",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 9,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Wien, Østerrike"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Trondheimgasse"
+            },
+            {
+               "offset" : 16,
+               "value" : "Wien"
+            },
+            {
+               "offset" : 22,
+               "value" : "Østerrike"
+            }
+         ],
+         "types" : [ "route", "geocode" ]
+      }
+   ],
+   "status" : "OK"
+}

@@ -16,10 +16,12 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     private int numberOfTabs;
     FragmentManager fragmentManager;
-    public PageAdapter(FragmentManager fm, int numberOfTabs) {
+    private Bundle bundle;
+    public PageAdapter(FragmentManager fm, int numberOfTabs, Bundle bundle) {
         super(fm, numberOfTabs);
         this.numberOfTabs = numberOfTabs;
         this.fragmentManager = fm;
+        this.bundle = bundle;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class PageAdapter extends FragmentPagerAdapter {
             case 0:
                 return new ChargingStationList();
             case 1:
-                return new ChargingStationMap();
+                return new ChargingStationMap(bundle);
                 default:
                     return null;
         }
