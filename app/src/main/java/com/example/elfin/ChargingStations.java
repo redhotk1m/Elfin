@@ -24,7 +24,7 @@ public class ChargingStations extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.viewPager);
         chargingStationContext = this;
 
-        final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+        final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),getIntent().getBundleExtra("bundle"));
         viewPager.setAdapter(pagerAdapter);
 
 

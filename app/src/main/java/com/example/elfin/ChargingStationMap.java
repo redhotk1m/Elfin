@@ -2,6 +2,7 @@ package com.example.elfin;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class ChargingStationMap extends Fragment {
     MapView mMapView;
     public static GoogleMap gMapStatic;
     static ChargingStationMap chargingStationMap;
+    private String destinationID;
 
     public void setPolylineOptions(PolylineOptions polylineOptions) {
         this.polylineOptions = polylineOptions;
@@ -47,9 +49,11 @@ public class ChargingStationMap extends Fragment {
 
     PolylineOptions polylineOptions;
 
-    public ChargingStationMap() {
+    public ChargingStationMap(Bundle bundle) {
         chargingStationMap = this;
+        destinationID = bundle.getString("destinationID");
     }
+
     public GoogleMap getgMapStatic(){
         return gMapStatic;
     }
@@ -93,16 +97,8 @@ public class ChargingStationMap extends Fragment {
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(4).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
-                String origin = "59.967771,10.731879";
-                String destination = "59.913622,10.753237";
-                String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
-                String mode = "driving";
-                String depertureTime = "now";
-                String parameters = googleURLDirection + "origin=" + origin + "&destination=" + destination + "&mode=" + mode + "&departure_time=" + depertureTime + "&key=" + key;
-                System.out.println(parameters);
                 TaskRequestDirections taskRequestDirections = new TaskRequestDirections(view.getContext());
-                taskRequestDirections.execute("");
+                taskRequestDirections.execute(destinationID);
                 //Nobil a = new Nobil(chargingStationMap);
                 //a.execute("");
             }

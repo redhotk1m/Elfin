@@ -1,0 +1,253 @@
+{
+   "geocoded_waypoints" : [
+      {
+         "geocoder_status" : "OK",
+         "place_id" : "ChIJ3QL44AVyQUYRf6PVk7bUOKM",
+         "types" : [ "establishment", "point_of_interest", "university" ]
+      },
+      {
+         "geocoder_status" : "OK",
+         "place_id" : "Eh1Ucm9uZGhlaW1zdmVpZW4sIE9zbG8sIE5vcndheSIuKiwKFAoSCf0gusEhcEFGEQR5vqlmN3qpEhQKEglxBsvAMm5BRhGzfffF35BkFQ",
+         "types" : [ "route" ]
+      }
+   ],
+   "routes" : [
+      {
+         "bounds" : {
+            "northeast" : {
+               "lat" : 59.9679237,
+               "lng" : 10.8215751
+            },
+            "southwest" : {
+               "lat" : 59.9372508,
+               "lng" : 10.7325756
+            }
+         },
+         "copyrights" : "Map data ©2020",
+         "legs" : [
+            {
+               "distance" : {
+                  "text" : "8.0 km",
+                  "value" : 8034
+               },
+               "duration" : {
+                  "text" : "12 mins",
+                  "value" : 729
+               },
+               "end_address" : "Trondheimsveien, Oslo, Norway",
+               "end_location" : {
+                  "lat" : 59.94435429999999,
+                  "lng" : 10.8215751
+               },
+               "start_address" : "Sognsveien 228, 0863 Oslo, Norway",
+               "start_location" : {
+                  "lat" : 59.9679237,
+                  "lng" : 10.7325756
+               },
+               "steps" : [
+                  {
+                     "distance" : {
+                        "text" : "42 m",
+                        "value" : 42
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 12
+                     },
+                     "end_location" : {
+                        "lat" : 59.9676097,
+                        "lng" : 10.7329834
+                     },
+                     "html_instructions" : "Head \u003cb\u003esoutheast\u003c/b\u003e toward \u003cb\u003eSognsveien\u003c/b\u003e",
+                     "polyline" : {
+                        "points" : "on_mJseo`ABC\\[LOBGDIBM"
+                     },
+                     "start_location" : {
+                        "lat" : 59.9679237,
+                        "lng" : 10.7325756
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.7 km",
+                        "value" : 740
+                     },
+                     "duration" : {
+                        "text" : "2 mins",
+                        "value" : 103
+                     },
+                     "end_location" : {
+                        "lat" : 59.9612734,
+                        "lng" : 10.7350349
+                     },
+                     "html_instructions" : "Turn \u003cb\u003eright\u003c/b\u003e onto \u003cb\u003eSognsveien\u003c/b\u003e",
+                     "maneuver" : "turn-right",
+                     "polyline" : {
+                        "points" : "ql_mJcho`AD@D?FENKRYn@y@RIBCJE\\Iz@QXGNAVGXIfAUVG`@M`@Iz@K`@EbAOVAJ?d@DR@RDVFv@\\l@^DDl@\\LBJBZCZKRKh@e@DE^c@`@k@x@eA^i@FDLM"
+                     },
+                     "start_location" : {
+                        "lat" : 59.9676097,
+                        "lng" : 10.7329834
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "1.7 km",
+                        "value" : 1707
+                     },
+                     "duration" : {
+                        "text" : "4 mins",
+                        "value" : 213
+                     },
+                     "end_location" : {
+                        "lat" : 59.9581191,
+                        "lng" : 10.7636999
+                     },
+                     "html_instructions" : "At the roundabout, take the \u003cb\u003e2nd\u003c/b\u003e exit onto \u003cb\u003eCarl Kjelsens Vei\u003c/b\u003e",
+                     "maneuver" : "roundabout-right",
+                     "polyline" : {
+                        "points" : "}d~lJ}to`A@@B?B@@ABA@A?C@A@C@E?C?E?C?E?CAC?EACAC?SAM?IASO_@Sw@Kq@QeAAKIk@CUEe@IgACa@EoBA_@?_@@{@BoCFqCBy@?G@m@Bk@@k@@O?Q?O?Q@QHaCFsBH_CJuBJgBBc@@YPoCDq@PcCDu@De@Fg@Di@Fi@Fq@LmAR{AVkBTwAVuARy@d@aBf@aBVy@Ps@XqAT_BLcABS@ULsAPyBLkA@SBQReB@KJq@`@yBTgALy@RuALsAH_APmC@e@D{AHcC@W?S@Q@k@BoB@U@W@c@?eAAw@?W?K?QAS?M?MAc@CkA"
+                     },
+                     "start_location" : {
+                        "lat" : 59.9612734,
+                        "lng" : 10.7350349
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.7 km",
+                        "value" : 695
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 79
+                     },
+                     "end_location" : {
+                        "lat" : 59.95239259999999,
+                        "lng" : 10.7609048
+                     },
+                     "html_instructions" : "Turn \u003cb\u003eright\u003c/b\u003e onto \u003cb\u003eMaridalsveien\u003c/b\u003e\u003cdiv style=\"font-size:0.9em\"\u003eGo through 1 roundabout\u003c/div\u003e",
+                     "maneuver" : "turn-right",
+                     "polyline" : {
+                        "points" : "gq}lJchu`AJ@`ABv@@n@@v@Bt@JTBh@PTJXRh@p@RZZj@n@zAZt@h@dA`@t@JNJNZT@B\\TTHJBh@DB@D@F?N@PAfAN?B@B?@@@?B@@?@@B?@@@@@?@@?@@@@@?@@@?@?@?@?@?@A@??A@A@A@?@A?C@A?A@A?A@A?A?A@C?C?A@CFE@?FCD?RGJ?RAPAh@AXC"
+                     },
+                     "start_location" : {
+                        "lat" : 59.9581191,
+                        "lng" : 10.7636999
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "2.4 km",
+                        "value" : 2351
+                     },
+                     "duration" : {
+                        "text" : "2 mins",
+                        "value" : 149
+                     },
+                     "end_location" : {
+                        "lat" : 59.939192,
+                        "lng" : 10.7825215
+                     },
+                     "html_instructions" : "Turn \u003cb\u003eleft\u003c/b\u003e to merge onto \u003cb\u003eRing3\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003eRv150\u003c/b\u003e toward \u003cb\u003eSInsen\u003c/b\u003e",
+                     "maneuver" : "ramp-left",
+                     "polyline" : {
+                        "points" : "mm|lJsvt`AF?F@?K?K?E?I?QAK?QC]G[GWKQOO]UUOQK]UKKMSEOCQE]IqACkB?{@Ao@A{@Ao@?U?a@Aa@?a@?IAG?c@AkA?[?E?w@@}ADw@DgAFu@JcAHu@RqA@KBMFS`A_FDUJe@VsATiAVsAFUNw@N{@N}@F[@ILs@Lu@?CFYBI\\aCd@cCR{@Nk@Pk@^cAN]NYPYR[HMFGVYZ[ZSz@c@lBcAvAk@n@Yt@]DAf@SDC`@Ol@Qx@Uj@Kh@K`@IXEl@Mf@Id@Mx@[x@W@AHCFC@?JC@Aj@Sl@SfAa@x@_@x@a@HEn@YdAg@bEkBhDoAPIvAg@fAc@dAa@|@c@z@i@VS`@YHG"
+                     },
+                     "start_location" : {
+                        "lat" : 59.95239259999999,
+                        "lng" : 10.7609048
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.2 km",
+                        "value" : 201
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 25
+                     },
+                     "end_location" : {
+                        "lat" : 59.9376153,
+                        "lng" : 10.7842236
+                     },
+                     "html_instructions" : "Take the \u003cb\u003eRv4\u003c/b\u003e exit toward \u003cb\u003eGjøvik\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003eSentrum\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003eC. Berners Pl.\u003c/b\u003e",
+                     "maneuver" : "ramp-right",
+                     "polyline" : {
+                        "points" : "}zylJw}x`AP?@?@??A\\WPQ`@a@JKHKHKNOBCV]VWZg@p@cA^k@"
+                     },
+                     "start_location" : {
+                        "lat" : 59.939192,
+                        "lng" : 10.7825215
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.3 km",
+                        "value" : 348
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 37
+                     },
+                     "end_location" : {
+                        "lat" : 59.93891499999999,
+                        "lng" : 10.7885369
+                     },
+                     "html_instructions" : "At the roundabout, take the \u003cb\u003e3rd\u003c/b\u003e exit onto the \u003cb\u003eRoute 4\u003c/b\u003e ramp to \u003cb\u003eGjøvik\u003c/b\u003e",
+                     "maneuver" : "roundabout-right",
+                     "polyline" : {
+                        "points" : "cqylJkhy`A@?@@@?@@@?@?@?@@LEFCDGFGBIDKBKBM@O@M?C?E?C?C?E?C?CAECWAKCKEIEIEGEEECGAEAA?A?A?A?A?A?A?g@uA{@}BY_A_@mAEQAAKa@U{@UeAWmAACACAAIK"
+                     },
+                     "start_location" : {
+                        "lat" : 59.9376153,
+                        "lng" : 10.7842236
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "2.0 km",
+                        "value" : 1950
+                     },
+                     "duration" : {
+                        "text" : "2 mins",
+                        "value" : 111
+                     },
+                     "end_location" : {
+                        "lat" : 59.94435429999999,
+                        "lng" : 10.8215751
+                     },
+                     "html_instructions" : "Merge onto \u003cb\u003eTrondheimsveien\u003c/b\u003e/\u003cwbr/\u003e\u003cb\u003eRv4\u003c/b\u003e",
+                     "maneuver" : "merge",
+                     "polyline" : {
+                        "points" : "eyylJkcz`A]oBi@{Co@uEE]SsAQ}A[yC[{CSuB_@sDi@eFk@wF[_DKcAc@uEe@sEmAwL_@qDWgCQmBOaBEi@AUGy@GiAEm@IwAIgBK}AASE}@IqAO_CIqACa@OuBKoASyBc@_Ei@gEmAmJMy@AOQuAQoAGm@EYOiAOiAUmBEk@Ei@Eu@G_BCgB?{@BcBF{ABg@"
+                     },
+                     "start_location" : {
+                        "lat" : 59.93891499999999,
+                        "lng" : 10.7885369
+                     },
+                     "travel_mode" : "DRIVING"
+                  }
+               ],
+               "traffic_speed_entry" : [],
+               "via_waypoint" : []
+            }
+         ],
+         "overview_polyline" : {
+            "points" : "on_mJseo`A`@_@PWHWJ@VQbAsAVMh@O|Bc@`B_@x@UbEk@b@Ax@Fj@LdB|@r@b@XFZCZK|@q@`C{C^i@FDLM@@F@DCDK@SASEi@A]c@wAi@oDI{@MiBGoC@{ANcJHuC@eAPuFTuFb@uHb@qG\\mD`@iDl@cEj@oClAcEh@mBn@qD`@aEd@kFTqBl@kDb@aC`@iDZmEFaCLaEHiE?yDA_AAq@CkAJ@xBDfBDjAN~@\\XRh@p@n@fAjApCjAzBV^\\Xr@^t@H`@DPAfAN@FBHBHJHLAHODSHIHCXG^A|AGF@?K?QAy@Ky@Si@m@e@g@[i@a@Sc@Io@IqACkBAkBCkBA{BCaC@wDJ_CRyBb@aDzAoHdCuM\\wBJc@bAeGb@gBp@oB^w@d@u@PUr@u@vAw@lBcAvAk@dBw@l@Uf@SfBg@pCg@tAW~Ai@lAa@NExAg@`CaAxDiBbEkBhDoAhBq@lCeA|@c@z@i@x@m@HGP?B?\\YhAkAt@}@r@_ApAoBFBF@TILOPo@Bg@?QGm@Ug@KIMCG?E?cBsEy@mCi@qBq@{CKMgAkG{AeLkB_RuHuu@_AaKWgEkAsSs@aJmAgK{AgLm@cF{@{GKuAMuCCcDJ_EBg@"
+         },
+         "summary" : "Rv150",
+         "warnings" : [],
+         "waypoint_order" : []
+      }
+   ],
+   "status" : "OK"
+}

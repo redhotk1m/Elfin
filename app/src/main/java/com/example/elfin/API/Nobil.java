@@ -111,7 +111,7 @@ public class Nobil extends AsyncTask<Void, Void, ArrayList<String>>{
     @Override
     protected void onPostExecute(ArrayList<String> arrayList) {
         HashSet<LatLng> chargingStationsEnroute = new HashSet<LatLng>();
-        //todo Iterere gjennom dobbelt, sånn at den ikke viser antall i forhold til den minste listen
+        //TODO Iterere gjennom dobbelt, sånn at den ikke viser antall i forhold til den minste listen
         int i = 0;
         double lat1, lon1;
         if (points.size() <= arrayList.size()){

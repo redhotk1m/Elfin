@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     ListView listViewSuggest;
     ArrayAdapter<String> arrayAdapterSuggestions;
     ArrayList<String> placeIdList = new ArrayList<>();
+    String destinationID;
 
 
 
@@ -110,16 +111,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
-                sendPlaceId(placeIdList.get(position));
+                setDestinationID(placeIdList.get(position));
                 listViewSuggest.setVisibility(View.INVISIBLE);
             }
         });
     }
 
 
-    public void sendPlaceId(String placeId){
-        System.out.println(placeId);
-
+    public void setDestinationID(String destinationID){
+        this.destinationID = destinationID;
     }
 
 
@@ -138,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void startChargingStationActivity() {
         Intent intent = new Intent(this,ChargingStations.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("destinationID",destinationID);
+        intent.putExtra("bundle",bundle);
         startActivity(intent);
     }
 
