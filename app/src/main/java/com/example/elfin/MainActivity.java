@@ -3,37 +3,23 @@ package com.example.elfin;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import com.example.elfin.API.CarInfoAPI;
-import com.example.elfin.API.Nobil;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-
-import rebus.permissionutils.AskAgainCallback;
-import rebus.permissionutils.FullCallback;
-import rebus.permissionutils.PermissionEnum;
-import rebus.permissionutils.PermissionManager;
-import rebus.permissionutils.PermissionUtils;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -47,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
 
 
+
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -60,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         Spinner dropdown = findViewById(R.id.chooseCar);
         ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
         editText = findViewById(R.id.editTextToAPlace);
+        editText.setCursorVisible(false);
+
         //dropdown.setPrompt("EB12342 VW e-Golf");
         String[] items = new String[]{"EB 12342 VW e-Golf", "Legg til bil"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -67,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         dropdown.setPrompt("EB12342 VW e-Golf");
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
+        EditTextFunctions editTextFunctions = new EditTextFunctions(this);
+        editTextFunctions.setText();
+
 
         /*
         //Hvis den skal funke
@@ -83,15 +77,22 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //swapview
 
 
+
     }
 
-    public void displaySuggestions(View view){
-        displaySuggestions = new DisplaySuggestions(getBaseContext(), new AsyncResponse() {
+    public void closeKeyboard(View view){
+        InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboardManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+    }
+
+
+
+    public void displaySuggestions(String adress){
+        displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
             ArrayList<String> list = new ArrayList<>();
 
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
-
                 for (int i = 0; i <lists.size() ; i++) {
                     for (int j = 0; j <lists.get(i).size() ; j++) {
                         if(i == 0){
@@ -113,9 +114,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
                 setDestinationID(placeIdList.get(position));
                 listViewSuggest.setVisibility(View.INVISIBLE);
+                arrayAdapterSuggestions.clear();
+                closeKeyboard(view);
             }
         });
     }
+
+
 
 
     public void setDestinationID(String destinationID){
