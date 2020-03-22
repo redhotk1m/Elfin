@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.car;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +17,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.elfin.API.CarInfoAPI;
-import com.example.elfin.model.Elbil;
+import com.example.elfin.R;
+import com.example.elfin.adapter.RecyclerViewAdapter;
+import com.example.elfin.RecyclerViewClickListener;
 import com.example.elfin.testing.NewCarActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -27,7 +29,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class AddCarActivity extends AppCompatActivity {
 
     private DocumentSnapshot lastResult;
 
-    private ArrayList<Elbil> mElbilList;
+    private List<Elbil> mElbilList;
 
     private EditText editTextSearchRegNr;
     private SearchView searchViewCar;
@@ -72,6 +73,19 @@ public class AddCarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 CarInfoAPI carInfoAPI = new CarInfoAPI();
                 carInfoAPI.execute(editTextSearchRegNr.getText().toString());
+
+                if (carInfoAPI.getElbilList().isEmpty()) {
+                    String model = carInfoAPI.getCarModel();
+                    Toast.makeText(AddCarActivity.this, "EMPTY..." + model, Toast.LENGTH_SHORT).show();
+                } else {
+                    mElbilList = carInfoAPI.getElbilList();
+                    elbil = mElbilList.get(0);
+                    Toast.makeText(AddCarActivity.this,
+                            "BRAND: " + elbil.getBrand() +
+                                    "MODEL: " + elbil.getModel() +
+                                    "ModelYear: " + elbil.getModelYear()
+                            , Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -84,7 +98,7 @@ public class AddCarActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() > 0) filterFirestoreData(newText);
-                else getInitialData();
+                else initRecyclerView();
                 return false;
             }
         });
@@ -121,29 +135,6 @@ public class AddCarActivity extends AppCompatActivity {
 
 
     private void initRecyclerView() {
-        getInitialData();
-
-        /*
-        recyclerAdapter.setOnItemClickListener(new CarListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Elbil elbil = documentSnapshot.toObject(Elbil.class);
-                String path = documentSnapshot.getReference().getPath();
-                String id = documentSnapshot.getId();
-                elbil.setDocumentId(id);
-
-                Toast.makeText(AddCarActivity.this,
-                        "Position: " + position + "\nPath: " + path + "\nID: " + elbil.getDocumentId(),
-                        Toast.LENGTH_LONG).show();
-                //startActivity(new Intent(AddCarActivity.this, CarInfoActivity.class));
-            }
-        });
-
-         */
-    }
-
-
-    public void getInitialData() {
         querySearch = elbilRef.orderBy("brand", Query.Direction.ASCENDING).orderBy("model");
 
         buildRecyclerResponse(querySearch);
@@ -152,11 +143,8 @@ public class AddCarActivity extends AppCompatActivity {
     private void filterFirestoreData(String userInput) {
         recyclerAdapter.stopListening();
 
-        String query = userInput;
-        //userInput.toLowerCase();
-
+        String query = userInput.toLowerCase();
         querySearch = elbilRef.orderBy("brand").startAt(query).endAt(query + "\uf8ff");
-
         buildRecyclerResponse(querySearch);
     }
 
@@ -164,20 +152,15 @@ public class AddCarActivity extends AppCompatActivity {
         response = new FirestoreRecyclerOptions.Builder<Elbil>()
                 .setQuery(querySearch, Elbil.class)
                 .build();
-
         attachRecyclerViewAdapter();
-
         // mAdapter.startListening();
         // mAdapter.notifyDataSetChanged();
-
         recyclerAdapter.startListening();
         recyclerAdapter.notifyDataSetChanged();
     }
 
     private void attachRecyclerViewAdapter() {
-
         //mAdapter = new RecyclerViewAdapter(response, mListener);
-
         recyclerAdapter = new FirestoreRecyclerAdapter<Elbil, CarsViewHolder>(response) {
 
             @NonNull
@@ -205,7 +188,6 @@ public class AddCarActivity extends AppCompatActivity {
             }
         };
 
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -214,64 +196,51 @@ public class AddCarActivity extends AppCompatActivity {
             public void onItemClick(View view, int position) {
 
                 if (position != recyclerView.NO_POSITION && mListener != null) {
-
                     DocumentSnapshot documentSnapshot = (DocumentSnapshot) recyclerAdapter.getSnapshots().getSnapshot(position);
                     elbil = documentSnapshot.toObject(Elbil.class);
-
+                    //getCarAttributes(elbil);
                     String path = documentSnapshot.getReference().getPath();
                     String id = documentSnapshot.getId();
                     elbil.setDocumentId(id);
 
-                    Toast.makeText(AddCarActivity.this,
-                            "Position " + position + "\nPath: " + path
-                                    + "\nID: " + elbil.getDocumentId()
-                                    + "\nMekre: " + elbil.getBrand()
-                                    + "\nModel: " + elbil.getModel(),
-                            Toast.LENGTH_LONG).show();
-
-                    //getCarAttributes(elbil);
+                    Intent intent = new Intent(AddCarActivity.this, CarInfoActivity.class);
+                    intent.putExtra("Elbil", elbil);
+                    startActivity(intent);
                 }
             }
         };
-
-
         //recyclerView.setAdapter(mAdapter);
-
         //RecyclerViewAdapter adapter = new RecyclerViewAdapter(mListener);
         //recyclerView.setAdapter(adapter);
-
         recyclerView.setAdapter(recyclerAdapter);
     }
-
 
     private Elbil getCarAttributes(Elbil elbil) {
         String documentId = elbil.getDocumentId();
         String brand = elbil.getBrand();
         String model = elbil.getModel();
+        String modelYear = elbil.getModelYear();
         String fastCharge = elbil.getFastCharge();
         Map<String, Double> specs = elbil.getSpecs();
 
-        elbil = new Elbil(brand, model, fastCharge, specs);
-
+        elbil = new Elbil(brand, model, modelYear, fastCharge, specs);
 
         return elbil;
     }
 
 
     private String makeCarDescription(Elbil elbil) {
-
         String description = "";
 
         Map<String, Double> specs = elbil.getSpecs();
 
-        description += "2019-2020, " +
-                "Batterikapasitet på " + specs.get("effect") +
+        description += elbil.getModelYear() +
+                ", Batterikapasitet på " + specs.get("effect") +
                 "\n, og " + elbil.getFastCharge() + " "
                 + specs.get("battery") + "kW DC " + "Hurtiglader";
 
         return description;
     }
-
 
     @Override
     protected void onStart() {

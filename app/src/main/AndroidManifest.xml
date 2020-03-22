@@ -17,8 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".testing.NewCarActivity"></activity>
-        <activity android:name=".AddCarActivity" />
+        <activity android:name=".car.CarInfoActivity"></activity>
+        <activity android:name=".testing.NewCarActivity" />
+        <activity android:name=".car.AddCarActivity" />
         <activity android:name=".AboutCharger" />
         <activity android:name=".testing.FilterTestActivity" />
         <activity android:name=".MainActivity">

@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.elfin.model.Elbil;
+import com.example.elfin.R;
+import com.example.elfin.RecyclerViewClickListener;
+import com.example.elfin.car.CarsViewHolder;
+import com.example.elfin.car.Elbil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 

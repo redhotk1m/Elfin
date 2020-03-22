@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.car;
 
 import android.view.View;
 import android.widget.TextView;
@@ -6,11 +6,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.elfin.R;
+import com.example.elfin.RecyclerViewClickListener;
+
 public class CarsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     private RecyclerViewClickListener mListener;
 
-    TextView textViewBrand, textViewModel, textViewDescription;
+    public TextView textViewBrand, textViewModel, textViewDescription;
 
     public CarsViewHolder(@NonNull View itemView, RecyclerViewClickListener listener) {
         super(itemView);
