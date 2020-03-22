@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.elfin.API.CarInfoAPI;
@@ -22,8 +21,6 @@ import com.example.elfin.model.Elbil;
 import com.example.elfin.testing.NewCarActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,7 +38,6 @@ public class AddCarActivity extends AppCompatActivity {
     private final String TAG = "AddCarActivity";
     public static Elbil elbil = new Elbil();
 
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference elbilRef = db.collection("Elbiler");
 
@@ -50,9 +46,12 @@ public class AddCarActivity extends AppCompatActivity {
     private FirestoreRecyclerAdapter recyclerAdapter;
     private FirestoreRecyclerOptions<Elbil> response;
 
+    private RecyclerViewClickListener mListener;
+    private RecyclerViewAdapter mAdapter;
+
     private DocumentSnapshot lastResult;
 
-    private List<Elbil> mElbilList;
+    private ArrayList<Elbil> mElbilList;
 
     private EditText editTextSearchRegNr;
     private SearchView searchViewCar;
@@ -68,9 +67,6 @@ public class AddCarActivity extends AppCompatActivity {
 
         initRecyclerView();
 
-        //getInitialData();
-
-
         searchRegNrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +74,6 @@ public class AddCarActivity extends AppCompatActivity {
                 carInfoAPI.execute(editTextSearchRegNr.getText().toString());
             }
         });
-
 
         searchViewCar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -165,7 +160,24 @@ public class AddCarActivity extends AppCompatActivity {
         buildRecyclerResponse(querySearch);
     }
 
+    private void buildRecyclerResponse(Query querySearch) {
+        response = new FirestoreRecyclerOptions.Builder<Elbil>()
+                .setQuery(querySearch, Elbil.class)
+                .build();
+
+        attachRecyclerViewAdapter();
+
+        // mAdapter.startListening();
+        // mAdapter.notifyDataSetChanged();
+
+        recyclerAdapter.startListening();
+        recyclerAdapter.notifyDataSetChanged();
+    }
+
     private void attachRecyclerViewAdapter() {
+
+        //mAdapter = new RecyclerViewAdapter(response, mListener);
+
         recyclerAdapter = new FirestoreRecyclerAdapter<Elbil, CarsViewHolder>(response) {
 
             @NonNull
@@ -173,7 +185,8 @@ public class AddCarActivity extends AppCompatActivity {
             public CarsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_item,
                         parent, false);
-                return new CarsViewHolder(view);
+
+                return new CarsViewHolder(view, mListener);
             }
 
             @Override
@@ -191,20 +204,43 @@ public class AddCarActivity extends AppCompatActivity {
                 Log.d(TAG, e.toString());
             }
         };
+
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mListener = new RecyclerViewClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                if (position != recyclerView.NO_POSITION && mListener != null) {
+
+                    DocumentSnapshot documentSnapshot = (DocumentSnapshot) recyclerAdapter.getSnapshots().getSnapshot(position);
+                    elbil = documentSnapshot.toObject(Elbil.class);
+
+                    String path = documentSnapshot.getReference().getPath();
+                    String id = documentSnapshot.getId();
+                    elbil.setDocumentId(id);
+
+                    Toast.makeText(AddCarActivity.this,
+                            "Position " + position + "\nPath: " + path
+                                    + "\nID: " + elbil.getDocumentId()
+                                    + "\nMekre: " + elbil.getBrand()
+                                    + "\nModel: " + elbil.getModel(),
+                            Toast.LENGTH_LONG).show();
+
+                    //getCarAttributes(elbil);
+                }
+            }
+        };
+
+
+        //recyclerView.setAdapter(mAdapter);
+
+        //RecyclerViewAdapter adapter = new RecyclerViewAdapter(mListener);
+        //recyclerView.setAdapter(adapter);
+
         recyclerView.setAdapter(recyclerAdapter);
-    }
-
-
-    private void buildRecyclerResponse(Query querySearch) {
-        response = new FirestoreRecyclerOptions.Builder<Elbil>()
-                .setQuery(querySearch, Elbil.class)
-                .build();
-
-        attachRecyclerViewAdapter();
-        recyclerAdapter.startListening();
-        recyclerAdapter.notifyDataSetChanged();
     }
 
 
@@ -237,54 +273,19 @@ public class AddCarActivity extends AppCompatActivity {
     }
 
 
-    private class CarsViewHolder extends RecyclerView.ViewHolder {
-
-        TextView textViewBrand, textViewModel, textViewDescription;
-
-        public CarsViewHolder(@NonNull final View itemView) {
-            super(itemView);
-            textViewBrand = itemView.findViewById(R.id.text_view_brand);
-            textViewModel = itemView.findViewById(R.id.text_view_model);
-            textViewDescription = itemView.findViewById(R.id.text_view_description);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    if (position != recyclerView.NO_POSITION) {
-                        Toast.makeText(AddCarActivity.this, "ID: " + itemView.getId(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-        }
-
-                    /*
-        setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION && listener != null) {
-            listener.onItemClick(getSnapshots.getSnapshot(position), position);
-            }
-            }
-            });
-        }
-
-                     */
-    }
-
-
     @Override
     protected void onStart() {
         super.onStart();
         //start listening to database changes when app goes into the foreground
         if (recyclerAdapter != null) recyclerAdapter.startListening();
+        //mAdapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         //stop recycler view updates while app goes into the background
+        // mAdapter.stopListening();
         recyclerAdapter.stopListening();
     }
 }
