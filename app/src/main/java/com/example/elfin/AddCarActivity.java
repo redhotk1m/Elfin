@@ -2,37 +2,62 @@ package com.example.elfin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.elfin.API.CarInfoAPI;
 import com.example.elfin.model.Elbil;
+import com.example.elfin.testing.NewCarActivity;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class AddCarActivity extends AppCompatActivity {
 
     private final String TAG = "AddCarActivity";
     public static Elbil elbil = new Elbil();
 
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference elbilRef = db.collection("Elbiler");
 
-    EditText editTextMerke, editTextLader, editTextBatteri;
-    TextView textViewData;
-    Button btnSave, btnRetrive;
+    private RecyclerView recyclerView;
+    private Query querySearch;
+    private FirestoreRecyclerAdapter recyclerAdapter;
+    private FirestoreRecyclerOptions<Elbil> response;
+
+    private DocumentSnapshot lastResult;
+
+    private List<Elbil> mElbilList;
+
+    private EditText editTextSearchRegNr;
+    private SearchView searchViewCar;
+    private ImageButton searchRegNrBtn, searchCarBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,81 +65,226 @@ public class AddCarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_car);
 
         findViewsById();
+
+        initRecyclerView();
+
+        //getInitialData();
+
+
+        searchRegNrBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CarInfoAPI carInfoAPI = new CarInfoAPI();
+                carInfoAPI.execute(editTextSearchRegNr.getText().toString());
+            }
+        });
+
+
+        searchViewCar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() > 0) filterFirestoreData(newText);
+                else getInitialData();
+                return false;
+            }
+        });
+
+
+        searchCarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //firestoreCarSearch();
+                //searchData();
+                //getModeldata();
+            }
+        });
+
+
+        //Todo: kan fjernes etter at alle bilene er lagt til
+        FloatingActionButton buttonAddCar = findViewById(R.id.button_add_car);
+        buttonAddCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AddCarActivity.this, NewCarActivity.class));
+            }
+        });
     }
+
+    private void findViewsById() {
+        editTextSearchRegNr = findViewById(R.id.edit_text_search_regNr);
+        searchViewCar = findViewById(R.id.search_view_car);
+        searchRegNrBtn = findViewById(R.id.image_button_search_icon);
+        searchCarBtn = findViewById(R.id.image_button_search_icon2);
+
+        recyclerView = findViewById(R.id.recycler_view_cars);
+    }
+
+
+    private void initRecyclerView() {
+        getInitialData();
+
+        /*
+        recyclerAdapter.setOnItemClickListener(new CarListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Elbil elbil = documentSnapshot.toObject(Elbil.class);
+                String path = documentSnapshot.getReference().getPath();
+                String id = documentSnapshot.getId();
+                elbil.setDocumentId(id);
+
+                Toast.makeText(AddCarActivity.this,
+                        "Position: " + position + "\nPath: " + path + "\nID: " + elbil.getDocumentId(),
+                        Toast.LENGTH_LONG).show();
+                //startActivity(new Intent(AddCarActivity.this, CarInfoActivity.class));
+            }
+        });
+
+         */
+    }
+
+
+    public void getInitialData() {
+        querySearch = elbilRef.orderBy("brand", Query.Direction.ASCENDING).orderBy("model");
+
+        buildRecyclerResponse(querySearch);
+    }
+
+    private void filterFirestoreData(String userInput) {
+        recyclerAdapter.stopListening();
+
+        String query = userInput;
+        //userInput.toLowerCase();
+
+        querySearch = elbilRef.orderBy("brand").startAt(query).endAt(query + "\uf8ff");
+
+        buildRecyclerResponse(querySearch);
+    }
+
+    private void attachRecyclerViewAdapter() {
+        recyclerAdapter = new FirestoreRecyclerAdapter<Elbil, CarsViewHolder>(response) {
+
+            @NonNull
+            @Override
+            public CarsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_item,
+                        parent, false);
+                return new CarsViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(CarsViewHolder carsViewHolder, int i, final Elbil elbil) {
+
+                carsViewHolder.textViewBrand.setText(elbil.getBrand());
+                carsViewHolder.textViewModel.setText(elbil.getModel());
+                carsViewHolder.textViewDescription.setText(makeCarDescription(elbil));
+
+            }
+
+            @Override
+            public void onError(FirebaseFirestoreException e) {
+                super.onError(e);
+                Log.d(TAG, e.toString());
+            }
+        };
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(recyclerAdapter);
+    }
+
+
+    private void buildRecyclerResponse(Query querySearch) {
+        response = new FirestoreRecyclerOptions.Builder<Elbil>()
+                .setQuery(querySearch, Elbil.class)
+                .build();
+
+        attachRecyclerViewAdapter();
+        recyclerAdapter.startListening();
+        recyclerAdapter.notifyDataSetChanged();
+    }
+
+
+    private Elbil getCarAttributes(Elbil elbil) {
+        String documentId = elbil.getDocumentId();
+        String brand = elbil.getBrand();
+        String model = elbil.getModel();
+        String fastCharge = elbil.getFastCharge();
+        Map<String, Double> specs = elbil.getSpecs();
+
+        elbil = new Elbil(brand, model, fastCharge, specs);
+
+
+        return elbil;
+    }
+
+
+    private String makeCarDescription(Elbil elbil) {
+
+        String description = "";
+
+        Map<String, Double> specs = elbil.getSpecs();
+
+        description += "2019-2020, " +
+                "Batterikapasitet på " + specs.get("effect") +
+                "\n, og " + elbil.getFastCharge() + " "
+                + specs.get("battery") + "kW DC " + "Hurtiglader";
+
+        return description;
+    }
+
+
+    private class CarsViewHolder extends RecyclerView.ViewHolder {
+
+        TextView textViewBrand, textViewModel, textViewDescription;
+
+        public CarsViewHolder(@NonNull final View itemView) {
+            super(itemView);
+            textViewBrand = itemView.findViewById(R.id.text_view_brand);
+            textViewModel = itemView.findViewById(R.id.text_view_model);
+            textViewDescription = itemView.findViewById(R.id.text_view_description);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (position != recyclerView.NO_POSITION) {
+                        Toast.makeText(AddCarActivity.this, "ID: " + itemView.getId(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }
+
+                    /*
+        setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION && listener != null) {
+            listener.onItemClick(getSnapshots.getSnapshot(position), position);
+            }
+            }
+            });
+        }
+
+                     */
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        elbilRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot querySnapshot, FirebaseFirestoreException e) {
-                if (e != null) {
-                    //leave method if there's an exception
-                    Toast.makeText(AddCarActivity.this, "Error while loading!", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, e.toString());
-                    return;
-                }
-
-                String data = "";
-                //Todo: Add to ArrayList instead of String
-                for (DocumentSnapshot documentSnapshot : querySnapshot) {
-                    Elbil elbil = documentSnapshot.toObject(Elbil.class);
-
-                    String merke = elbil.getMerke();
-                    String lader = elbil.getLader();
-                    String batteri = elbil.getBatteri();
-
-                    data += "Merke: " + merke + "\nLadetype: " + lader + "\nBatterikapasitet: " + batteri + "\n\n";
-                }
-
-                textViewData.setText(data);
-            }
-        });
+        //start listening to database changes when app goes into the foreground
+        if (recyclerAdapter != null) recyclerAdapter.startListening();
     }
 
-    public void AddCar(View view) {
-        String merke = editTextMerke.getText().toString();
-        String lader = editTextLader.getText().toString();
-        String batteri = editTextBatteri.getText().toString();
-
-        Elbil elbil = new Elbil(merke, lader, batteri);
-
-        elbilRef.add(elbil);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //stop recycler view updates while app goes into the background
+        recyclerAdapter.stopListening();
     }
-
-
-    public void loadCars(View view) {
-        elbilRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshot) {
-                String data = "";
-
-                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshot) {
-                    Elbil elbil = documentSnapshot.toObject(Elbil.class);
-
-                    String merke = elbil.getMerke();
-                    String lader = elbil.getLader();
-                    String batteri = elbil.getBatteri();
-
-                    data += "Merke: " + merke + "\nLadetype: " + lader + "\nBatterikapasitet: " + batteri + "\n\n";
-                }
-
-                textViewData.setText(data);
-            }
-        });
-    }
-
-
-    private void findViewsById() {
-        editTextMerke = findViewById(R.id.edit_text_merke);
-        editTextLader = findViewById(R.id.edit_text_lader);
-        editTextBatteri = findViewById(R.id.edit_text_batteri);
-
-        textViewData = findViewById(R.id.text_view_data);
-
-        btnSave = findViewById(R.id.btnAdd);
-        btnRetrive = findViewById(R.id.btnLoad);
-    }
-
 }

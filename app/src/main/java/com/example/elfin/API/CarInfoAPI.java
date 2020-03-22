@@ -22,7 +22,8 @@ public class CarInfoAPI extends AsyncTask<String, Void, String> {
             JSONObject vegvesenJSON = getJSONFromURL(chassieNR)
                     .getJSONArray("entries")
                     .getJSONObject(0);
-            return vegvesenJSON.getString("reg_aar");
+            //return vegvesenJSON.getString("reg_aar");
+            return vegvesenJSON.getString("modellbetegnelse");
         } catch (JSONException | NullPointerException | IOException e){
             e.printStackTrace();
             //Something went wrong, cannot find the correct car

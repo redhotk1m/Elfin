@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backGroundColor"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".MainActivity">
 
 
@@ -73,7 +76,6 @@
         app:layout_constraintEnd_toEndOf="@+id/rectangleTo"
         app:layout_constraintStart_toEndOf="@+id/textTo"
         app:layout_constraintTop_toTopOf="@+id/rectangleTo"
-        android:onClick="displaySuggestions"
         />
 
     <ImageView
@@ -388,9 +390,13 @@
 
     <ListView
         android:id="@+id/listViewSuggest"
-        android:background="@color/whiteColor"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="150dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@color/whiteColor"
+        android:divider="@color/blackColor"
+        android:dividerHeight="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.709"
         app:layout_constraintStart_toStartOf="parent"
