@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.elfin.API.CarInfoAPI;
 import com.example.elfin.API.Nobil;
+import com.example.elfin.staticMethods.Distance;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 

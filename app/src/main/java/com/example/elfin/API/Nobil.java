@@ -114,33 +114,41 @@ public class Nobil extends AsyncTask<Void, Void, ArrayList<String>>{
         //TODO Iterere gjennom dobbelt, sånn at den ikke viser antall i forhold til den minste listen
         int i = 0;
         double lat1, lon1;
-        if (points.size() <= arrayList.size()){
-            for (Object point : points){
-                String[] a = arrayList.get(i++).split(",");
-                lat1 = Double.parseDouble(a[0]);
-                lon1 = Double.parseDouble(a[1]);
+        String[] a;
+        double g = 0;
+        int arrSize = arrayList.size();
+        LatLng currentPoint = (LatLng)points.get(0);
+        chargingStationsEnroute.add(currentPoint);
+        //if (points.size() <= arrayList.size()) {
+            for (Object point : points) {
+                if (Distance.distanceBetweenKM(currentPoint.latitude,currentPoint.longitude,((LatLng) point).latitude, ((LatLng) point).longitude) > 0.5){
+                    currentPoint = (LatLng) point;
+                    chargingStationsEnroute.add(currentPoint);
+                    System.out.println("added");
+                }
+                //    for (i = 0; i < arrSize;) {//TODO Inner for-loop disabled for testing, not showing all charging stations
+                //if (i % 10 == 0) {//TODO check for every 10th point?
+                //a = arrayList.get(i++).split(",");
+                //lat1 = Double.parseDouble(a[0]);
+                //lon1 = Double.parseDouble(a[1]);
                 //googleMap.addCircle(new CircleOptions().center(new LatLng(((LatLng) point).latitude,((LatLng) point).longitude)).radius(500));
-                if (Distance.distanceBetweenKM(lat1, lon1, ((LatLng) point).latitude, ((LatLng) point).longitude) < 1.1) {
-                    chargingStationsEnroute.add(new LatLng(lat1, lon1));
-                }
+                //if ((g = Distance.distanceBetweenFlat(lat1, lon1, ((LatLng) point).latitude, ((LatLng) point).longitude)) < 1.1) {
+                //    System.out.println(g);
+                //    chargingStationsEnroute.add(new LatLng(lat1, lon1));
+                //}
+                //      }
+                //System.out.println("running: " + i);
+                //}
                 //googleMap.addMarker(new MarkerOptions().position(new LatLng(((LatLng) point).latitude,((LatLng) point).longitude)).title("point"));
-            }
-        }else {
-            for (String latlng : arrayList) {
-                String[] a = latlng.split(",");
-                LatLng latLng = (LatLng) points.get(i++);
-                lat1 = Double.parseDouble(a[0]);
-                lon1 = Double.parseDouble(a[1]);
-                //googleMap.addMarker(new MarkerOptions().position(new LatLng(lat1,lon1)).title("test").snippet("testDesc"));
-                if (Distance.distanceBetweenKM(lat1, lon1, latLng.latitude, latLng.longitude) < 1) {
-                    chargingStationsEnroute.add(new LatLng(lat1, lon1));
-                }
-            }
+                //chargingStationsEnroute.add((LatLng) point);
+           // }
         }
+
         for (LatLng latLng : chargingStationsEnroute) {
             chargingStationMap.addAllChargingStations(latLng);
             //googleMap.addMarker(new MarkerOptions().position(latLng).title("test123").snippet("test9321"));
         }
+        System.out.println("FERDIG MED ALLE PUNKTER PÅ KART!@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + chargingStationsEnroute.size());
         //asyncResponse.processFinishSet(set);
     }
 
