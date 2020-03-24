@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddCarActivity">
+    tools:context=".car.AddCarActivity">
 
     <TextView
         android:id="@+id/text_view_add_car"

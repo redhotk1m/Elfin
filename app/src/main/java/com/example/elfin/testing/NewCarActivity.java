@@ -3,20 +3,15 @@ package com.example.elfin.testing;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.elfin.R;
-import com.example.elfin.model.Elbil;
+import com.example.elfin.car.Elbil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -31,7 +26,7 @@ public class NewCarActivity extends AppCompatActivity {
 
     private static final String TAG = "NewCarActivity";
 
-    private EditText editTextMerke, editTextModell, editTextFastCharge, editTextSpecs;
+    private EditText editTextMerke, editTextModell, editTextModelYear, editTextFastCharge, editTextSpecs;
     private TextView textViewData;
 
     @Override
@@ -45,6 +40,7 @@ public class NewCarActivity extends AppCompatActivity {
     public void saveCar(View view) {
         String merke = editTextMerke.getText().toString();
         String modell = editTextModell.getText().toString();
+        String modelYear = editTextModelYear.getText().toString();
         String hurtiglader = editTextFastCharge.getText().toString();
         String specInput = editTextSpecs.getText().toString();
 
@@ -60,7 +56,7 @@ public class NewCarActivity extends AppCompatActivity {
 
         CollectionReference elbilRef = FirebaseFirestore.getInstance()
                 .collection("Elbiler");
-        elbilRef.add(new Elbil(merke, modell, hurtiglader, specs));
+        elbilRef.add(new Elbil(merke, modell, modelYear, hurtiglader, specs));
         Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
         //finish();
     }
@@ -97,6 +93,7 @@ public class NewCarActivity extends AppCompatActivity {
     private void findViewsById() {
         editTextMerke = findViewById(R.id.edit_text_add_brand);
         editTextModell = findViewById(R.id.edit_text_add_model);
+        editTextModelYear = findViewById(R.id.edit_text_add_model_year);
         editTextFastCharge = findViewById(R.id.edit_text_add_fast_charge);
         editTextSpecs = findViewById(R.id.edit_text_add_specs);
         textViewData = findViewById(R.id.text_view_data);
@@ -106,11 +103,13 @@ public class NewCarActivity extends AppCompatActivity {
         String documentId = elbil.getDocumentId();
         String merke = elbil.getBrand();
         String modell = elbil.getModel();
+        String modelYear = elbil.getModelYear();
         String hurtiglader = elbil.getFastCharge();
 
         data += "ID: " + documentId
                 + "\nMerke: " + merke
                 + "\nModell: " + modell
+                + "\nModell Year: " + modelYear
                 + "\nLadetype: " + hurtiglader
                 + "\nSpecs: ";
 

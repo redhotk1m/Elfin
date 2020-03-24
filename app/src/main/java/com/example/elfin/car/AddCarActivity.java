@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.car;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,23 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.elfin.API.CarInfoAPI;
-import com.example.elfin.model.Elbil;
+import com.example.elfin.R;
+import com.example.elfin.adapter.RecyclerViewAdapter;
+import com.example.elfin.RecyclerViewClickListener;
 import com.example.elfin.testing.NewCarActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +39,6 @@ public class AddCarActivity extends AppCompatActivity {
     private final String TAG = "AddCarActivity";
     public static Elbil elbil = new Elbil();
 
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference elbilRef = db.collection("Elbiler");
 
@@ -49,6 +46,9 @@ public class AddCarActivity extends AppCompatActivity {
     private Query querySearch;
     private FirestoreRecyclerAdapter recyclerAdapter;
     private FirestoreRecyclerOptions<Elbil> response;
+
+    private RecyclerViewClickListener mListener;
+    private RecyclerViewAdapter mAdapter;
 
     private DocumentSnapshot lastResult;
 
@@ -68,17 +68,26 @@ public class AddCarActivity extends AppCompatActivity {
 
         initRecyclerView();
 
-        //getInitialData();
-
-
         searchRegNrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CarInfoAPI carInfoAPI = new CarInfoAPI();
                 carInfoAPI.execute(editTextSearchRegNr.getText().toString());
+
+                if (carInfoAPI.getElbilList().isEmpty()) {
+                    String model = carInfoAPI.getCarModel();
+                    Toast.makeText(AddCarActivity.this, "EMPTY..." + model, Toast.LENGTH_SHORT).show();
+                } else {
+                    mElbilList = carInfoAPI.getElbilList();
+                    elbil = mElbilList.get(0);
+                    Toast.makeText(AddCarActivity.this,
+                            "BRAND: " + elbil.getBrand() +
+                                    "MODEL: " + elbil.getModel() +
+                                    "ModelYear: " + elbil.getModelYear()
+                            , Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
 
         searchViewCar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -89,7 +98,7 @@ public class AddCarActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() > 0) filterFirestoreData(newText);
-                else getInitialData();
+                else initRecyclerView();
                 return false;
             }
         });
@@ -126,29 +135,6 @@ public class AddCarActivity extends AppCompatActivity {
 
 
     private void initRecyclerView() {
-        getInitialData();
-
-        /*
-        recyclerAdapter.setOnItemClickListener(new CarListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Elbil elbil = documentSnapshot.toObject(Elbil.class);
-                String path = documentSnapshot.getReference().getPath();
-                String id = documentSnapshot.getId();
-                elbil.setDocumentId(id);
-
-                Toast.makeText(AddCarActivity.this,
-                        "Position: " + position + "\nPath: " + path + "\nID: " + elbil.getDocumentId(),
-                        Toast.LENGTH_LONG).show();
-                //startActivity(new Intent(AddCarActivity.this, CarInfoActivity.class));
-            }
-        });
-
-         */
-    }
-
-
-    public void getInitialData() {
         querySearch = elbilRef.orderBy("brand", Query.Direction.ASCENDING).orderBy("model");
 
         buildRecyclerResponse(querySearch);
@@ -157,15 +143,24 @@ public class AddCarActivity extends AppCompatActivity {
     private void filterFirestoreData(String userInput) {
         recyclerAdapter.stopListening();
 
-        String query = userInput;
-        //userInput.toLowerCase();
-
+        String query = userInput.toLowerCase();
         querySearch = elbilRef.orderBy("brand").startAt(query).endAt(query + "\uf8ff");
-
         buildRecyclerResponse(querySearch);
     }
 
+    private void buildRecyclerResponse(Query querySearch) {
+        response = new FirestoreRecyclerOptions.Builder<Elbil>()
+                .setQuery(querySearch, Elbil.class)
+                .build();
+        attachRecyclerViewAdapter();
+        // mAdapter.startListening();
+        // mAdapter.notifyDataSetChanged();
+        recyclerAdapter.startListening();
+        recyclerAdapter.notifyDataSetChanged();
+    }
+
     private void attachRecyclerViewAdapter() {
+        //mAdapter = new RecyclerViewAdapter(response, mListener);
         recyclerAdapter = new FirestoreRecyclerAdapter<Elbil, CarsViewHolder>(response) {
 
             @NonNull
@@ -173,7 +168,8 @@ public class AddCarActivity extends AppCompatActivity {
             public CarsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_item,
                         parent, false);
-                return new CarsViewHolder(view);
+
+                return new CarsViewHolder(view, mListener);
             }
 
             @Override
@@ -191,100 +187,74 @@ public class AddCarActivity extends AppCompatActivity {
                 Log.d(TAG, e.toString());
             }
         };
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mListener = new RecyclerViewClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                if (position != recyclerView.NO_POSITION && mListener != null) {
+                    DocumentSnapshot documentSnapshot = (DocumentSnapshot) recyclerAdapter.getSnapshots().getSnapshot(position);
+                    elbil = documentSnapshot.toObject(Elbil.class);
+                    //getCarAttributes(elbil);
+                    String path = documentSnapshot.getReference().getPath();
+                    String id = documentSnapshot.getId();
+                    elbil.setDocumentId(id);
+
+                    Intent intent = new Intent(AddCarActivity.this, CarInfoActivity.class);
+                    intent.putExtra("Elbil", elbil);
+                    startActivity(intent);
+                }
+            }
+        };
+        //recyclerView.setAdapter(mAdapter);
+        //RecyclerViewAdapter adapter = new RecyclerViewAdapter(mListener);
+        //recyclerView.setAdapter(adapter);
         recyclerView.setAdapter(recyclerAdapter);
     }
-
-
-    private void buildRecyclerResponse(Query querySearch) {
-        response = new FirestoreRecyclerOptions.Builder<Elbil>()
-                .setQuery(querySearch, Elbil.class)
-                .build();
-
-        attachRecyclerViewAdapter();
-        recyclerAdapter.startListening();
-        recyclerAdapter.notifyDataSetChanged();
-    }
-
 
     private Elbil getCarAttributes(Elbil elbil) {
         String documentId = elbil.getDocumentId();
         String brand = elbil.getBrand();
         String model = elbil.getModel();
+        String modelYear = elbil.getModelYear();
         String fastCharge = elbil.getFastCharge();
         Map<String, Double> specs = elbil.getSpecs();
 
-        elbil = new Elbil(brand, model, fastCharge, specs);
-
+        elbil = new Elbil(brand, model, modelYear, fastCharge, specs);
 
         return elbil;
     }
 
 
     private String makeCarDescription(Elbil elbil) {
-
         String description = "";
 
         Map<String, Double> specs = elbil.getSpecs();
 
-        description += "2019-2020, " +
-                "Batterikapasitet på " + specs.get("effect") +
+        description += elbil.getModelYear() +
+                ", Batterikapasitet på " + specs.get("effect") +
                 "\n, og " + elbil.getFastCharge() + " "
                 + specs.get("battery") + "kW DC " + "Hurtiglader";
 
         return description;
     }
 
-
-    private class CarsViewHolder extends RecyclerView.ViewHolder {
-
-        TextView textViewBrand, textViewModel, textViewDescription;
-
-        public CarsViewHolder(@NonNull final View itemView) {
-            super(itemView);
-            textViewBrand = itemView.findViewById(R.id.text_view_brand);
-            textViewModel = itemView.findViewById(R.id.text_view_model);
-            textViewDescription = itemView.findViewById(R.id.text_view_description);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    if (position != recyclerView.NO_POSITION) {
-                        Toast.makeText(AddCarActivity.this, "ID: " + itemView.getId(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-        }
-
-                    /*
-        setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION && listener != null) {
-            listener.onItemClick(getSnapshots.getSnapshot(position), position);
-            }
-            }
-            });
-        }
-
-                     */
-    }
-
-
     @Override
     protected void onStart() {
         super.onStart();
         //start listening to database changes when app goes into the foreground
         if (recyclerAdapter != null) recyclerAdapter.startListening();
+        //mAdapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         //stop recycler view updates while app goes into the background
+        // mAdapter.stopListening();
         recyclerAdapter.stopListening();
     }
 }
