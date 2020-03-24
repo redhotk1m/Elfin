@@ -86,8 +86,8 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... strings) {
         String responseString = "";
-        //responseString = createTextFromCsvTrondheim();
-        responseString= createTextFromWebJson();
+        responseString = createTextFromCsvTrondheim();
+        //responseString= createTextFromWebJson();
         return responseString;
     }
 

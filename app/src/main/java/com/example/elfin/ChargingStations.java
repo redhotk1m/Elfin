@@ -11,6 +11,8 @@ import com.example.elfin.adapter.PageAdapter;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.zip.Inflater;
+
 public class ChargingStations extends AppCompatActivity {
 
     public static Context chargingStationContext;
@@ -47,6 +49,8 @@ public class ChargingStations extends AppCompatActivity {
                 }
             }
 
+
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
@@ -60,9 +64,12 @@ public class ChargingStations extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("onResume","Er i onResume Charging Stations");
     }
+
 }
