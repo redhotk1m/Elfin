@@ -18,8 +18,10 @@ import java.util.List;
 public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     Context context;
-    TaskRequestDirections(Context context){
+    ChargingStationMap chargingStationMap;
+    TaskRequestDirections(Context context, ChargingStationMap chargingStationMap){
         this.context = context;
+        this.chargingStationMap = chargingStationMap;
     }
 
     private String requestDirection(String ID){
@@ -75,7 +77,7 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        TaskParser taskParser = new TaskParser();
+        TaskParser taskParser = new TaskParser(chargingStationMap);
         taskParser.execute(s);
     }
 }

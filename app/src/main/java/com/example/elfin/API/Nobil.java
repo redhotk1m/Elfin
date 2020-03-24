@@ -1,18 +1,12 @@
 package com.example.elfin.API;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.elfin.AsyncResponse;
-import com.example.elfin.ChargingStationMap;
-import com.example.elfin.ChargingStations;
+import com.example.elfin.MainActivity;
 import com.example.elfin.R;
-import com.example.elfin.staticMethods.Distance;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.CircleOptions;
+import com.example.elfin.comparators.LatitudeComparator;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,28 +18,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-public class Nobil extends AsyncTask<Void, Void, ArrayList<String>>{
+public class Nobil extends AsyncTask<Void, Void, ArrayList<LatLng>>{
     InputStreamReader in;
     BufferedReader reader;
     InputStream is;
-    AsyncResponse asyncResponse;
-    GoogleMap googleMap;
-    ChargingStationMap chargingStationMap;
-    ArrayList points;
+    MainActivity mainActivity;
 
-    public Nobil(ChargingStationMap chargingStationMap,ArrayList arrayList){
-        points = arrayList;
-        String responseString="";
+    public Nobil(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
         // Create an InputStream object. From API
-        is = ChargingStations.chargingStationContext.getResources().openRawResource(R.raw.nobil);
+        is = mainActivity.getResources().openRawResource(R.raw.nobil);
         // Create a BufferedReader object to read values from CSV file.
         in = new InputStreamReader(is);
         reader = new BufferedReader(in);
-        googleMap = chargingStationMap.getgMapStatic();
-        this.chargingStationMap = chargingStationMap;
     }
 
     private String requestDirection(){
@@ -54,24 +40,10 @@ public class Nobil extends AsyncTask<Void, Void, ArrayList<String>>{
         // Create a BufferedReader object to read values from CSV file.
         String line = "";
         // Create a list of LatLng objects.
-        List<LatLng> latLngList = new ArrayList<>();
         StringBuffer stringBuffer = new StringBuffer();
         try {
             while ((line = reader.readLine()) != null) {
                 stringBuffer.append(line);
-                // Split the line into different tokens (using the comma as a separator).
-                /*String[] tokens = line.split(",");
-                // Only add the right latlng points to a desired line by color.
-                if (tokens[0].trim().equals(lineKeyword) && tokens[1].trim().equals(ENCODED_POINTS)) {
-                    // Use PolyUtil to decode the polylines path into list of LatLng objects.
-                    latLngList.addAll(PolyUtil.decode(tokens[2].trim().replace("\\\\", "\\")));
-                    Log.d(LOG_TAG + lineKeyword, tokens[2].trim());
-                    for (LatLng lat : latLngList) {
-                        Log.d(LOG_TAG + lineKeyword, lat.latitude + ", " + lat.longitude);
-                    }
-                } else {
-                    Log.d(LOG_TAG, "null");
-                }*/
             }
             responseString = stringBuffer.toString();
             reader.close();
@@ -85,54 +57,87 @@ public class Nobil extends AsyncTask<Void, Void, ArrayList<String>>{
 
 
     @Override
-    protected ArrayList<String> doInBackground(Void... arrayLists) {
-        ArrayList<String> chargingStationCoordinates = new ArrayList<>();
+    protected ArrayList<LatLng> doInBackground(Void... arrayLists) {
+        ArrayList<LatLng> chargingStationCoordinates = new ArrayList<>();
         try {
             JSONArray latlngJSONArray = new JSONObject(
                     requestDirection())
                     .getJSONArray("chargerstations");
-            //.getJSONObject(0)
-            //        .getJSONObject("csmd");
             for (int i = 0; i < latlngJSONArray.length(); i++){
-                String latlng = latlngJSONArray.getJSONObject(i)
+                String[] latlng = latlngJSONArray.getJSONObject(i)
                         .getJSONObject("csmd")
                         .getString("Position")
                         .replace("(","")
                         .replace(")","")
-                        .trim();
-                chargingStationCoordinates.add(latlng);
+                        .trim().split(",");
+                chargingStationCoordinates.add(
+                        new LatLng(
+                                Double.valueOf(latlng[0]),
+                                Double.valueOf(latlng[1])
+                        ));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //TODO: Endre fra CSV til Nobil API, håndter dersom man ikke finner noen stasjoner
+        chargingStationCoordinates.sort(new LatitudeComparator());
+        mainActivity.setAllChargingStations(chargingStationCoordinates);
+        mainActivity.setChargingStationsFound(true);
         return chargingStationCoordinates;
     }
 
     @Override
-    protected void onPostExecute(ArrayList<String> arrayList) {
+    protected void onPostExecute(ArrayList<LatLng> ladestasjoner) {
         HashSet<LatLng> chargingStationsEnroute = new HashSet<LatLng>();
         //TODO Iterere gjennom dobbelt, sånn at den ikke viser antall i forhold til den minste listen
+        //double startTime = System.currentTimeMillis();
+        //System.out.println(startTime);
+        /*TimingLogger timings = new TimingLogger("TimingLogger","MethodA");
+        Collections.sort(ladestasjoner,new LongditudeComparator());
+        timings.addSplit("Work A");
+        Collections.sort(ladestasjoner,new LatitudeComparator());
+        timings.addSplit("Work B");
+        timings.dumpToLog();
+        */
+        //System.out.println(System.currentTimeMillis() - startTime);
         int i = 0;
         double lat1, lon1;
-        String[] a;
+        String[] a,b;
         double g = 0;
-        int arrSize = arrayList.size();
-        LatLng currentPoint = (LatLng)points.get(0);
-        chargingStationsEnroute.add(currentPoint);
+        int arrSize = ladestasjoner.size();
+        int sameLon = 0;
+        int sameLat = 0;
+        /*for (int j = 0; j < ladestasjoner.size(); j++){
+            a = ladestasjoner.get(j).split(",");
+            lat1 = Double.parseDouble(a[0]);
+            lon1 = Double.parseDouble(a[1]);
+            for (int k = j+1; k < ladestasjoner.size(); k++){
+                b = ladestasjoner.get(k).split(",");
+                lat1 = Double.parseDouble(a[0]);
+                lon1 = Double.parseDouble(a[1]);
+                if (a[0].equals(b[0]))
+                    sameLat++;
+                if (a[1].equals(b[1]))
+                    sameLon++;
+            }
+        }*/
+        System.out.println("same er : " + sameLat + " " + sameLon);
+        //LatLng currentPoint = (LatLng)points.get(0);
+        //chargingStationsEnroute.add(currentPoint);
         //if (points.size() <= arrayList.size()) {
-            for (Object point : points) {
-                if (Distance.distanceBetweenKM(currentPoint.latitude,currentPoint.longitude,((LatLng) point).latitude, ((LatLng) point).longitude) > 0.5){
+            /*for (Object point : points) {
+                //if (StMethods.distanceBetweenKM(currentPoint.latitude,currentPoint.longitude,((LatLng) point).latitude, ((LatLng) point).longitude) > 0.5){
                     currentPoint = (LatLng) point;
                     chargingStationsEnroute.add(currentPoint);
                     System.out.println("added");
-                }
+                //}
                 //    for (i = 0; i < arrSize;) {//TODO Inner for-loop disabled for testing, not showing all charging stations
                 //if (i % 10 == 0) {//TODO check for every 10th point?
                 //a = arrayList.get(i++).split(",");
                 //lat1 = Double.parseDouble(a[0]);
                 //lon1 = Double.parseDouble(a[1]);
                 //googleMap.addCircle(new CircleOptions().center(new LatLng(((LatLng) point).latitude,((LatLng) point).longitude)).radius(500));
-                //if ((g = Distance.distanceBetweenFlat(lat1, lon1, ((LatLng) point).latitude, ((LatLng) point).longitude)) < 1.1) {
+                //if ((g = StMethods.distanceBetweenFlat(lat1, lon1, ((LatLng) point).latitude, ((LatLng) point).longitude)) < 1.1) {
                 //    System.out.println(g);
                 //    chargingStationsEnroute.add(new LatLng(lat1, lon1));
                 //}
@@ -149,7 +154,7 @@ public class Nobil extends AsyncTask<Void, Void, ArrayList<String>>{
             //googleMap.addMarker(new MarkerOptions().position(latLng).title("test123").snippet("test9321"));
         }
         System.out.println("FERDIG MED ALLE PUNKTER PÅ KART!@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + chargingStationsEnroute.size());
-        //asyncResponse.processFinishSet(set);
+        //asyncResponse.processFinishSet(set);*/
     }
 
 

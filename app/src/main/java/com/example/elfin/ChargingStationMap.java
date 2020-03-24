@@ -1,15 +1,10 @@
 package com.example.elfin;
 
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -17,7 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.elfin.API.Nobil;
+import com.example.elfin.comparators.LatitudeComparator;
+import com.example.elfin.comparators.LongditudeComparator;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -26,11 +22,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 
 
 /**
@@ -40,8 +35,12 @@ public class ChargingStationMap extends Fragment {
 
     MapView mMapView;
     public static GoogleMap gMapStatic;
-    static ChargingStationMap chargingStationMap;
+
+    private ChargingStationMap chargingStationMap;
     private String destinationID;
+
+
+    private ArrayList<LatLng> allChargingStations;
 
     public void setPolylineOptions(PolylineOptions polylineOptions) {
         this.polylineOptions = polylineOptions;
@@ -52,6 +51,7 @@ public class ChargingStationMap extends Fragment {
     public ChargingStationMap(Bundle bundle) {
         chargingStationMap = this;
         destinationID = bundle.getString("destinationID");
+        allChargingStations = bundle.getParcelableArrayList("chargingStations");
     }
 
     public GoogleMap getgMapStatic(){
@@ -89,15 +89,19 @@ public class ChargingStationMap extends Fragment {
                 // For showing a move to my location button
                 googleMap.setMyLocationEnabled(true);
 
+
+                ArrayList<LatLng> latLngs = new ArrayList<>();
                 // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng( 59.964161,10.730915);
+                LatLng sydney = new LatLng( 59.964161,15.730915);
+
+                //latLngs.sort(new LongditudeComparator());
+                //System.out.println(latLngs + " etter");
                 googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(4).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-                TaskRequestDirections taskRequestDirections = new TaskRequestDirections(view.getContext());
+                TaskRequestDirections taskRequestDirections = new TaskRequestDirections(view.getContext(),chargingStationMap);
                 taskRequestDirections.execute(destinationID);
                 //Nobil a = new Nobil(chargingStationMap);
                 //a.execute("");
@@ -108,7 +112,11 @@ public class ChargingStationMap extends Fragment {
 
     }
 
-    public void addAllChargingStations(LatLng latLng){
+    public ArrayList<LatLng> getAllChargingStations() {
+        return allChargingStations;
+    }
+
+    public void drawChargingStations(LatLng latLng){
         gMapStatic.addMarker(new MarkerOptions().position(latLng).title("test123").snippet("test9321"));
     }
 
@@ -117,6 +125,7 @@ public class ChargingStationMap extends Fragment {
         gMapStatic.addPolyline(polylineOptions);
         //googleMap.addPolyline(new PolylineOptions().color(getResources().getColor(R.color.blackColor)).width(5f).clickable(false).addAll(Utils.readEncodedPolyLinePointsFromCSV(this,)));
     }
+
 
     @Override
     public void onResume() {
