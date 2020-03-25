@@ -90,7 +90,7 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextModel = findViewById(R.id.edit_text_model);
         editTextModelYear = findViewById(R.id.edit_text_model_year);
         editTextFastCharge = findViewById(R.id.edit_text_fast_charge);
-        editTextBattery = findViewById(R.id.edit_text_battery);
+        //editTextBattery = findViewById(R.id.edit_text_battery);
 
         saveCarBtn = findViewById(R.id.btnSaveCar);
         loadCarBtn = findViewById(R.id.btnLoadCar);
@@ -102,9 +102,9 @@ public class CarInfoActivity extends AppCompatActivity {
         String model = "Bilmodell: " + elbil.getModel();
         String modelYear = "Årsmodell: " + elbil.getModelYear();
         Map<String, Double> specs = elbil.getSpecs();
-        String fastCharge = "Ladetype: " + elbil.getFastCharge();
+        //String fastCharge = "Ladetype: " + elbil.getFastCharge();
         //+ " " + specs.get("effect") + " kwh";
-        String battery = "Batteri: ";
+       // String battery = "Batteri: ";
         //+ specs.get("battery") + " kw";
         //      String effect = specs.get("effect").toString();
 
@@ -112,8 +112,8 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextBrand.setText(brand);
         editTextModel.setText(model);
         editTextModelYear.setText(modelYear);
-        editTextFastCharge.setText(fastCharge);
-        editTextBattery.setText(battery);
+        //editTextFastCharge.setText(fastCharge);
+        //editTextBattery.setText(battery);
     }
 
     private void clearAttributes(){
@@ -123,13 +123,13 @@ public class CarInfoActivity extends AppCompatActivity {
         Map<String, Double> specs;
         String fastCharge = "Ladetype: ";
         //+ " " + specs.get("effect") + " kwh";
-        String battery = "Batteri: ";
+        //String battery = "Batteri: ";
 
         editTextBrand.setText(brand);
         editTextModel.setText(model);
         editTextModelYear.setText(modelYear);
-        editTextFastCharge.setText(fastCharge);
-        editTextBattery.setText(battery);
+        //editTextFastCharge.setText(fastCharge);
+        //editTextBattery.setText(battery);
     }
 
     private void clearSharedPrefferences() {

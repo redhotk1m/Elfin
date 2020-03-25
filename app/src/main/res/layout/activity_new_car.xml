@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".testing.NewCarActivity">
+    tools:context=".car.NewCarActivity">
 
     <EditText
         android:id="@+id/edit_text_add_brand"
@@ -42,18 +42,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_add_model" />
 
-
+    <!--
     <EditText
-        android:id="@+id/edit_text_add_fast_charge"
+        android:id="@+id/edit_text_add_battery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Hurtiglader"
+        android:hint="Battery"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_add_model_year" />
+        -->
 
     <EditText
         android:id="@+id/edit_text_add_specs"
@@ -61,11 +62,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Specs: i.e effect,battery"
+        android:hint="Specs: type, effect, battery"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_add_fast_charge" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_add_model_year" />
 
     <Button
         android:id="@+id/btnAdd"

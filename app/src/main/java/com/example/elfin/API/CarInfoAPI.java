@@ -2,6 +2,7 @@ package com.example.elfin.API;
 
 import android.os.AsyncTask;
 
+import com.example.elfin.car.AddCarActivity;
 import com.example.elfin.car.Elbil;
 
 import org.json.JSONException;
@@ -15,15 +16,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarInfoAPI extends AsyncTask<String, Void, String> {
+public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
 
     private Elbil elbil;
-    private ArrayList<Elbil> mElbilList = new ArrayList<>();
-    private String model;
-    private String modelYear;
+    private AddCarActivity addCarActivity;
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected Elbil doInBackground(String... strings) {
         try {
             JSONObject biltemaJSON = getJSONFromURL(strings[0]);
             String chassieNR = biltemaJSON.getString("chassieNumber");
@@ -36,19 +35,22 @@ public class CarInfoAPI extends AsyncTask<String, Void, String> {
             String model = vegvesenJSON.getString("modellbetegnelse");
             String modelYear = vegvesenJSON.getString("reg_aar");
 
-            //elbil = new Elbil();
-            //elbil.setModel(model);
-            //elbil.setModelYear(modelYear);
+            elbil = new Elbil();
+            elbil.setModel(model);
+            elbil.setModelYear(modelYear);
 
-            mElbilList.add(new Elbil(null, model, modelYear, null, null));
+            //mElbilList.add(new Elbil(null, model, modelYear, null, null));
             //return mElbilList;
-            return vegvesenJSON.getString("modellbetegnelse");
+            return elbil;
+            //return vegvesenJSON.getString("modellbetegnelse");
         } catch (JSONException | NullPointerException | IOException e){
             e.printStackTrace();
             //Something went wrong, cannot find the correct car
-            return "Error";
+
+            return new Elbil("error");
         }
     }
+
     private JSONObject getJSONFromURL(String identifier) throws JSONException, IOException {
         int minimumChassieNumberLength = 17;
         /*
@@ -76,33 +78,19 @@ public class CarInfoAPI extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String reponse) {
-        if (isError(reponse))
-            return; //Gi beskjed til bruker om at feil har oppstått
-        System.out.println(reponse + " er responsen vi fikk");
-        System.out.println(mElbilList.get(0).getModelYear());
+    protected void onPostExecute(Elbil reponse) {
+        //if (isError(reponse.get(0))) return; //Gi beskjed til bruker om at feil har oppstått
+        System.out.println(reponse.getModel() + " ; " + reponse.getModelYear() + " er responsen vi fikk");
 
-        reponse = model + modelYear;
-
-        model = mElbilList.get(0).getModel();
-        modelYear= mElbilList.get(0).getModelYear();
-
-        //getElbilList();
+        addCarActivity.loadApiInfo(reponse);
     }
 
     private boolean isError(String s){
         return s.toLowerCase().equals("error");
     }
 
-    public List<Elbil> getElbilList() {
-        return this.mElbilList;
-    }
 
-    public String getCarModel() {
-        return this.model;
-    }
-
-    public String getCarModelYear() {
-        return this.modelYear;
+    public void setAddCarActivity(AddCarActivity addCarActivity) {
+        this.addCarActivity = addCarActivity;
     }
 }

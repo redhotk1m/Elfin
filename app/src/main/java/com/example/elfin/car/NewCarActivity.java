@@ -1,4 +1,4 @@
-package com.example.elfin.testing;
+package com.example.elfin.car;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.elfin.R;
-import com.example.elfin.car.Elbil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,7 +25,7 @@ public class NewCarActivity extends AppCompatActivity {
 
     private static final String TAG = "NewCarActivity";
 
-    private EditText editTextMerke, editTextModell, editTextModelYear, editTextFastCharge, editTextSpecs;
+    private EditText editTextMerke, editTextModell, editTextModelYear, editTextBattery, editTextSpecs;
     private TextView textViewData;
 
     @Override
@@ -38,27 +37,45 @@ public class NewCarActivity extends AppCompatActivity {
     }
 
     public void saveCar(View view) {
-        String merke = editTextMerke.getText().toString();
-        String modell = editTextModell.getText().toString();
-        String modelYear = editTextModelYear.getText().toString();
-        String hurtiglader = editTextFastCharge.getText().toString();
-        String specInput = editTextSpecs.getText().toString();
+        String merke = editTextMerke.getText().toString().toLowerCase();
+        String model = editTextModell.getText().toString().toLowerCase();
+        String modelYear = editTextModelYear.getText().toString().toLowerCase();
+        //String battery = editTextBattery.getText().toString().toLowerCase();
+        String specInput = editTextSpecs.getText().toString().toLowerCase();
 
         Map<String, Double> specs = new HashMap<>();
         String[] specArray = specInput.split("\\s*,\\s*");
-        boolean firstIterationFlag = true;
-        for (String spec : specArray) {
-            if (firstIterationFlag) specs.put("battery", Double.parseDouble(spec));
-            else specs.put("effect", Double.parseDouble(spec));
 
-            firstIterationFlag = false;
+
+        for(int i = 0; i < specArray.length; i++) {
+            //specs.put(specArray[i], Double.parseDouble(specArray[s]));
+            if (i == 0) specs.put(specArray[i], Double.parseDouble(specArray[1]));
+                //System.out.println(specArray[i] + " ; " + specArray[1]);
+            if (i == 2) specs.put("battery", Double.parseDouble(specArray[i]));
+                //System.out.println("battery" + " ; " + specArray[i]);
+            //if (i == 1) specs.put("battery", Double.parseDouble(specArray[i]));
         }
 
         CollectionReference elbilRef = FirebaseFirestore.getInstance()
-                .collection("Elbiler");
-        elbilRef.add(new Elbil(merke, modell, modelYear, hurtiglader, specs));
-        Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
+                .collection("elbiler");
+
+
+
+
+        //elbilRef.document(merke).set(new Elbil(model, modelYear, specs));
+
+        //elbilRef.document(merke).collection(model).add(new Elbil(modelYear, specs));
+
+        elbilRef.add(new Elbil(merke, model, modelYear, specs));
+        //Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
         //finish();
+
+        //elbilRef.document(modell).
+
+        //elbilRef.document().collection(modell).add(new Elbil(modelYear, hurtiglader, specs));
+        Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
+
+
     }
 
 
@@ -94,7 +111,7 @@ public class NewCarActivity extends AppCompatActivity {
         editTextMerke = findViewById(R.id.edit_text_add_brand);
         editTextModell = findViewById(R.id.edit_text_add_model);
         editTextModelYear = findViewById(R.id.edit_text_add_model_year);
-        editTextFastCharge = findViewById(R.id.edit_text_add_fast_charge);
+       // editTextBattery = findViewById(R.id.edit_text_add_battery);
         editTextSpecs = findViewById(R.id.edit_text_add_specs);
         textViewData = findViewById(R.id.text_view_data);
     }
@@ -104,13 +121,13 @@ public class NewCarActivity extends AppCompatActivity {
         String merke = elbil.getBrand();
         String modell = elbil.getModel();
         String modelYear = elbil.getModelYear();
-        String hurtiglader = elbil.getFastCharge();
+        //String hurtiglader = elbil.getFastCharge();
 
         data += "ID: " + documentId
                 + "\nMerke: " + merke
                 + "\nModell: " + modell
                 + "\nModell Year: " + modelYear
-                + "\nLadetype: " + hurtiglader
+                //+ "\nLadetype: " + hurtiglader
                 + "\nSpecs: ";
 
         for (String spec : elbil.getSpecs().keySet()) {

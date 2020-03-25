@@ -94,7 +94,7 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Elbil, CarsVie
 
         description += "2019-2020, " +
                 "Batterikapasitet på " + specs.get("effect") +
-                "\n, og " + elbil.getFastCharge() + " "
+                "\n, og " //+ elbil.getFastCharge() + " "
                 + specs.get("battery") + "kW DC " + "Hurtiglader";
 
         return description;
@@ -108,7 +108,8 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Elbil, CarsVie
         //set values of data here
         viewHolder.textViewBrand.setText(elbil.getBrand());
         viewHolder.textViewModel.setText(elbil.getModel());
-        viewHolder.textViewDescription.setText(makeCarDescription(elbil));
+        viewHolder.textViewDescription.setText(elbil.getModelYear());
+        //viewHolder.textViewDescription.setText(makeCarDescription(elbil));
     }
 
     @NonNull

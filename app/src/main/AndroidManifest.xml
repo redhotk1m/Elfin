@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".car.CarInfoActivity"></activity>
-        <activity android:name=".testing.NewCarActivity" />
+        <activity android:name=".car.NewCarActivity" />
         <activity android:name=".car.AddCarActivity" />
         <activity android:name=".AboutCharger" />
         <activity android:name=".testing.FilterTestActivity" />

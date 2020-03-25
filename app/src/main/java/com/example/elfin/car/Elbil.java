@@ -2,6 +2,7 @@ package com.example.elfin.car;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.Exclude;
 
@@ -10,27 +11,25 @@ import java.util.Map;
 public class Elbil implements Parcelable {
 
     private String documentId;
-    private String brand, model, modelYear, fastCharge;
+    private String brand, model, modelYear;
     private Map<String, Double> specs;
 
     public Elbil(){
         //public no-arg constructor needed for firestore database
     }
 
-    public Elbil(String brand, String model, String modelYear, String fastCharge, Map<String, Double> specs) {
+    public Elbil(String brand, String model, String modelYear, Map<String, Double> specs) {
         this.brand = brand;
         this.model = model;
         this.modelYear = modelYear;
-        this.fastCharge = fastCharge;
         this.specs = specs;
     }
 
-    protected Elbil(Parcel in) {
+    public Elbil(Parcel in) {
         documentId = in.readString();
         brand = in.readString();
         model = in.readString();
         modelYear = in.readString();
-        fastCharge = in.readString();
     }
 
     public static final Creator<Elbil> CREATOR = new Creator<Elbil>() {
@@ -44,6 +43,12 @@ public class Elbil implements Parcelable {
             return new Elbil[size];
         }
     };
+
+    Boolean isError = false;
+
+    public Elbil(String error) {
+        isError = true;
+    }
 
     @Exclude
     public String getDocumentId() {
@@ -78,14 +83,6 @@ public class Elbil implements Parcelable {
         this.modelYear = modelYear;
     }
 
-    public String getFastCharge() {
-        return fastCharge;
-    }
-
-    public void setFastCharge(String fastCharge) {
-        this.fastCharge = fastCharge;
-    }
-
     public Map<String, Double> getSpecs() {
         return specs;
     }
@@ -105,6 +102,5 @@ public class Elbil implements Parcelable {
         parcel.writeString(brand);
         parcel.writeString(model);
         parcel.writeString(modelYear);
-        parcel.writeString(fastCharge);
     }
 }
