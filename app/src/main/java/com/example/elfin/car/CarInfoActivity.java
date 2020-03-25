@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.elfin.MainActivity;
 import com.example.elfin.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -71,6 +72,7 @@ public class CarInfoActivity extends AppCompatActivity {
         editor.apply();
 
         Toast.makeText(this, "CAR SAVED!", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     private void loadCar() {

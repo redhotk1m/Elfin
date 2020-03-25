@@ -8,6 +8,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -18,10 +19,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.elfin.API.Nobil;
+import com.example.elfin.car.AddCarActivity;
+import com.example.elfin.car.Elbil;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -36,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public static ArrayList<LatLng> allChargingStations;
     private boolean chargingStationsFound = false;
 
+    private TextView tvMyCar;
+    private Spinner dropdown;
+    private ArrayList<Elbil> mCarList;
 
 
 
@@ -51,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         listViewSuggest.setVisibility(View.INVISIBLE);
 
 
-        Spinner dropdown = findViewById(R.id.chooseCar);
+        dropdown = findViewById(R.id.chooseCar);
         ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
         editText = findViewById(R.id.editTextToAPlace);
         editText.setCursorVisible(false);
@@ -61,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setPrompt("EB12342 VW e-Golf");
+
+
+
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
         EditTextFunctions editTextFunctions = new EditTextFunctions(this);
@@ -84,6 +97,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         Nobil nobil = new Nobil(this);
         nobil.execute();
+
+        tvMyCar = findViewById(R.id.tv_my_car);
+        getSavedCar();
+        tvMyCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), AddCarActivity.class));
+            }
+        });
     }
 
     public void closeKeyboard(View view){
@@ -190,5 +212,20 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void setChargingStationsFound(boolean found){
         this.chargingStationsFound = found;
+    }
+
+    private void getSavedCar() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("car list", null);
+        Type type = new TypeToken<ArrayList<Elbil>>() {}.getType();
+        mCarList = gson.fromJson(json, type);
+
+        if (mCarList == null) mCarList = new ArrayList<>();
+        else {
+            String myCar = mCarList.get(0).getBrand() + " " + mCarList.get(0).getModel();
+            tvMyCar.setText(myCar);
+            //dropdown.setPrompt(myCar);
+        }
     }
 }
