@@ -18,8 +18,10 @@ import java.util.List;
 public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     Context context;
-    TaskRequestDirections(Context context){
+    ChargingStationMap chargingStationMap;
+    TaskRequestDirections(Context context, ChargingStationMap chargingStationMap){
         this.context = context;
+        this.chargingStationMap = chargingStationMap;
     }
 
     private String requestDirection(String ID){
@@ -33,13 +35,15 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
         String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&departure_time=" + depertureTime + "&key=" + key;
         System.out.println(parameters);
         // Create an InputStream object. From API
-        InputStream is;
-        if (ID.equals("Eh9Ucm9uZGhlaW1zZ2F0YW4sIEtpc3RhLCBTdmVyaWdlIi4qLAoUChIJnT2ifeSeX0YRjiFRsjPOZckSFAoSCfHwNW05slxGEWJvrY2i67gi"))
-            is = context.getResources().openRawResource(R.raw.trondheimsgatansverige);
-        else if (ID.equals("ChIJU34DR5cxbUYR1PM8jyjI9ws"))
-            is = context.getResources().openRawResource(R.raw.trondheimnorge);
-        else if (ID.equals("EhxUcm9uZGhlaW1zdmVpZW4sIE9zbG8sIE5vcmdlIi4qLAoUChIJ_SC6wSFwQUYRBHm-qWY3eqkSFAoSCXEGy8AybkFGEbN998XfkGQV"))
-            is = context.getResources().openRawResource(R.raw.trondheimsveienoslo);
+        InputStream is = null;
+        if (ID != null) {
+            if (ID.equals("Eh9Ucm9uZGhlaW1zZ2F0YW4sIEtpc3RhLCBTdmVyaWdlIi4qLAoUChIJnT2ifeSeX0YRjiFRsjPOZckSFAoSCfHwNW05slxGEWJvrY2i67gi"))
+                is = context.getResources().openRawResource(R.raw.trondheimsgatansverige);
+            else if (ID.equals("ChIJU34DR5cxbUYR1PM8jyjI9ws"))
+                is = context.getResources().openRawResource(R.raw.trondheimnorge);
+            else if (ID.equals("EhxUcm9uZGhlaW1zdmVpZW4sIE9zbG8sIE5vcmdlIi4qLAoUChIJ_SC6wSFwQUYRBHm-qWY3eqkSFAoSCXEGy8AybkFGEbN998XfkGQV"))
+                is = context.getResources().openRawResource(R.raw.trondheimsveienoslo);
+        }
         else
             is = context.getResources().openRawResource(R.raw.test);
         //TODO istedenfor å bruke inputstream CSV, må vi hente data fra URL som står over.
@@ -73,7 +77,7 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        TaskParser taskParser = new TaskParser();
+        TaskParser taskParser = new TaskParser(chargingStationMap);
         taskParser.execute(s);
     }
 }

@@ -19,6 +19,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.example.elfin.API.Nobil;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     ArrayAdapter<String> arrayAdapterSuggestions;
     ArrayList<String> placeIdList = new ArrayList<>();
     String destinationID;
+    public static ArrayList<LatLng> allChargingStations;
+    private boolean chargingStationsFound = false;
 
 
 
@@ -77,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //swapview
 
 
-
+        Nobil nobil = new Nobil(this);
+        nobil.execute();
     }
 
     public void closeKeyboard(View view){
@@ -142,8 +148,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void startChargingStationActivity() {
+        checkIfChargingStationsAreFound();
         Intent intent = new Intent(this,ChargingStations.class);
         Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("chargingStations",getAllChargingStations());
         bundle.putString("destinationID",destinationID);
         intent.putExtra("bundle",bundle);
         startActivity(intent);
@@ -158,9 +166,29 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     this
                     , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
                     ,0);
-        }else{
+        } else {
             //If permission is already granted, change activity
             startChargingStationActivity();
         }
+    }
+
+
+    public ArrayList<LatLng> getAllChargingStations() {
+        return allChargingStations;
+    }
+
+    public void setAllChargingStations(ArrayList<LatLng> allChargingStations) {
+        this.allChargingStations = allChargingStations;
+    }
+
+    private void checkIfChargingStationsAreFound(){
+        while (!chargingStationsFound){
+            //TODO: Venter på alle ladestasjoner før noe mer skjer,
+            // bør håndtere hvis den ikke finner ladestajoner, eller det går en viss tid.
+        }
+    }
+
+    public void setChargingStationsFound(boolean found){
+        this.chargingStationsFound = found;
     }
 }

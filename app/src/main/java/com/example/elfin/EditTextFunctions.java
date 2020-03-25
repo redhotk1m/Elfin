@@ -58,6 +58,7 @@ public class EditTextFunctions {
         });
 
     }
+    //enums fasiliteter
 
 
 

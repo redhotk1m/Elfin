@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String,String>>>> {
+    ChargingStationMap chargingStationMap;
+    public TaskParser(ChargingStationMap chargingStationMap) {
+        this.chargingStationMap = chargingStationMap;
+    }
+
     @Override
     protected List<List<HashMap<String, String>>> doInBackground(String... strings) {
         JSONObject jsonObject = null;
@@ -45,16 +50,16 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
             polylineOptions.addAll(points);
             polylineOptions.width(15);
             polylineOptions.color(Color.BLACK);
-            polylineOptions.geodesic(true);//???????????
+            polylineOptions.geodesic(true);//Tegnes i 3D, tar hensyn til høyde osv
         }
         if (polylineOptions != null){
             System.out.println("FERDIG@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            ChargingStationMap chargingStationMap = ChargingStationMap.chargingStationMap;
             chargingStationMap.setPolylineOptions(polylineOptions);
             chargingStationMap.drawAllPolyLines();
             //chargingStationMap.addAllChargingStations();
-            Nobil nobil = new Nobil(chargingStationMap,points);
-            nobil.execute();
+            StationDrawer stationDrawer = new StationDrawer(chargingStationMap);
+            stationDrawer.execute(points);
+            //TODO: stationDrawer.execute
         }
     }
 }

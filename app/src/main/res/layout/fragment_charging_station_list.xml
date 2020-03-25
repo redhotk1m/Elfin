@@ -3,14 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ChargingStationList"
-    android:background="@color/blackColor">
+    android:background="@color/backGroundColor"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+    >
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/listView"
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/resyclerViewItems"
+        android:scrollbars="vertical"
+        android:orientation="vertical"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+
 
 </FrameLayout>
