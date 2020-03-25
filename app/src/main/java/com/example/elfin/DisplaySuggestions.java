@@ -1,11 +1,11 @@
 package com.example.elfin;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONException;
+import com.example.elfin.Parsers.JsonToString;
+import com.example.elfin.Utils.AsyncResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;

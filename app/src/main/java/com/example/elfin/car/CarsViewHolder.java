@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.elfin.R;
-import com.example.elfin.RecyclerViewClickListener;
 
 public class CarsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 

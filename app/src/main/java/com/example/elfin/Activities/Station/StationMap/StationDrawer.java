@@ -1,9 +1,9 @@
-package com.example.elfin;
+package com.example.elfin.Activities.Station.StationMap;
 
 import android.os.AsyncTask;
 
 import com.example.elfin.comparators.LongditudeComparator;
-import com.example.elfin.staticMethods.StMethods;
+import com.example.elfin.Utils.StMethods;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class StationDrawer extends AsyncTask<ArrayList<LatLng>, Void, String> {
 
     final double LONG_DIFF = 0.0015, LAT_DIFF = 0.0015;
 
-    StationDrawer (ChargingStationMap chargingStationMap){
+    public StationDrawer(ChargingStationMap chargingStationMap){
         this.chargingStationMap = chargingStationMap;
         this.chargingStations = new ArrayList<>(chargingStationMap.getAllChargingStations());
     }

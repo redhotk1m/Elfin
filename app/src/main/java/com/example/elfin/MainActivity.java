@@ -22,6 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.elfin.API.Nobil;
+import com.example.elfin.Activities.Station.ChargingStations;
+import com.example.elfin.Utils.AsyncResponse;
+import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.car.AddCarActivity;
 import com.example.elfin.car.Elbil;
 import com.google.android.gms.maps.model.LatLng;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public EditText editText;
     DisplaySuggestions displaySuggestions;
     //TextView textView;
-    ListView listViewSuggest;
+    public ListView listViewSuggest;
     ArrayAdapter<String> arrayAdapterSuggestions;
     ArrayList<String> placeIdList = new ArrayList<>();
     String destinationID;
@@ -171,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void startChargingStationActivity() {
         checkIfChargingStationsAreFound();
-        Intent intent = new Intent(this,ChargingStations.class);
+        Intent intent = new Intent(this, ChargingStations.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("chargingStations",getAllChargingStations());
         bundle.putString("destinationID",destinationID);

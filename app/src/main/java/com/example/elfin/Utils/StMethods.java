@@ -1,4 +1,4 @@
-package com.example.elfin.staticMethods;
+package com.example.elfin.Utils;
 
 import com.google.android.gms.maps.model.LatLng;
 

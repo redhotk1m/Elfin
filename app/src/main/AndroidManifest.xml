@@ -20,7 +20,7 @@
         <activity android:name=".car.CarInfoActivity"></activity>
         <activity android:name=".car.NewCarActivity" />
         <activity android:name=".car.AddCarActivity" />
-        <activity android:name=".AboutCharger" />
+        <activity android:name=".Activities.AboutCharger" />
         <activity android:name=".testing.FilterTestActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -30,7 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChargingStations" />
+        <activity android:name=".Activities.Station.ChargingStations" />
 
         <uses-library
             android:name="org.apache.http.legacy"

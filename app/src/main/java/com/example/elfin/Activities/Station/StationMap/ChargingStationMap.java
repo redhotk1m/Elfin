@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.Activities.Station.StationMap;
 
 
 import android.os.Bundle;
@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.elfin.comparators.LatitudeComparator;
-import com.example.elfin.comparators.LongditudeComparator;
+import com.example.elfin.API.TaskRequestDirections;
+import com.example.elfin.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 /**

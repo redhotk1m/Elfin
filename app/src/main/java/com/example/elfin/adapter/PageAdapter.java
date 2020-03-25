@@ -1,7 +1,6 @@
 package com.example.elfin.adapter;
 
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,8 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.elfin.ChargingStationList;
-import com.example.elfin.ChargingStationMap;
+import com.example.elfin.Activities.Station.StationList.ChargingStationList;
+import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
 
 public class PageAdapter extends FragmentPagerAdapter {
 

@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.Activities;
 
 import android.content.Intent;
 import android.net.Uri;

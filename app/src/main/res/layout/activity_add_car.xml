@@ -51,7 +51,7 @@
         android:id="@+id/image_view_regNr"
         android:layout_width="25dp"
         android:layout_height="50dp"
-        android:src="@drawable/no_reg_plate"
+        android:src="@drawable/no_reg_plate_small"
         android:text="@string/to"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/rectangle_search_regNr"

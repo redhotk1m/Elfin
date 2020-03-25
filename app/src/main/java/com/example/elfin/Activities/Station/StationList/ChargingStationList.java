@@ -1,9 +1,8 @@
-package com.example.elfin;
+package com.example.elfin.Activities.Station.StationList;
 
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.elfin.R;
+import com.example.elfin.adapter.RecyleViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

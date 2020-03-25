@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.elfin.Activities.AboutCharger;
+import com.example.elfin.Activities.Station.StationList.ChargerItem;
+import com.example.elfin.R;
 
 import java.util.List;
 
@@ -36,7 +40,7 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
             @Override
             public void onClick(View view) {
                 System.out.println("Item click at position" + myViewHolder.getAdapterPosition());
-                intent = new Intent(context,AboutCharger.class);
+                intent = new Intent(context, AboutCharger.class);
                 context.startActivity(intent);
             }
         });

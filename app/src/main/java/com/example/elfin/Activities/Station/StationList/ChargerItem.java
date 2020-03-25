@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.Activities.Station.StationList;
 
 public class ChargerItem {
 

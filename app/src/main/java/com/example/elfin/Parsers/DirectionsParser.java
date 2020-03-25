@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.Parsers;
 
 import com.google.android.gms.maps.model.LatLng;
 

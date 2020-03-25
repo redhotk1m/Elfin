@@ -1,9 +1,9 @@
-package com.example.elfin;
+package com.example.elfin.Utils;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.example.elfin.ChargingStationMap;
+import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
 import com.example.elfin.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.PolyUtil;

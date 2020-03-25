@@ -1,10 +1,12 @@
-package com.example.elfin;
+package com.example.elfin.Utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.example.elfin.MainActivity;
 
 public class EditTextFunctions {
 

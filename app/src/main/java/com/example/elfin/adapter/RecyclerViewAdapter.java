@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.elfin.R;
-import com.example.elfin.RecyclerViewClickListener;
+import com.example.elfin.car.RecyclerViewClickListener;
 import com.example.elfin.car.CarsViewHolder;
 import com.example.elfin.car.Elbil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;

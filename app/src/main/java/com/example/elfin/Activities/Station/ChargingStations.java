@@ -1,4 +1,4 @@
-package com.example.elfin;
+package com.example.elfin.Activities.Station;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.elfin.R;
 import com.example.elfin.adapter.PageAdapter;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
