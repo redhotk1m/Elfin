@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.elfin.MainActivity;
@@ -17,13 +18,17 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CarInfoActivity extends AppCompatActivity {
 
     private ArrayList<Elbil> mCarList;
     private Button saveCarBtn, loadCarBtn;
-    private EditText editTextBrand, editTextModel, editTextModelYear, editTextFastCharge, editTextBattery;
+    private EditText editTextFastCharge, editTextBattery;
+    private TextView editTextBrand, editTextModel, editTextModelYear;
     private Elbil elbil;
 
 
@@ -88,9 +93,9 @@ public class CarInfoActivity extends AppCompatActivity {
 
 
     private void findViewsById() {
-        editTextBrand = findViewById(R.id.edit_text_brand);
-        editTextModel = findViewById(R.id.edit_text_model);
-        editTextModelYear = findViewById(R.id.edit_text_model_year);
+        editTextBrand = findViewById(R.id.text_view_brand);
+        editTextModel = findViewById(R.id.text_view_model);
+        editTextModelYear = findViewById(R.id.text_view_model_year);
         editTextFastCharge = findViewById(R.id.edit_text_fast_charge);
         //editTextBattery = findViewById(R.id.edit_text_battery);
 
@@ -110,6 +115,7 @@ public class CarInfoActivity extends AppCompatActivity {
         //+ specs.get("battery") + " kw";
         //      String effect = specs.get("effect").toString();
 
+        getSpecs(specs);
 
         editTextBrand.setText(brand);
         editTextModel.setText(model);
@@ -117,6 +123,30 @@ public class CarInfoActivity extends AppCompatActivity {
         //editTextFastCharge.setText(fastCharge);
         //editTextBattery.setText(battery);
     }
+
+
+    private void getSpecs(Map<String, Double> specs) {
+
+        if (specs == null) System.out.println("NO SPECS");
+        else System.out.println(specs.get("battery"));
+
+//            String spec = specs.keySet().toString();
+
+    //    System.out.println(spec + " ; " + specs.get(spec));
+
+
+
+        /*
+        for(Map.Entry entry:specs.entrySet()){
+            System.out.print(entry.getKey() + " : " + entry.getValue());
+            //String s = entry.getKey() + " : " + entry.getValue() + "\n";
+            //editTextFastCharge.setText(s);
+        }
+
+         */
+    }
+
+
 
     private void clearAttributes(){
         String brand = "Bilmerke: ";

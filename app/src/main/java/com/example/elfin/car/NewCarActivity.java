@@ -18,6 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,17 +57,25 @@ public class NewCarActivity extends AppCompatActivity {
             //if (i == 1) specs.put("battery", Double.parseDouble(specArray[i]));
         }
 
-        CollectionReference elbilRef = FirebaseFirestore.getInstance()
+        CollectionReference elbiler = FirebaseFirestore.getInstance()
                 .collection("elbiler");
 
 
+        Map<String, Object> elbilMap = new HashMap<>();
+        elbilMap.put("brand", merke);
+        elbilMap.put("model", model);
+        elbilMap.put("modelYear", modelYear);
+        //elbilMap.put("specs", Arrays.asList(specArray));
+        elbilMap.put("specs", specs);
+
+        elbiler.document().set(elbilMap);
 
 
         //elbilRef.document(merke).set(new Elbil(model, modelYear, specs));
 
         //elbilRef.document(merke).collection(model).add(new Elbil(modelYear, specs));
 
-        elbilRef.add(new Elbil(merke, model, modelYear, specs));
+        //elbilRef.add(new Elbil(merke, model, modelYear, specs));
         //Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
         //finish();
 

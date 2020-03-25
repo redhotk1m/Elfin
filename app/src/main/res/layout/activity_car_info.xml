@@ -6,22 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".car.CarInfoActivity">
 
-    <EditText
-        android:id="@+id/edit_text_brand"
+    <TextView
+        android:id="@+id/text_view_add_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Er dette din bil?"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_brand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:hint="Merke"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_add_car" />
 
-    <EditText
-        android:id="@+id/edit_text_model"
+    <TextView
+        android:id="@+id/text_view_model"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -32,10 +42,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_brand" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_brand" />
 
-    <EditText
-        android:id="@+id/edit_text_model_year"
+    <TextView
+        android:id="@+id/text_view_model_year"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -46,7 +56,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_model" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_model" />
 
 
     <EditText
@@ -61,7 +71,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_model_year" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_model_year" />
 
     <EditText
         android:id="@+id/edit_text_battery"
@@ -86,10 +96,10 @@
         android:text="Legg til Bil"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_battery"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="@+id/edit_text_battery"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_fast_charge"
-        app:layout_constraintVertical_bias="0.83" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_battery"
+        app:layout_constraintVertical_bias="0.363" />
 
     <Button
         android:id="@+id/btnLoadCar"
@@ -101,7 +111,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSave"
         app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

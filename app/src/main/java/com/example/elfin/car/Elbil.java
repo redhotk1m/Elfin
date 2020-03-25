@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class Elbil implements Parcelable {
 
+
+
     private String documentId;
     private String brand, model, modelYear;
     private Map<String, Double> specs;

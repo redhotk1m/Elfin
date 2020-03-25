@@ -14,6 +14,9 @@
     <string name="search">Søk</string>
     <string name="google_map_api_key">AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU</string>
 
+    <string name="velg_bilmerke">Velg bilmerke</string>
+    <string name="velg_bilmodel">Velg bilmodell</string>
+    <string name="velg_spesifikk_bilmodell">Velg spesifikk bilmodell</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
