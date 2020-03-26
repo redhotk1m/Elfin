@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void startChargingStationActivity() {
-        checkIfChargingStationsAreFound();
+        //checkIfChargingStationsAreFound();
         Intent intent = new Intent(this, ChargingStations.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("chargingStations",getAllChargingStations());

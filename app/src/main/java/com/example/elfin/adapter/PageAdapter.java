@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargingStationList;
 import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
 
@@ -16,11 +17,15 @@ public class PageAdapter extends FragmentPagerAdapter {
     private int numberOfTabs;
     FragmentManager fragmentManager;
     private Bundle bundle;
-    public PageAdapter(FragmentManager fm, int numberOfTabs, Bundle bundle) {
+
+    ChargingStationList chargingStationList;
+    ChargingStationMap chargingStationMap;
+    ChargingStations chargingStations;
+    public PageAdapter(FragmentManager fm, int numberOfTabs, ChargingStations chargingStations) {
         super(fm, numberOfTabs);
         this.numberOfTabs = numberOfTabs;
         this.fragmentManager = fm;
-        this.bundle = bundle;
+        this.chargingStations = chargingStations;
     }
 
     @Override
@@ -28,9 +33,9 @@ public class PageAdapter extends FragmentPagerAdapter {
         System.out.println("Pos er " + position);
         switch (position){
             case 0:
-                return new ChargingStationList();
+                return this.chargingStationList = new ChargingStationList(chargingStations);
             case 1:
-                return new ChargingStationMap(bundle);
+                return this.chargingStationMap = new ChargingStationMap(chargingStations);
                 default:
                     return null;
         }
@@ -52,6 +57,15 @@ public class PageAdapter extends FragmentPagerAdapter {
             System.out.println("MAP");
         }*/
         return super.instantiateItem(container, position);
+    }
+
+
+    public ChargingStationList getChargingStationList() {
+        return chargingStationList;
+    }
+
+    public ChargingStationMap getChargingStationMap() {
+        return chargingStationMap;
     }
 
 }

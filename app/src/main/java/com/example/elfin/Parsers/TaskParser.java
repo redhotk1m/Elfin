@@ -3,6 +3,7 @@ package com.example.elfin.Parsers;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
+import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
 import com.example.elfin.Activities.Station.StationMap.StationDrawer;
 import com.google.android.gms.maps.model.LatLng;
@@ -16,9 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String,String>>>> {
-    ChargingStationMap chargingStationMap;
-    public TaskParser(ChargingStationMap chargingStationMap) {
-        this.chargingStationMap = chargingStationMap;
+    ChargingStations chargingStations;
+    public TaskParser(ChargingStations chargingStations) {
+        this.chargingStations = chargingStations;
     }
 
     @Override
@@ -36,10 +37,12 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
         return routes;
     }
 
+
+    PolylineOptions polylineOptions;
     @Override
     protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
         ArrayList points = null;
-        PolylineOptions polylineOptions = null;
+        polylineOptions = null;
         for (List<HashMap<String, String>> path : lists){
             points = new ArrayList();
             polylineOptions = new PolylineOptions();
@@ -55,12 +58,13 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
         }
         if (polylineOptions != null){
             System.out.println("FERDIG@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            chargingStationMap.setPolylineOptions(polylineOptions);
-            chargingStationMap.drawAllPolyLines();
+            //chargingStationMap.drawPolyLines(polylineOptions);
             //chargingStationMap.addAllChargingStations();
-            StationDrawer stationDrawer = new StationDrawer(chargingStationMap);
+            chargingStations.getPagerAdapter().getChargingStationMap().setPolyLineOptions(polylineOptions);
+            StationDrawer stationDrawer = new StationDrawer(chargingStations);
             stationDrawer.execute(points);
             //TODO: stationDrawer.execute
         }
     }
+
 }

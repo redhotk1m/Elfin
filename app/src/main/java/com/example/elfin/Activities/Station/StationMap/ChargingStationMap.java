@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.elfin.API.TaskRequestDirections;
+import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,28 +34,27 @@ import java.util.ArrayList;
 public class ChargingStationMap extends Fragment {
 
     MapView mMapView;
-    public static GoogleMap gMapStatic;
+    public GoogleMap gMap;
 
     private ChargingStationMap chargingStationMap;
     private String destinationID;
+    private boolean hasCreatedValidStations = false;
+    private boolean hasCreatedPolyline = false;
+    private boolean hasCreatedMap = false;
+    ChargingStations chargingStations;
 
 
     private ArrayList<LatLng> allChargingStations;
 
-    public void setPolylineOptions(PolylineOptions polylineOptions) {
-        this.polylineOptions = polylineOptions;
-    }
-
-    PolylineOptions polylineOptions;
-
-    public ChargingStationMap(Bundle bundle) {
+    public ChargingStationMap(ChargingStations chargingStations) {
+        this.chargingStations = chargingStations;
         chargingStationMap = this;
-        destinationID = bundle.getString("destinationID");
-        allChargingStations = bundle.getParcelableArrayList("chargingStations");
+        destinationID = chargingStations.getBundle().getString("destinationID");
+        allChargingStations = chargingStations.getBundle().getParcelableArrayList("chargingStations");
     }
 
-    public GoogleMap getgMapStatic(){
-        return gMapStatic;
+    public GoogleMap getgMap(){
+        return gMap;
     }
 
 
@@ -84,7 +84,8 @@ public class ChargingStationMap extends Fragment {
             @Override
             public void onMapReady(final GoogleMap googleMap) {
                 System.out.println("Kjører onMapReady ASYNC i onCreateView");
-                gMapStatic = googleMap;
+                gMap = googleMap;
+                chargingStations.mapCreated = true;
                 // For showing a move to my location button
                 googleMap.setMyLocationEnabled(true);
 
@@ -100,10 +101,12 @@ public class ChargingStationMap extends Fragment {
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(4).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                TaskRequestDirections taskRequestDirections = new TaskRequestDirections(view.getContext(),chargingStationMap);
-                taskRequestDirections.execute(destinationID);
+                //TaskRequestDirections taskRequestDirections = new TaskRequestDirections(view.getContext(),chargingStationMap);
+                //taskRequestDirections.execute(destinationID);
                 //Nobil a = new Nobil(chargingStationMap);
                 //a.execute("");
+                drawRoute();
+                drawValidStations();
             }
         });
 
@@ -115,15 +118,13 @@ public class ChargingStationMap extends Fragment {
         return allChargingStations;
     }
 
-    public void drawChargingStations(LatLng latLng){
-        gMapStatic.addMarker(new MarkerOptions().position(latLng).title("test123").snippet("test9321"));
-    }
 
 
-    public void drawAllPolyLines(){
-        gMapStatic.addPolyline(polylineOptions);
+    public void drawPolyLines(PolylineOptions polylineOptions){
+        gMap.addPolyline(polylineOptions);
         //googleMap.addPolyline(new PolylineOptions().color(getResources().getColor(R.color.blackColor)).width(5f).clickable(false).addAll(Utils.readEncodedPolyLinePointsFromCSV(this,)));
     }
+
 
 
     @Override
@@ -150,4 +151,41 @@ public class ChargingStationMap extends Fragment {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
+
+    PolylineOptions polylineOptions;
+    public void setPolyLineOptions(PolylineOptions polyLineOptions){
+        this.polylineOptions = polyLineOptions;
+        chargingStations.routeCreated = true;
+        drawRoute();
+    }
+
+    public void drawRoute(){
+        if (chargingStations.mapCreated && chargingStations.routeCreated){
+            gMap.addPolyline(polylineOptions);
+        }
+    }
+
+    ArrayList<LatLng> validStations;
+    public void setAllValidStations(ArrayList<LatLng> validStations){
+        System.out.println("Har satt valid stations i map");
+        this.validStations = validStations;
+        chargingStations.validStationsFound = true;
+        drawValidStations();
+    }
+
+
+    public void drawValidStations(){
+        if (chargingStations.mapCreated && chargingStations.validStationsFound){
+            System.out.println("går  gjennom alle valid");
+            for (Object latLng : validStations) {
+                drawChargingStations((LatLng) latLng);
+            }
+        }
+    }
+
+    public void drawChargingStations(LatLng latLng){
+        System.out.println("tegner");
+        gMap.addMarker(new MarkerOptions().position(latLng).title("test123").snippet("test9321"));
+    }
+
 }

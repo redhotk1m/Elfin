@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.R;
 import com.example.elfin.adapter.RecyleViewAdapter;
 
@@ -28,17 +29,18 @@ public class ChargingStationList extends Fragment {
 
     private  RecyclerView recyclerView3;
     private List<ChargerItem> chargerItemList;
+    ChargingStations chargingStations;
 
 
 
 
 
-
-    public ChargingStationList() {
+    public ChargingStationList(ChargingStations chargingStations) {
+        this.chargingStations = chargingStations;
         // Required empty public constructor
     }
 
-
+    //TODO: Sjekk hvis chargingStations.routeCreated && routeCreated = true før noe vises, bør ha loading mens disse er false.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
