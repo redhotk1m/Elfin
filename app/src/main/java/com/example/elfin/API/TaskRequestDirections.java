@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
 import com.example.elfin.R;
 import com.example.elfin.Parsers.TaskParser;
@@ -19,10 +20,10 @@ import java.util.List;
 public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     Context context;
-    ChargingStationMap chargingStationMap;
-    public TaskRequestDirections(Context context, ChargingStationMap chargingStationMap){
+    ChargingStations chargingStations;
+    public TaskRequestDirections(Context context, ChargingStations chargingStations){
         this.context = context;
-        this.chargingStationMap = chargingStationMap;
+        this.chargingStations = chargingStations;
     }
 
     private String requestDirection(String ID){
@@ -78,7 +79,7 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        TaskParser taskParser = new TaskParser(chargingStationMap);
+        TaskParser taskParser = new TaskParser(chargingStations);
         taskParser.execute(s);
     }
 }

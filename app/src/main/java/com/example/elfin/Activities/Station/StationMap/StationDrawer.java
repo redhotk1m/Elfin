@@ -2,6 +2,7 @@ package com.example.elfin.Activities.Station.StationMap;
 
 import android.os.AsyncTask;
 
+import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.comparators.LongditudeComparator;
 import com.example.elfin.Utils.StMethods;
 import com.google.android.gms.maps.model.LatLng;
@@ -9,17 +10,20 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 public class StationDrawer extends AsyncTask<ArrayList<LatLng>, Void, String> {
-    private ChargingStationMap chargingStationMap;
     private ArrayList<LatLng> points,
             chargingStations,
             validLatStations = new ArrayList<>(),
             validStations = new ArrayList<>();
 
     final double LONG_DIFF = 0.0015, LAT_DIFF = 0.0015;
+    ChargingStations chargingStation;
 
-    public StationDrawer(ChargingStationMap chargingStationMap){
-        this.chargingStationMap = chargingStationMap;
-        this.chargingStations = new ArrayList<>(chargingStationMap.getAllChargingStations());
+    public StationDrawer(ChargingStations chargingStations){
+        this.chargingStation = chargingStations;
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + chargingStations + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        //this.chargingStations = new ArrayList<>(chargingStationMap.getAllChargingStations());
+        this.chargingStations = new ArrayList<>(chargingStations.getAllChargingStations());
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@2" + this.chargingStations.toString() + " @@@@@@@@@@@@@@@@@@@@@");
     }
 
 
@@ -76,12 +80,15 @@ public class StationDrawer extends AsyncTask<ArrayList<LatLng>, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        drawAllValidStations();
+        System.out.println("VALID STATIONS: " + validStations.toString());
+        chargingStation.setValidStations(validStations);
+        chargingStation.getPagerAdapter().getChargingStationMap().setAllValidStations(validStations);
+        //drawAllValidStations();
     }
 
     private void drawAllValidStations(){
         for (Object latLng : validStations) {
-            chargingStationMap.drawChargingStations((LatLng) latLng);
+            chargingStation.getPagerAdapter().getChargingStationMap().drawChargingStations((LatLng) latLng);
         }
     }
 }
