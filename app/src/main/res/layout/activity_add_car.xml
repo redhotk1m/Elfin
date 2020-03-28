@@ -92,12 +92,12 @@
     <!--  Search after car brand / model -->
 
 
-    <TextView
-        android:id="@+id/text_view_search_car"
+    <CheckBox
+        android:id="@+id/check_box_manual_selection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="eller velg bil manuelt"
+        android:text="@string/manual_selection"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -112,12 +112,12 @@
         style="@android:style/Widget.Spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="@string/velg_bilmerke"
+        android:prompt="@string/choose_brand"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_search_car"
+        app:layout_constraintTop_toBottomOf="@+id/check_box_manual_selection"
         app:layout_constraintVertical_bias="0.032" />
 
     <Spinner
@@ -125,7 +125,7 @@
         style="@android:style/Widget.Spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="@string/velg_bilmodel"
+        android:prompt="@string/choose_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
