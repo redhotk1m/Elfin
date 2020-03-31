@@ -1,11 +1,13 @@
 package com.example.elfin.car;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -75,11 +77,13 @@ public class AddCarActivity extends AppCompatActivity {
 
         searchRegNrBtn.setOnClickListener(myOnClickListener);
 
+
         brands = new ArrayList<>();
         brands.add(getString(R.string.choose_brand));
         adapterBrands = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, brands);
         adapterBrands.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         initSpinner(BRAND, spinnerBrands, brands);
+
 
         models = new ArrayList<>();
         models.add(getString(R.string.choose_model));
@@ -102,6 +106,8 @@ public class AddCarActivity extends AppCompatActivity {
                 startActivity(new Intent(AddCarActivity.this, NewCarActivity.class));
             }
         });
+
+       // if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
     }
 
     private void findViewsById() {
@@ -111,6 +117,15 @@ public class AddCarActivity extends AppCompatActivity {
         searchCarBtn = findViewById(R.id.button_search_car);
         spinnerBrands = findViewById(R.id.spinner_brands);
         spinnerModels = findViewById(R.id.spinner_models);
+    }
+
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+
+        System.out.println("ELBIL LIST SIZE: " + allElbilList.size());
+        brands = new ArrayList<>();
+        getCarBrands(brands);
     }
 
     private View.OnClickListener myOnClickListener = new View.OnClickListener() {
@@ -143,13 +158,16 @@ public class AddCarActivity extends AppCompatActivity {
             switch (adapterView.getId()) {
                 case R.id.spinner_brands:
                     //models.add("TEST!!!");
-                    if (!brands.get(0).equals(getString(R.string.choose_brand))
-                            && !brands.get(0).equals(getString(R.string.choose_brand))) {
-                        spinnerModels.setEnabled(true);
-                        models = getFilteredModels(models);
-                    } else if (brands.get(0).equals(getString(R.string.choose_brand))
-                            || !brands.get(0).equals(getString(R.string.choose_brand))) {
-                        spinnerModels.setEnabled(false);
+
+                    if (brands.size() != 0) {
+                        if (!brands.get(0).equals(getString(R.string.choose_brand))
+                                && !brands.get(0).equals(getString(R.string.choose_brand))) {
+                            spinnerModels.setEnabled(true);
+                            models = getFilteredModels(models);
+                        } else if (brands.get(0).equals(getString(R.string.choose_brand))
+                                || !brands.get(0).equals(getString(R.string.choose_brand))) {
+                            spinnerModels.setEnabled(false);
+                        }
                     }
                     /*
                     else {
@@ -174,7 +192,6 @@ public class AddCarActivity extends AppCompatActivity {
         }
 
     };
-
 
     private void executeCarInfoApi() {
         CarInfoAPI carInfoAPI = new CarInfoAPI();
@@ -253,7 +270,8 @@ public class AddCarActivity extends AppCompatActivity {
 
 
         models.clear();
-        for (Elbil elbil : filteredCars) models.add(elbil.getModel());
+        for (Elbil elbil : filteredCars)
+            if (!models.contains(elbil.getModel())) models.add(elbil.getModel());
 
         if (models.size() != 0) {
             Toast.makeText(this, "FILRTRED MODELS: " + models.get(0), Toast.LENGTH_SHORT).show();
@@ -398,6 +416,7 @@ public class AddCarActivity extends AppCompatActivity {
         super.onStart();
         if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
     }
+
 
     private void getInitFirestoreData(CollectionReference reference) {
         reference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

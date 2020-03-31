@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.Exclude;
 
 import java.util.Map;
@@ -12,18 +14,19 @@ public class Elbil implements Parcelable {
 
 
 
-    private String documentId;
-    private String brand, model, modelYear;
+    private String documentId, spinnerDisplay;
+    private String brand, model, modelYear, battery;
     private Map<String, Double> specs;
 
     public Elbil(){
         //public no-arg constructor needed for firestore database
     }
 
-    public Elbil(String brand, String model, String modelYear, Map<String, Double> specs) {
+    public Elbil(String brand, String model, String modelYear, String battery, Map<String, Double> specs) {
         this.brand = brand;
         this.model = model;
         this.modelYear = modelYear;
+        this.battery = battery;
         this.specs = specs;
     }
 
@@ -32,6 +35,8 @@ public class Elbil implements Parcelable {
         brand = in.readString();
         model = in.readString();
         modelYear = in.readString();
+        battery = in.readString();
+        //specs = in.readHashMap();
     }
 
     public static final Creator<Elbil> CREATOR = new Creator<Elbil>() {
@@ -85,6 +90,14 @@ public class Elbil implements Parcelable {
         this.modelYear = modelYear;
     }
 
+    public String getBattery() {
+        return battery;
+    }
+
+    public void setBattery(String battery) {
+        this.battery = battery;
+    }
+
     public Map<String, Double> getSpecs() {
         return specs;
     }
@@ -104,5 +117,16 @@ public class Elbil implements Parcelable {
         parcel.writeString(brand);
         parcel.writeString(model);
         parcel.writeString(modelYear);
+        parcel.writeString(battery);
+        //parcel.writeMap(specs);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        spinnerDisplay = brand + " " + model + " ( " + modelYear + ")";
+        if (documentId == null) return brand;
+        return spinnerDisplay;
+        //return super.toString();
     }
 }
