@@ -20,12 +20,14 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.elfin.API.Nobil;
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Utils.AsyncResponse;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.car.AddCarActivity;
+import com.example.elfin.car.CarInfoActivity;
 import com.example.elfin.car.Elbil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -46,42 +48,27 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public static ArrayList<LatLng> allChargingStations;
     private boolean chargingStationsFound = false;
 
-    private TextView tvMyCar;
     private Spinner dropdown;
     private ArrayList<Elbil> mCarList;
-
-
+    private ArrayAdapter adapter;
 
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //textView = findViewById(R.id.textViewSuggest);
-        listViewSuggest=findViewById(R.id.listViewSuggest);
-        listViewSuggest.setVisibility(View.INVISIBLE);
 
-
-        dropdown = findViewById(R.id.chooseCar);
-        ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
-        editText = findViewById(R.id.editTextToAPlace);
+        findViewsById();
         editText.setCursorVisible(false);
 
-        //dropdown.setPrompt("EB12342 VW e-Golf");
-        String[] items = new String[]{"EB 12342 VW e-Golf", "Legg til bil"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
-        dropdown.setPrompt("EB12342 VW e-Golf");
-
-
+        // dropdown.setPrompt("EB12342 VW e-Golf");
+        initSpinner();
 
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
         EditTextFunctions editTextFunctions = new EditTextFunctions(this);
         editTextFunctions.setText();
-
 
         /*
         //Hvis den skal funke
@@ -97,44 +84,91 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         */
         //swapview
 
-
         Nobil nobil = new Nobil(this);
         nobil.execute();
-
-        tvMyCar = findViewById(R.id.tv_my_car);
-        getSavedCar();
-        tvMyCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), AddCarActivity.class));
-            }
-        });
     }
 
-    public void closeKeyboard(View view){
+    private void findViewsById() {
+        //textView = findViewById(R.id.textViewSuggest);
+        listViewSuggest = findViewById(R.id.listViewSuggest);
+        listViewSuggest.setVisibility(View.INVISIBLE);
+
+        dropdown = findViewById(R.id.chooseCar);
+        ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
+        editText = findViewById(R.id.editTextToAPlace);
+    }
+
+    public void closeKeyboard(View view) {
         InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboardManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+        keyboardManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    private AdapterView.OnItemSelectedListener myOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
+            Toast.makeText(adapterView.getContext(),
+                    "OnItemSelectedListener: \n" + adapterView.getItemAtPosition(position).toString(),
+                    Toast.LENGTH_LONG).show();
 
-    public void displaySuggestions(String adress){
+            getSelectedCar();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private void initSpinner() {
+        getSavedCars();
+        mCarList.add(new Elbil("Legg til bil", null, null, null, null));
+
+        adapter = new ArrayAdapter<>(MainActivity.this,
+                android.R.layout.simple_spinner_item, mCarList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(myOnItemSelectedListener);
+    }
+
+    private void getSavedCars() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("car list", null);
+        Type type = new TypeToken<ArrayList<Elbil>>() {
+        }.getType();
+        mCarList = gson.fromJson(json, type);
+
+        if (mCarList == null) mCarList = new ArrayList<>();
+    }
+
+    private void getSelectedCar() {
+        Elbil elbil = (Elbil) dropdown.getSelectedItem();
+
+        if (elbil.getBrand().equals("Legg til bil"))
+            startActivity(new Intent(this, AddCarActivity.class));
+        //Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
+        //  else Toast.makeText(this, "Selected Car: \n" + elbil.getBrand(), Toast.LENGTH_LONG).show();
+    }
+
+    public void displaySuggestions(String adress) {
         displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
             ArrayList<String> list = new ArrayList<>();
 
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
-                for (int i = 0; i <lists.size() ; i++) {
-                    for (int j = 0; j <lists.get(i).size() ; j++) {
-                        if(i == 0){
+                for (int i = 0; i < lists.size(); i++) {
+                    for (int j = 0; j < lists.get(i).size(); j++) {
+                        if (i == 0) {
                             list.add(lists.get(i).get(j));
-                        }else {
+                        } else {
                             placeIdList.add(lists.get(i).get(j));
                         }
                     }
                 }
                 listViewSuggest.setVisibility(View.VISIBLE);
-                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
+                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1, list);
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
             }
         });
@@ -152,21 +186,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
 
-
-
-    public void setDestinationID(String destinationID){
+    public void setDestinationID(String destinationID) {
         this.destinationID = destinationID;
     }
 
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //This is the result when user accepts / declines GPS location.
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             startChargingStationActivity();//Access was granted to GPS, change activity
-        else{
+        else {
             //Permission was not granted, should inform user that it's required to use the app.
             //Gi beskjed til bruker at appen ikke kan brukes uten tilgang til GPS
         }
@@ -176,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //checkIfChargingStationsAreFound();
         Intent intent = new Intent(this, ChargingStations.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("chargingStations",getAllChargingStations());
-        bundle.putString("destinationID",destinationID);
-        intent.putExtra("bundle",bundle);
+        bundle.putParcelableArrayList("chargingStations", getAllChargingStations());
+        bundle.putString("destinationID", destinationID);
+        intent.putExtra("bundle", bundle);
         startActivity(intent);
     }
 
@@ -190,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             ActivityCompat.requestPermissions(
                     this
                     , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
-                    ,0);
+                    , 0);
         } else {
             //If permission is already granted, change activity
             startChargingStationActivity();
@@ -206,29 +237,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         this.allChargingStations = allChargingStations;
     }
 
-    private void checkIfChargingStationsAreFound(){
-        while (!chargingStationsFound){
+    private void checkIfChargingStationsAreFound() {
+        while (!chargingStationsFound) {
             //TODO: Venter på alle ladestasjoner før noe mer skjer,
             // bør håndtere hvis den ikke finner ladestajoner, eller det går en viss tid.
         }
     }
 
-    public void setChargingStationsFound(boolean found){
+    public void setChargingStationsFound(boolean found) {
         this.chargingStationsFound = found;
-    }
-
-    private void getSavedCar() {
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("car list", null);
-        Type type = new TypeToken<ArrayList<Elbil>>() {}.getType();
-        mCarList = gson.fromJson(json, type);
-
-        if (mCarList == null) mCarList = new ArrayList<>();
-        else {
-            String myCar = mCarList.get(0).getBrand() + " " + mCarList.get(0).getModel();
-            tvMyCar.setText(myCar);
-            //dropdown.setPrompt(myCar);
-        }
     }
 }
