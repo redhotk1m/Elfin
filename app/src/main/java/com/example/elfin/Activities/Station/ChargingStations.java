@@ -83,25 +83,44 @@ public class ChargingStations extends AppCompatActivity {
             }
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("allValidChargingStations"));
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverAllStations,new IntentFilter("jsonString"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverAllValidStations,new IntentFilter("allValidChargingStations"));
+
         if (allChargingStations != null && allChargingStations.size() > 0)
             startRequestDirections();
     }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mMessageReceiverAllValidStations = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             System.out.println("BLIR MOTTAT!");
             ArrayList<LatLng> allValidStations = intent.getParcelableArrayListExtra("allValidChargingStations");
-            if (allValidStations == null || allValidStations.size() < 1) //Bør være allValidStations.get(0).getError (ikke helt sånn)
+            if (allValidStations == null) //Bør være allValidStations.get(0).getError (ikke helt sånn)
+                System.out.println("error"); //Bør aldri skje
+                //TODO: Error message to user
+            else {
+                pagerAdapter.getChargingStationList().setAllValidStations(allValidStations);
+                pagerAdapter.getChargingStationMap().setAllValidStations(allValidStations);
+                //TODO: Gi beskjed til map og list om at alle ladestasjoner er funnet
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiverAllValidStations);
+            }
+        }
+    };
+
+
+    private BroadcastReceiver mMessageReceiverAllStations = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("BLIR MOTTAT!");
+            String message = intent.getStringExtra("jsonString");
+            if ("error".equals(message))
                 System.out.println("error");
                 //TODO: Error message to user
             else {
-                validStations = allValidStations;
-                pagerAdapter.getChargingStationMap().setAllValidStations(validStations);
-                pagerAdapter.getChargingStationList().setAllValidStations(validStations);
-                //TODO: Gi beskjed til map og list om at alle ladestasjoner er funnet
-                LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
+                NobilAPIHandler nobilAPIHandler = new NobilAPIHandler(message);
+                setAllChargingStations(nobilAPIHandler.getChargingStationCoordinates());
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiverAllStations);
             }
         }
     };

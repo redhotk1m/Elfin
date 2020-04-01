@@ -7,6 +7,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -24,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.elfin.API.Nobil;
+import com.example.elfin.API.NobilAPIHandler;
 import com.example.elfin.API.RetrieveJSON;
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Utils.AsyncResponse;
@@ -107,15 +109,31 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("jsonString"));
 
 
-        tvMyCar = findViewById(R.id.tv_my_car);
-        getSavedCar();
-        tvMyCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), AddCarActivity.class));
-            }
-        });
+        //tvMyCar = findViewById(R.id.tv_my_car);
+        //getSavedCar();
+        //tvMyCar.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        startActivity(new Intent(getApplicationContext(), AddCarActivity.class));
+        //    }
+        //});
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("BLIR MOTTAT!");
+            String message = intent.getStringExtra("jsonString");
+            if ("error".equals(message))
+                System.out.println("error");
+                //TODO: Error message to user
+            else {
+                NobilAPIHandler nobilAPIHandler = new NobilAPIHandler(message);
+                setAllChargingStations(nobilAPIHandler.getChargingStationCoordinates());
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
+            }
+        }
+    };
 
     public void closeKeyboard(View view){
         InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
