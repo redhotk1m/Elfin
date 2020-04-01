@@ -33,6 +33,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -54,13 +55,13 @@ public class AddCarActivity extends AppCompatActivity {
 
     private DocumentSnapshot lastResult;
 
-    private List<String> brands, models;
+    private List<String> brands, models, modelYears;
     private ArrayAdapter<String> mAdapter;
-    private ArrayAdapter<String> adapterBrands, adapterModels;
+    private ArrayAdapter<String> adapterBrands, adapterModels, adapterModelYears;
 
     private EditText editTextSearchRegNr;
     private SearchView searchViewCar;
-    private Spinner spinnerBrands, spinnerModels;
+    private Spinner spinnerBrands, spinnerModels, spinnerModelYears;
     private ImageButton searchRegNrBtn;
     private Button searchCarBtn;
     private CheckBox carCheckBox;
@@ -77,7 +78,6 @@ public class AddCarActivity extends AppCompatActivity {
 
         searchRegNrBtn.setOnClickListener(myOnClickListener);
 
-
         brands = new ArrayList<>();
         brands.add(getString(R.string.choose_brand));
         adapterBrands = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, brands);
@@ -91,12 +91,24 @@ public class AddCarActivity extends AppCompatActivity {
         adapterModels.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         initSpinner(MODEL, spinnerModels, models);
 
+        modelYears = new ArrayList<>();
+        modelYears.add(getString(R.string.choose_model_year));
+        adapterModelYears = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, modelYears);
+        adapterModelYears.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        initSpinner(MODELYEAR, spinnerModelYears, modelYears);
+
         // adapterModels = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, models);
         //  adapterModels.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         carCheckBox.setOnClickListener(myOnClickListener);
 
         searchCarBtn.setOnClickListener(myOnClickListener);
+
+        if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
+
+        onPostCreate(savedInstanceState);
+        Toast.makeText(this, "ELBIL LIST SIZE: " + allElbilList.size(), Toast.LENGTH_SHORT).show();
+        System.out.println("ELBIL LIST SIZE: " + allElbilList.size());
 
         //Todo: utkommenter etter at alle bilene er lagt til
         FloatingActionButton buttonAddCar = findViewById(R.id.button_add_car);
@@ -107,7 +119,7 @@ public class AddCarActivity extends AppCompatActivity {
             }
         });
 
-       // if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
+        // if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
     }
 
     private void findViewsById() {
@@ -117,6 +129,7 @@ public class AddCarActivity extends AppCompatActivity {
         searchCarBtn = findViewById(R.id.button_search_car);
         spinnerBrands = findViewById(R.id.spinner_brands);
         spinnerModels = findViewById(R.id.spinner_models);
+        spinnerModelYears = findViewById(R.id.spinner_model_years);
     }
 
     @Override
@@ -124,8 +137,8 @@ public class AddCarActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState, persistentState);
 
         System.out.println("ELBIL LIST SIZE: " + allElbilList.size());
-        brands = new ArrayList<>();
-        getCarBrands(brands);
+        // brands = new ArrayList<>();
+        // getCarBrands(brands);
     }
 
     private View.OnClickListener myOnClickListener = new View.OnClickListener() {
@@ -160,12 +173,12 @@ public class AddCarActivity extends AppCompatActivity {
                     //models.add("TEST!!!");
 
                     if (brands.size() != 0) {
-                        if (!brands.get(0).equals(getString(R.string.choose_brand))
-                                && !brands.get(0).equals(getString(R.string.choose_brand))) {
+                        if (!brands.get(0).equals(getString(R.string.choose_brand)) ) {
+                                //&& !brands.get(0).equals(getString(R.string.choose_nothing))) {
                             spinnerModels.setEnabled(true);
                             models = getFilteredModels(models);
                         } else if (brands.get(0).equals(getString(R.string.choose_brand))
-                                || !brands.get(0).equals(getString(R.string.choose_brand))) {
+                                || brands.get(0).equals(getString(R.string.choose_nothing))) {
                             spinnerModels.setEnabled(false);
                         }
                     }
@@ -179,6 +192,21 @@ public class AddCarActivity extends AppCompatActivity {
                     adapterModels.notifyDataSetChanged();
                     break;
                 case R.id.spinner_models:
+
+                    if (models.size() != 0) {
+                        if (!models.get(0).equals(getString(R.string.choose_model)) ) {
+                                //&& !models.get(0).equals(getString(R.string.choose_nothing))) {
+                            spinnerModelYears.setEnabled(true);
+                            String[] years = getResources().getStringArray(R.array.year_models);
+                          //  modelYears = new ArrayList<>(Arrays.asList(years));
+                            modelYears.addAll(Arrays.asList(years));
+                        } else if (models.get(0).equals(getString(R.string.choose_model))
+                                || models.get(0).equals(getString(R.string.choose_nothing))) {
+                            spinnerModelYears.setEnabled(false);
+                        }
+                    }
+
+                    adapterModelYears.notifyDataSetChanged();
                     //  Toast.makeText(adapterView.getContext(), "MODELS SPINNER", Toast.LENGTH_SHORT).show();
                     break;
                 default:
@@ -233,6 +261,10 @@ public class AddCarActivity extends AppCompatActivity {
                 System.out.println("MODELS");
                 spinner.setAdapter(adapterModels);
                 break;
+            case MODELYEAR:
+                System.out.println("MODEL YEARS");
+                spinner.setAdapter(adapterModelYears);
+                break;
             default:
                 System.out.println("NO MATCH..");
         }
@@ -270,6 +302,7 @@ public class AddCarActivity extends AppCompatActivity {
 
 
         models.clear();
+        models.add(getString(R.string.choose_nothing));
         for (Elbil elbil : filteredCars)
             if (!models.contains(elbil.getModel())) models.add(elbil.getModel());
 
@@ -302,6 +335,8 @@ public class AddCarActivity extends AppCompatActivity {
         });
     }
 
+    private void compoundFirestoreQuerry(String brand, String model, String modelYear) {
+    }
 
     private void compoundFirestoreQuerry(String model, String modelYear) {
         elbilReference.whereEqualTo(MODEL, model)

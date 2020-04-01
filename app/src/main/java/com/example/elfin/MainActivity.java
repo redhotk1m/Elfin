@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.elfin.API.Nobil;
 import com.example.elfin.API.NobilAPIHandler;
@@ -51,11 +52,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public static ArrayList<LatLng> allChargingStations;
     private boolean chargingStationsFound = false;
 
-    private TextView tvMyCar;
-    private Spinner dropdown;
     private ArrayList<Elbil> mCarList;
-
-
+    private ArrayAdapter adapter;
+    private Spinner dropdown;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -75,12 +74,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         editText.setCursorVisible(false);
 
         //dropdown.setPrompt("EB12342 VW e-Golf");
-        String[] items = new String[]{"EB 12342 VW e-Golf", "Legg til bil"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
-        dropdown.setPrompt("EB12342 VW e-Golf");
-
-
+        initSpinner();
 
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
@@ -107,16 +101,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&countrycode=NOR&file=false&format=json");
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("jsonString"));
-
-
-        //tvMyCar = findViewById(R.id.tv_my_car);
-        //getSavedCar();
-        //tvMyCar.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        startActivity(new Intent(getApplicationContext(), AddCarActivity.class));
-        //    }
-        //});
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -140,7 +124,51 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         keyboardManager.hideSoftInputFromWindow(view.getWindowToken(),0);
     }
 
+    private void initSpinner() {
+        getSavedCars();
+        mCarList.add(new Elbil("Legg til bil", null, null, null, null));
 
+        adapter = new ArrayAdapter<>(MainActivity.this,
+                android.R.layout.simple_spinner_item, mCarList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                Toast.makeText(adapterView.getContext(),
+                        "OnItemSelectedListener: \n" + adapterView.getItemAtPosition(position).toString(),
+                        Toast.LENGTH_LONG).show();
+
+                getSelectedCar();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void getSavedCars() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("car list", null);
+        Type type = new TypeToken<ArrayList<Elbil>>() {
+        }.getType();
+        mCarList = gson.fromJson(json, type);
+
+        if (mCarList == null) mCarList = new ArrayList<>();
+    }
+
+    private void getSelectedCar() {
+        Elbil elbil = (Elbil) dropdown.getSelectedItem();
+
+        if (elbil.getBrand().equals("Legg til bil"))
+            startActivity(new Intent(this, AddCarActivity.class));
+        //Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
+        //  else Toast.makeText(this, "Selected Car: \n" + elbil.getBrand(), Toast.LENGTH_LONG).show();
+    }
 
     public void displaySuggestions(String adress){
         displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
@@ -239,20 +267,5 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void setChargingStationsFound(boolean found){
         this.chargingStationsFound = found;
-    }
-
-    private void getSavedCar() {
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("car list", null);
-        Type type = new TypeToken<ArrayList<Elbil>>() {}.getType();
-        mCarList = gson.fromJson(json, type);
-
-        if (mCarList == null) mCarList = new ArrayList<>();
-        else {
-            String myCar = mCarList.get(0).getBrand() + " " + mCarList.get(0).getModel();
-            tvMyCar.setText(myCar);
-            //dropdown.setPrompt(myCar);
-        }
     }
 }

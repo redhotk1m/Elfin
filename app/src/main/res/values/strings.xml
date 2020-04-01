@@ -18,7 +18,23 @@
     <string name="choose_nothing">--VET IKKE--</string>
     <string name="choose_brand">Velg bilmerke</string>
     <string name="choose_model">Velg bilmodell</string>
+    <string name="choose_model_year">Velg årsmodell</string>
     <string name="choose_specific_model">Velg spesifikk bilmodell</string>
+
+    <string-array name="year_models">
+        <item>2010</item>
+        <item>2011</item>
+        <item>2012</item>
+        <item>2013</item>
+        <item>2014</item>
+        <item>2015</item>
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+        <item>2021</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
