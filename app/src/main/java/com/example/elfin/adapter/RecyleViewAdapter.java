@@ -98,7 +98,6 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
             chargeTimeSlow= itemView.findViewById(R.id.charge_time_slow);
             avaiableSlow= itemView.findViewById(R.id.available_slow);
             distanceKm= itemView.findViewById(R.id.distance_km);
-
             imageViewFast = itemView.findViewById(R.id.imageViewFast);
             imageViewSlow = itemView.findViewById(R.id.imageViewSlow);
 

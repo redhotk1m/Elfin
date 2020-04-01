@@ -33,7 +33,7 @@ public class PageAdapter extends FragmentPagerAdapter {
         System.out.println("Pos er " + position);
         switch (position){
             case 0:
-                return this.chargingStationList = new ChargingStationList(chargingStations);
+                return this.chargingStationList = new ChargingStationList();
             case 1:
                 return this.chargingStationMap = new ChargingStationMap(chargingStations);
                 default:

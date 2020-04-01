@@ -13,7 +13,7 @@ public class StMethods {
                         (1 - Math.cos((lon2 - lon1) * p))/2;
         long result = Math.round(12742 * Math.asin(Math.sqrt(a)));
         double endTime = System.currentTimeMillis();
-        System.out.println(endTime-startTime/1000);
+        //System.out.println(endTime-startTime/1000);
         return result;
     }
 
@@ -21,7 +21,7 @@ public class StMethods {
         double startTime = System.currentTimeMillis();
         double a = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         double endTime = System.currentTimeMillis();
-        System.out.println(endTime-startTime/1000 + " FLAT");
+        //System.out.println(endTime-startTime/1000 + " FLAT");
         return a;
     }
 

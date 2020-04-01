@@ -62,12 +62,15 @@ public class ChargingStationMap extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_charging_station_map, container, false);
+
         // Inflate the layout for this fragment
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+        Log.d("Charging", "onCreateView:  starter" );
+
         mMapView = view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         System.out.println("Kjører onCreateView");

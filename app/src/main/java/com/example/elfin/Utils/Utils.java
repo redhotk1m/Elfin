@@ -33,7 +33,7 @@ public class Utils {
         String mode = "driving";
         String depertureTime = "now";
         String parameters = googleURLDirection + "origin=" + origin + "&" + destination + "&" + mode + "&" + depertureTime + "&" + key;
-        System.out.println(parameters);
+        //System.out.println(parameters);
         //https://maps.googleapis.com/maps/api/directions/JSON?parameters
         // Create an InputStream object. From API
         InputStream is = context.getResources().openRawResource(R.raw.test);
