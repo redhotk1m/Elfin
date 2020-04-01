@@ -88,7 +88,6 @@ public class Nobil extends AsyncTask<Void, Void, ArrayList<LatLng>>{
 
     @Override
     protected void onPostExecute(ArrayList<LatLng> ladestasjoner) {
-        HashSet<LatLng> chargingStationsEnroute = new HashSet<LatLng>();
         //TODO Iterere gjennom dobbelt, sånn at den ikke viser antall i forhold til den minste listen
         //double startTime = System.currentTimeMillis();
         //System.out.println(startTime);

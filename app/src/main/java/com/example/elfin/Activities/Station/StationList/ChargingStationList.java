@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.R;
 import com.example.elfin.adapter.RecyleViewAdapter;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,5 +107,10 @@ public class ChargingStationList extends Fragment {
     public void onPause() {
         super.onPause();
         System.out.println("ON PAUSE LIST");
+    }
+
+    public void setAllValidStations(ArrayList<LatLng> validStations) {
+        //TODO: Denne blir kalt når alle stasjonene er FUNNET!
+        System.out.println("Blir kalt inne i ChargingStationList");
     }
 }

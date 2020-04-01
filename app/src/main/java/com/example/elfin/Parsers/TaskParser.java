@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String,String>>>> {
-    ChargingStations chargingStations;
+    private ChargingStations chargingStations;
     public TaskParser(ChargingStations chargingStations) {
         this.chargingStations = chargingStations;
     }
@@ -38,13 +38,12 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
     }
 
 
-    PolylineOptions polylineOptions;
     @Override
     protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
-        ArrayList points = null;
-        polylineOptions = null;
+        ArrayList <LatLng> points = null;
+        PolylineOptions polylineOptions = null;
         for (List<HashMap<String, String>> path : lists){
-            points = new ArrayList();
+            points = new ArrayList<>();
             polylineOptions = new PolylineOptions();
             for (HashMap<String, String> point : path){
                 double lat = Double.parseDouble(point.get("lat"));
@@ -61,9 +60,8 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
             //chargingStationMap.drawPolyLines(polylineOptions);
             //chargingStationMap.addAllChargingStations();
             chargingStations.getPagerAdapter().getChargingStationMap().setPolyLineOptions(polylineOptions);
-            StationDrawer stationDrawer = new StationDrawer(chargingStations);
-            stationDrawer.execute(points);
-            //TODO: stationDrawer.execute
+            StationDrawer stationDrawer = new StationDrawer(chargingStations,points);
+            stationDrawer.execute(chargingStations.getAllChargingStations());
         }
     }
 
