@@ -37,11 +37,13 @@ public class NewCarActivity extends AppCompatActivity {
         findViewsById();
     }
 
+
+
     public void saveCar(View view) {
         String merke = editTextMerke.getText().toString().toLowerCase();
         String model = editTextModell.getText().toString().toLowerCase();
         String modelYear = editTextModelYear.getText().toString().toLowerCase();
-        //String battery = editTextBattery.getText().toString().toLowerCase();
+        String battery = editTextBattery.getText().toString().toLowerCase();
         String specInput = editTextSpecs.getText().toString().toLowerCase();
 
         Map<String, Double> specs = new HashMap<>();
@@ -65,6 +67,7 @@ public class NewCarActivity extends AppCompatActivity {
         elbilMap.put("brand", merke);
         elbilMap.put("model", model);
         elbilMap.put("modelYear", modelYear);
+        elbilMap.put("battery", battery);
         //elbilMap.put("specs", Arrays.asList(specArray));
         elbilMap.put("specs", specs);
 
@@ -83,8 +86,6 @@ public class NewCarActivity extends AppCompatActivity {
 
         //elbilRef.document().collection(modell).add(new Elbil(modelYear, hurtiglader, specs));
         Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
-
-
     }
 
 
@@ -120,7 +121,7 @@ public class NewCarActivity extends AppCompatActivity {
         editTextMerke = findViewById(R.id.edit_text_add_brand);
         editTextModell = findViewById(R.id.edit_text_add_model);
         editTextModelYear = findViewById(R.id.edit_text_add_model_year);
-       // editTextBattery = findViewById(R.id.edit_text_add_battery);
+        editTextBattery = findViewById(R.id.edit_text_add_battery);
         editTextSpecs = findViewById(R.id.edit_text_add_specs);
         textViewData = findViewById(R.id.text_view_data);
     }
@@ -130,13 +131,14 @@ public class NewCarActivity extends AppCompatActivity {
         String merke = elbil.getBrand();
         String modell = elbil.getModel();
         String modelYear = elbil.getModelYear();
+        String battery = elbil.getBattery().toString();
         //String hurtiglader = elbil.getFastCharge();
 
         data += "ID: " + documentId
                 + "\nMerke: " + merke
                 + "\nModell: " + modell
                 + "\nModell Year: " + modelYear
-                //+ "\nLadetype: " + hurtiglader
+                + "\nBattery: " + battery
                 + "\nSpecs: ";
 
         for (String spec : elbil.getSpecs().keySet()) {

@@ -77,11 +77,13 @@ public class AddCarActivity extends AppCompatActivity {
 
         searchRegNrBtn.setOnClickListener(myOnClickListener);
 
+
         brands = new ArrayList<>();
         brands.add(getString(R.string.choose_brand));
         adapterBrands = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, brands);
         adapterBrands.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         initSpinner(BRAND, spinnerBrands, brands);
+
 
         models = new ArrayList<>();
         models.add(getString(R.string.choose_model));
@@ -104,6 +106,8 @@ public class AddCarActivity extends AppCompatActivity {
                 startActivity(new Intent(AddCarActivity.this, NewCarActivity.class));
             }
         });
+
+       // if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
     }
 
     private void findViewsById() {
@@ -113,6 +117,15 @@ public class AddCarActivity extends AppCompatActivity {
         searchCarBtn = findViewById(R.id.button_search_car);
         spinnerBrands = findViewById(R.id.spinner_brands);
         spinnerModels = findViewById(R.id.spinner_models);
+    }
+
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+
+        System.out.println("ELBIL LIST SIZE: " + allElbilList.size());
+        brands = new ArrayList<>();
+        getCarBrands(brands);
     }
 
     private View.OnClickListener myOnClickListener = new View.OnClickListener() {
@@ -145,13 +158,16 @@ public class AddCarActivity extends AppCompatActivity {
             switch (adapterView.getId()) {
                 case R.id.spinner_brands:
                     //models.add("TEST!!!");
-                    if (!brands.get(0).equals(getString(R.string.choose_brand))
-                            && !brands.get(0).equals(getString(R.string.choose_brand))) {
-                        spinnerModels.setEnabled(true);
-                        models = getFilteredModels(models);
-                    } else if (brands.get(0).equals(getString(R.string.choose_brand))
-                            || !brands.get(0).equals(getString(R.string.choose_brand))) {
-                        spinnerModels.setEnabled(false);
+
+                    if (brands.size() != 0) {
+                        if (!brands.get(0).equals(getString(R.string.choose_brand))
+                                && !brands.get(0).equals(getString(R.string.choose_brand))) {
+                            spinnerModels.setEnabled(true);
+                            models = getFilteredModels(models);
+                        } else if (brands.get(0).equals(getString(R.string.choose_brand))
+                                || !brands.get(0).equals(getString(R.string.choose_brand))) {
+                            spinnerModels.setEnabled(false);
+                        }
                     }
                     /*
                     else {
@@ -176,7 +192,6 @@ public class AddCarActivity extends AppCompatActivity {
         }
 
     };
-
 
     private void executeCarInfoApi() {
         CarInfoAPI carInfoAPI = new CarInfoAPI();
@@ -255,7 +270,8 @@ public class AddCarActivity extends AppCompatActivity {
 
 
         models.clear();
-        for (Elbil elbil : filteredCars) models.add(elbil.getModel());
+        for (Elbil elbil : filteredCars)
+            if (!models.contains(elbil.getModel())) models.add(elbil.getModel());
 
         if (models.size() != 0) {
             Toast.makeText(this, "FILRTRED MODELS: " + models.get(0), Toast.LENGTH_SHORT).show();
@@ -326,80 +342,12 @@ public class AddCarActivity extends AppCompatActivity {
                 });
     }
 
-
-    private void findParcelableCar(Elbil elbil) {
-
-        /*
-        DocumentSnapshot documentSnapshot = (DocumentSnapshot) recyclerAdapter.getSnapshots().getSnapshot(1);
-        elbil = documentSnapshot.toObject(Elbil.class);
-        //getCarAttributes(elbil);
-        String path = documentSnapshot.getReference().getPath();
-        String id = documentSnapshot.getId();
-        elbil.setDocumentId(id);
-
-
-
-        Intent intent = new Intent(AddCarActivity.this, CarInfoActivity.class);
-        intent.putExtra("Elbil", elbil);
-        startActivity(intent);
-
-         */
-    }
-
-
-    private void getCarData(CollectionReference reference) {
-        reference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot querySnapshot) {
-                for (DocumentSnapshot documentSnapshot : querySnapshot) {
-                    Elbil elbil = documentSnapshot.toObject(Elbil.class);
-                    allElbilList.add(elbil);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
-                Toast.makeText(AddCarActivity.this,
-                        "COULD NOT LOCATE FIRESTORE DATA..!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-    private Elbil getCarAttributes(Elbil elbil) {
-        String documentId = elbil.getDocumentId();
-        String brand = elbil.getBrand();
-        String model = elbil.getModel();
-        String modelYear = elbil.getModelYear();
-        //String fastCharge = elbil.getFastCharge();
-        Map<String, Double> specs = elbil.getSpecs();
-
-        //elbil = new Elbil(brand, model, modelYear, specs);
-
-        return elbil;
-    }
-
-
-    private String makeCarDescription(Elbil elbil) {
-        String description = "";
-
-        Map<String, Double> specs = elbil.getSpecs();
-
-        description += elbil.getModelYear() +
-                ", Batterikapasitet på " + specs.get("effect") +
-                "\n, og " //+ elbil.getFastCharge() + " "
-                + specs.get("battery") + "kW DC " + "Hurtiglader";
-
-        return description;
-    }
-
-
     @Override
     protected void onStart() {
         super.onStart();
         if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
     }
+
 
     private void getInitFirestoreData(CollectionReference reference) {
         reference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

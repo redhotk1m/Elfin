@@ -7,7 +7,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,9 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.elfin.API.Nobil;
-import com.example.elfin.API.NobilAPIHandler;
 import com.example.elfin.API.RetrieveJSON;
-import com.example.elfin.APIErrors.NoSuchJSONFound;
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Utils.AsyncResponse;
 import com.example.elfin.Utils.EditTextFunctions;
@@ -103,15 +100,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         */
         //swapview
 
-
-        //Nobil nobil = new Nobil(this);
-        //nobil.execute();
-
         //Henter JSON fra Nobil APIet
         RetrieveJSON a = new RetrieveJSON(this);
         a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&countrycode=NOR&file=false&format=json");
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("jsonString"));
+
 
         tvMyCar = findViewById(R.id.tv_my_car);
         getSavedCar();
@@ -127,20 +121,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboardManager.hideSoftInputFromWindow(view.getWindowToken(),0);
     }
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra("jsonString");
-            if ("error".equals(message))
-                System.out.println("error");
-                //TODO: Popup notifying user
-            else{
-                NobilAPIHandler nobilAPIHandler = new NobilAPIHandler(message);
-                setAllChargingStations(nobilAPIHandler.getChargingStationCoordinates());
-                LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
-            }
-        }
-    };
 
 
 
@@ -200,14 +180,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void startChargingStationActivity() {
         //checkIfChargingStationsAreFound();
-        System.out.println("SKAL BYTTE ACTIVITY");
         Intent intent = new Intent(this, ChargingStations.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("chargingStations",getAllChargingStations());
         bundle.putString("destinationID",destinationID);
         intent.putExtra("bundle",bundle);
         startActivity(intent);
-        System.out.println("HAR BYTTA ACTIVITY");
     }
 
     public void nextActivity(View view) {

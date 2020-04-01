@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +28,12 @@ import java.util.Set;
 
 public class CarInfoActivity extends AppCompatActivity {
 
-    private ArrayList<Elbil> mCarList;
+    private ArrayList<Elbil> mCarList, mCarListAll;
     private Button saveCarBtn, loadCarBtn;
     private EditText editTextFastCharge, editTextBattery;
     private TextView editTextBrand, editTextModel, editTextModelYear;
+    private Spinner spinner;
+    private ArrayAdapter adapter;
     private Elbil elbil;
 
 
@@ -42,9 +47,21 @@ public class CarInfoActivity extends AppCompatActivity {
 
         findViewsById();
 
+       // clearSharedPrefferences();
+
+        loadCar();
+
         getCarAttributes(elbil);
 
         mCarList = new ArrayList<>();
+        /*
+        if (mCarList.size() == 0) Toast.makeText(this, "EMPTY CAR LIST!", Toast.LENGTH_SHORT).show();
+        else {
+            for (Elbil elbil : mCarList) {
+                Toast.makeText(this, "BRAND: " + elbil.getBrand(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        */
 
         saveCarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,13 +75,31 @@ public class CarInfoActivity extends AppCompatActivity {
         loadCarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCarList.clear();
-                loadCar();
-                //if (!mCarList.isEmpty()) getCarAttributes(mCarList.get(0));
+                // mCarList.clear();
+
+                initSpinner();
+
+                Toast.makeText(CarInfoActivity.this, "SIZE: " + mCarListAll.size(), Toast.LENGTH_LONG).show();
+                for (Elbil elbil : mCarListAll)
+                    System.out.println("\nINFO MERKE : " + elbil.getBrand());
+
+                //display spinner item
+                // getSelectedCar(view);
             }
         });
     }
 
+    private void initSpinner() {
+        loadCar();
+        mCarListAll.add(new Elbil("LEGG TIL BIL", null, null, null, null));
+
+        adapter = new ArrayAdapter<>(CarInfoActivity.this,
+                android.R.layout.simple_spinner_item, mCarListAll);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(myOnItemSelectedListener);
+    }
 
     private void saveCar() {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
@@ -72,6 +107,7 @@ public class CarInfoActivity extends AppCompatActivity {
         //editor.clear(); //clear shared preferences
         Gson gson = new Gson();
         //to contain ArrayList as Json form
+        mCarList.addAll(mCarListAll);
         String json = gson.toJson(mCarList);
         editor.putString("car list", json);
         editor.apply();
@@ -84,11 +120,11 @@ public class CarInfoActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("car list", null);
-        Type type = new TypeToken<ArrayList<Elbil>>() {}.getType();
-        mCarList = gson.fromJson(json, type);
+        Type type = new TypeToken<ArrayList<Elbil>>() {
+        }.getType();
+        mCarListAll = gson.fromJson(json, type);
 
-        if (mCarList == null) mCarList = new ArrayList<>();
-        else getCarAttributes(mCarList.get(0));
+        if (mCarListAll == null) mCarListAll = new ArrayList<>();
     }
 
 
@@ -97,21 +133,51 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextModel = findViewById(R.id.text_view_model);
         editTextModelYear = findViewById(R.id.text_view_model_year);
         editTextFastCharge = findViewById(R.id.edit_text_fast_charge);
-        //editTextBattery = findViewById(R.id.edit_text_battery);
+        editTextBattery = findViewById(R.id.edit_text_battery);
+
+        spinner = findViewById(R.id.spinner_all_cars);
 
         saveCarBtn = findViewById(R.id.btnSaveCar);
         loadCarBtn = findViewById(R.id.btnLoadCar);
     }
+
+    private AdapterView.OnItemSelectedListener myOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+
+            Toast.makeText(adapterView.getContext(),
+                    "OnItemSelectedListener : " + adapterView.getItemAtPosition(position).toString(),
+                    Toast.LENGTH_SHORT).show();
+
+            getSelectedCar();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private void getSelectedCar() {
+        Elbil elbil = (Elbil) spinner.getSelectedItem();
+
+        if (elbil.getBrand().equals("LEGG TIL BIL"))
+            startActivity(new Intent(this, AddCarActivity.class));
+            //Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
+        else getCarAttributes(elbil);
+    }
+
 
     private void getCarAttributes(Elbil elbil) {
         String documentId = elbil.getDocumentId();
         String brand = "Bilmerke: " + elbil.getBrand();
         String model = "Bilmodell: " + elbil.getModel();
         String modelYear = "Årsmodell: " + elbil.getModelYear();
+        String battery = "Batterikappasitet: " + elbil.getBattery();
         Map<String, Double> specs = elbil.getSpecs();
         //String fastCharge = "Ladetype: " + elbil.getFastCharge();
         //+ " " + specs.get("effect") + " kwh";
-       // String battery = "Batteri: ";
+        // String battery = "Batteri: ";
         //+ specs.get("battery") + " kw";
         //      String effect = specs.get("effect").toString();
 
@@ -121,7 +187,7 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextModel.setText(model);
         editTextModelYear.setText(modelYear);
         //editTextFastCharge.setText(fastCharge);
-        //editTextBattery.setText(battery);
+        editTextBattery.setText(battery);
     }
 
 
@@ -132,7 +198,7 @@ public class CarInfoActivity extends AppCompatActivity {
 
 //            String spec = specs.keySet().toString();
 
-    //    System.out.println(spec + " ; " + specs.get(spec));
+        //    System.out.println(spec + " ; " + specs.get(spec));
 
 
 
@@ -147,11 +213,11 @@ public class CarInfoActivity extends AppCompatActivity {
     }
 
 
-
-    private void clearAttributes(){
+    private void clearAttributes() {
         String brand = "Bilmerke: ";
         String model = "Bilmodell: ";
         String modelYear = "Årsmodell: ";
+        String battery = "Batterikapasitet: ";
         Map<String, Double> specs;
         String fastCharge = "Ladetype: ";
         //+ " " + specs.get("effect") + " kwh";
