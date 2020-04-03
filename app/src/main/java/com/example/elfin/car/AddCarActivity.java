@@ -86,6 +86,7 @@ public class AddCarActivity extends AppCompatActivity {
         searchCarBtn.setOnClickListener(myOnClickListener);
         carCheckBox.setOnClickListener(myOnClickListener);
 
+
         //Todo: utkommenter etter at alle bilene er lagt til
         FloatingActionButton buttonAddCar = findViewById(R.id.button_add_car);
         buttonAddCar.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +95,8 @@ public class AddCarActivity extends AppCompatActivity {
                 startActivity(new Intent(AddCarActivity.this, NewCarActivity.class));
             }
         });
+
+        buttonAddCar.hide();
     }
 
     private void findViewsById() {
@@ -132,7 +135,7 @@ public class AddCarActivity extends AppCompatActivity {
                         intent.putExtra("Elbil", mElbilList.get(0));
                         startActivity(intent);
                     }
-                    Toast.makeText(AddCarActivity.this, "LIST SIZE: " + allElbilList.size(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(AddCarActivity.this, "LIST SIZE: " + allElbilList.size(), Toast.LENGTH_LONG).show();
                     break;
                 default:
                     Toast.makeText(AddCarActivity.this, "CLICKABLE ID NOT FOUND..", Toast.LENGTH_SHORT).show();
@@ -329,6 +332,7 @@ public class AddCarActivity extends AppCompatActivity {
     }
 
     private List<Elbil> searchCar() {
+        mElbilList = new ArrayList<>();
         for (Elbil elbil : allElbilList) {
             if (spinnerBrands.getSelectedItem().equals(elbil.getBrand())
                     && spinnerModels.getSelectedItem().equals(elbil.getModel())
