@@ -126,6 +126,12 @@ public class AddCarActivity extends AppCompatActivity {
                     enableSpinnerSelection(v);
                     break;
                 case R.id.button_search_car:
+                    mElbilList = searchCar();
+                    if (mElbilList.size() == 1) {
+                        Intent intent = new Intent(AddCarActivity.this, CarInfoActivity.class);
+                        intent.putExtra("Elbil", mElbilList.get(0));
+                        startActivity(intent);
+                    }
                     Toast.makeText(AddCarActivity.this, "LIST SIZE: " + allElbilList.size(), Toast.LENGTH_LONG).show();
                     break;
                 default:
@@ -142,13 +148,13 @@ public class AddCarActivity extends AppCompatActivity {
                     spinnerSelection.spinnerBrandOnItemSelected(
                             spinnerBrands, spinnerModels, spinnerModelYears, models, modelYears);
                     adapterModels.notifyDataSetChanged();
-                   // spinnerOnItemSelected(BRAND);
+                    // spinnerOnItemSelected(BRAND);
                     break;
                 case R.id.spinner_models:
                     spinnerSelection.spinnerModelsOnItemSelected(
                             spinnerModels, spinnerModelYears, modelYears);
                     adapterModelYears.notifyDataSetChanged();
-                   // spinnerOnItemSelected(MODEL);
+                    // spinnerOnItemSelected(MODEL);
                     break;
                 case R.id.spinner_model_years:
                     spinnerSelection.spinnerModelYearsOnItemSelected(spinnerModelYears, modelYears);
@@ -322,8 +328,31 @@ public class AddCarActivity extends AppCompatActivity {
                 });
     }
 
+    private List<Elbil> searchCar() {
+        for (Elbil elbil : allElbilList) {
+            if (spinnerBrands.getSelectedItem().equals(elbil.getBrand())
+                    && spinnerModels.getSelectedItem().equals(elbil.getModel())
+                    && spinnerModelYears.getSelectedItem().equals(elbil.getModelYear())) {
+                mElbilList.add(elbil);
+            }
+        }
+        return mElbilList;
+    }
+
     public List<Elbil> getAllCars() {
         return this.allElbilList;
+    }
+
+    public List<String> getBrands() {
+        return this.brands;
+    }
+
+    public List<String> getModels() {
+        return this.models;
+    }
+
+    public List<String> getModelYears() {
+        return this.modelYears;
     }
 
     @Override

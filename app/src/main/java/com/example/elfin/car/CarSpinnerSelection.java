@@ -21,7 +21,7 @@ public class CarSpinnerSelection {
 
     private List<Elbil> allElbilList;
 
-    private List<String> spinnerList;
+    private List<String> spinnerBrands, spinnerModels, spinnerModelYears;
 
     private final String BRAND = "brand";
     private final String MODEL = "model";
@@ -32,8 +32,12 @@ public class CarSpinnerSelection {
     public CarSpinnerSelection(AddCarActivity addCarActivity) {
         this.addCarActivity = addCarActivity;
         allElbilList = addCarActivity.getAllCars();
+        spinnerBrands = addCarActivity.getBrands();
+        spinnerModels = addCarActivity.getModels();
+        spinnerModelYears = addCarActivity.getModelYears();
     }
 
+    /*
     protected List<String> initSpinnerList(String dataField) {
         spinnerList = new ArrayList<>();
         switch (dataField) {
@@ -54,6 +58,8 @@ public class CarSpinnerSelection {
         }
         return spinnerList;
     }
+
+     */
 
     protected void disableSpinner(String dataField, Spinner spinner, List<String> list) {
         switch (dataField) {
