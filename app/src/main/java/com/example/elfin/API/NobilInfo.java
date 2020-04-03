@@ -152,7 +152,6 @@ public class NobilInfo extends AsyncTask<LatLng, Void, ArrayList<String>>{
                         info.add("");
                         info.add("");
                     }
-
                     if(boolFast){
                         info.add("" + counterFast + " " + lightning + "\n" + fastCharger);
                         info.add(""+ counterFast + " ledig");
@@ -161,7 +160,6 @@ public class NobilInfo extends AsyncTask<LatLng, Void, ArrayList<String>>{
                         info.add("");
                         info.add("");
                     }
-
                     if(boolCha){
                         info.add("" + counterCHD + " " + chademo + "\n" + fastCharger);
                         info.add("" + counterCHD+ " ledig");

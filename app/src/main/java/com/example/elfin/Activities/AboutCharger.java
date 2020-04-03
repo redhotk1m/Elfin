@@ -11,11 +11,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.elfin.API.NobilInfo;
 import com.example.elfin.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class AboutCharger extends AppCompatActivity {
+public class AboutCharger extends AppCompatActivity implements OnMapReadyCallback {
     TextView textViewTitel;
     TextView textViewAdress;
     TextView textViewCompany;
@@ -27,8 +34,15 @@ public class AboutCharger extends AppCompatActivity {
     TextView textViewChargerType;
     TextView textViewChargerType2;
     TextView textViewChargerType3;
+    TextView payMethodTitel;
+    View linePayMethod;
+    View lineDescription;
+
+    TextView textViewDescription;
 
     TextView textViewPayMethod;
+
+    LatLng latLng;
 
 
 
@@ -49,13 +63,26 @@ public class AboutCharger extends AppCompatActivity {
         textViewChargerType2 = findViewById(R.id.textViewChargerType2);
         textViewChargerType3 = findViewById(R.id.textViewChargerType3);
         textViewPayMethod = findViewById(R.id.textViewPayMethod);
+        textViewDescription = findViewById(R.id.textViewDescription);
 
+        payMethodTitel = findViewById(R.id.textViewPayTittel);
+
+        lineDescription = findViewById(R.id.line3_about);
+        linePayMethod = findViewById(R.id.line2_about);
+
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+
+        getInfo();
 
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=59.909266,10.742538&mode=d");
+                String stringLatlng = latLng.latitude +"," +latLng.longitude;
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" +stringLatlng + "&mode=d");
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 if (mapIntent.resolveActivity(getPackageManager()) != null) {
@@ -64,8 +91,13 @@ public class AboutCharger extends AppCompatActivity {
             }
         });
 
-        getInfo();
 
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
     }
 
 
@@ -76,7 +108,7 @@ public class AboutCharger extends AppCompatActivity {
         //LatLng latLng = new LatLng(60.58991, 4.84047);
         //en plass cirkle k ---> 63.32481,10.30589 ... 2 hurtig -- 2 chademo
         // Esso loddefjord 60.58991, 4.84047 --> 1 lyn, 2 hurti -- 2 chademo
-        LatLng latLng = new LatLng(60.36144, 5.23441);
+        latLng = new LatLng(60.36144, 5.23441);
         nobilInfo.execute(latLng);
     }
 
@@ -84,7 +116,7 @@ public class AboutCharger extends AppCompatActivity {
     public void setInfo(ArrayList<String> info){
 
         /**
-         * Sette alle verdiene som ikke er i den neste forloopen først, frodi nesten fosvinner når den breakes.
+         * Sette alle verdiene som ikke er i den neste forloopen først, frodi resten fosvinner når den breakes.
          */
         textViewTitel.setText(info.get(0));
         textViewAdress.setText(info.get(1));
@@ -93,7 +125,33 @@ public class AboutCharger extends AppCompatActivity {
         textViewDescriptionText.setText(info.get(4));
         textViewInfoText.setText(info.get(5));
 
+        /*
+        // Bare testing av det funeket for betalling
+        textViewPayMethod.setText("");
+        if(textViewPayMethod.getText().toString().equals("")){
+            payMethodTitel.setVisibility(View.GONE);
+            textViewPayMethod.setVisibility(View.GONE);
+            linePayMethod.setVisibility(View.GONE);
+        }
 
+         */
+
+        if(info.get(3).equals("")){
+            payMethodTitel.setVisibility(View.GONE);
+            textViewPayMethod.setVisibility(View.GONE);
+            linePayMethod.setVisibility(View.GONE);
+        }
+
+        if(info.get(4).equals("")){
+            textViewDescription.setVisibility(View.GONE);
+            textViewDescriptionText.setVisibility(View.GONE);
+            lineDescription.setVisibility(View.GONE);
+        }
+
+
+        /**
+         * Verdier inni forloopen
+         */
 
         textViewChargerType.setText(info.get(6));
         textViewAvaiable.setText(info.get(7));
@@ -101,28 +159,8 @@ public class AboutCharger extends AppCompatActivity {
         textViewAvaiable2.setText(info.get(9));
         textViewChargerType3.setText(info.get(10));
         textViewAvaiable3.setText(info.get(11));
-//        textViewPayMethod.setText(info.get(9));
-  /*     textViewDescriptionText.setText("yyyyyyyyyyyyyyyyyrrrrrrrrrrrrrrrrrrrrrrrrrrrrr" +
-                        "ryeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" +"yyyyyyyyyyyyyyyyyrrrrrrrrrrrrrrrrrrrrrrrrrrrrr" +
-                        "ryeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-                );
-        //textViewDescriptionText.setText(info.get(10));
 
-
-
-        /*
-
-        textViewCompany.setText(info.get(4));
-        textViewAvaiable.setText(info.get(5) + " ledig");
-        textViewAvaiable.setText(info.get(6) + " ledig");
-        textViewPayInfo.setText(info.get(7));
-        textViewInfoText.setText(info.get(8));
-        //åpningstider er 8
-        textViewChargerType.setText(info.get(10));
-        textViewChargerType2.setText(info.get(11));
-        textViewPayMethod.setText(info.get(12));
-
-         */
     }
+
 
 }
