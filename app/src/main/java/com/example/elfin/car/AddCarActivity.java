@@ -33,9 +33,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class AddCarActivity extends AppCompatActivity {
 
@@ -47,6 +45,8 @@ public class AddCarActivity extends AppCompatActivity {
     private Elbil elbil;
     private List<Elbil> allElbilList = new ArrayList<>();
     private List<Elbil> mElbilList = new ArrayList<>();
+
+    private CarSpinnerSelection spinnerSelection;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference elbilReference = db.collection("elbiler");
@@ -76,39 +76,15 @@ public class AddCarActivity extends AppCompatActivity {
 
         findViewsById();
 
+        spinnerSelection = new CarSpinnerSelection(this);
+        initSpinner(BRAND, spinnerBrands);
+        initSpinner(MODEL, spinnerModels);
+        initSpinner(MODELYEAR, spinnerModelYears);
+
+
         searchRegNrBtn.setOnClickListener(myOnClickListener);
-
-        brands = new ArrayList<>();
-        brands.add(getString(R.string.choose_brand));
-        adapterBrands = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, brands);
-        adapterBrands.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        initSpinner(BRAND, spinnerBrands, brands);
-
-
-        models = new ArrayList<>();
-        models.add(getString(R.string.choose_model));
-        adapterModels = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, models);
-        adapterModels.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        initSpinner(MODEL, spinnerModels, models);
-
-        modelYears = new ArrayList<>();
-        modelYears.add(getString(R.string.choose_model_year));
-        adapterModelYears = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, modelYears);
-        adapterModelYears.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        initSpinner(MODELYEAR, spinnerModelYears, modelYears);
-
-        // adapterModels = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, models);
-        //  adapterModels.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        carCheckBox.setOnClickListener(myOnClickListener);
-
         searchCarBtn.setOnClickListener(myOnClickListener);
-
-        if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
-
-        onPostCreate(savedInstanceState);
-        Toast.makeText(this, "ELBIL LIST SIZE: " + allElbilList.size(), Toast.LENGTH_SHORT).show();
-        System.out.println("ELBIL LIST SIZE: " + allElbilList.size());
+        carCheckBox.setOnClickListener(myOnClickListener);
 
         //Todo: utkommenter etter at alle bilene er lagt til
         FloatingActionButton buttonAddCar = findViewById(R.id.button_add_car);
@@ -118,8 +94,6 @@ public class AddCarActivity extends AppCompatActivity {
                 startActivity(new Intent(AddCarActivity.this, NewCarActivity.class));
             }
         });
-
-        // if (allElbilList.size() == 0) getInitFirestoreData(elbilReference);
     }
 
     private void findViewsById() {
@@ -149,7 +123,7 @@ public class AddCarActivity extends AppCompatActivity {
                     executeCarInfoApi();
                     break;
                 case R.id.check_box_manual_selection:
-                    enableBrandSpinner(v, spinnerBrands);
+                    enableSpinnerSelection(v);
                     break;
                 case R.id.button_search_car:
                     Toast.makeText(AddCarActivity.this, "LIST SIZE: " + allElbilList.size(), Toast.LENGTH_LONG).show();
@@ -163,51 +137,22 @@ public class AddCarActivity extends AppCompatActivity {
     private AdapterView.OnItemSelectedListener myOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-            /*
-            Toast.makeText(adapterView.getContext(),
-                    "OnItemSelectedListener : " + adapterView.getItemAtPosition(position).toString(),
-                    Toast.LENGTH_SHORT).show();
-             */
             switch (adapterView.getId()) {
                 case R.id.spinner_brands:
-                    //models.add("TEST!!!");
-
-                    if (brands.size() != 0) {
-                        if (!brands.get(0).equals(getString(R.string.choose_brand)) ) {
-                                //&& !brands.get(0).equals(getString(R.string.choose_nothing))) {
-                            spinnerModels.setEnabled(true);
-                            models = getFilteredModels(models);
-                        } else if (brands.get(0).equals(getString(R.string.choose_brand))
-                                || brands.get(0).equals(getString(R.string.choose_nothing))) {
-                            spinnerModels.setEnabled(false);
-                        }
-                    }
-                    /*
-                    else {
-                        models = new ArrayList<>();
-                        models.add(getString(R.string.choose_model));
-                        spinnerModels.setEnabled(false);
-                    }
-                     */
+                    spinnerSelection.spinnerBrandOnItemSelected(
+                            spinnerBrands, spinnerModels, spinnerModelYears, models, modelYears);
                     adapterModels.notifyDataSetChanged();
+                   // spinnerOnItemSelected(BRAND);
                     break;
                 case R.id.spinner_models:
-
-                    if (models.size() != 0) {
-                        if (!models.get(0).equals(getString(R.string.choose_model)) ) {
-                                //&& !models.get(0).equals(getString(R.string.choose_nothing))) {
-                            spinnerModelYears.setEnabled(true);
-                            String[] years = getResources().getStringArray(R.array.year_models);
-                          //  modelYears = new ArrayList<>(Arrays.asList(years));
-                            modelYears.addAll(Arrays.asList(years));
-                        } else if (models.get(0).equals(getString(R.string.choose_model))
-                                || models.get(0).equals(getString(R.string.choose_nothing))) {
-                            spinnerModelYears.setEnabled(false);
-                        }
-                    }
-
+                    spinnerSelection.spinnerModelsOnItemSelected(
+                            spinnerModels, spinnerModelYears, modelYears);
                     adapterModelYears.notifyDataSetChanged();
-                    //  Toast.makeText(adapterView.getContext(), "MODELS SPINNER", Toast.LENGTH_SHORT).show();
+                   // spinnerOnItemSelected(MODEL);
+                    break;
+                case R.id.spinner_model_years:
+                    spinnerSelection.spinnerModelYearsOnItemSelected(spinnerModelYears, modelYears);
+                    // spinnerOnItemSelected(MODELYEAR);
                     break;
                 default:
                     Toast.makeText(adapterView.getContext(), "NO SPINNER", Toast.LENGTH_SHORT).show();
@@ -221,10 +166,76 @@ public class AddCarActivity extends AppCompatActivity {
 
     };
 
+    private void initSpinner(String dataField, Spinner spinner) {
+        spinner.setOnItemSelectedListener(myOnItemSelectedListener);
+        spinner.setEnabled(false);
+        switch (dataField) {
+            case BRAND:
+                // brands = spinnerSelection.initSpinnerList(BRAND);
+                initSpinnerList(BRAND);
+                spinner.setAdapter(adapterBrands);
+                //fetchFirstoreData(elbilReference, BRAND, mAdapter);
+                break;
+            case MODEL:
+                initSpinnerList(MODEL);
+                spinner.setAdapter(adapterModels);
+                break;
+            case MODELYEAR:
+                initSpinnerList(MODELYEAR);
+                spinner.setAdapter(adapterModelYears);
+                break;
+            default:
+                System.out.println("NO SUCH SPINNER..");
+        }
+    }
+
+    private void initSpinnerList(String dataField) {
+        switch (dataField) {
+            case BRAND:
+                System.out.println("INIT BRANDS");
+                brands = new ArrayList<>();
+                brands.add(getString(R.string.choose_brand));
+                adapterBrands = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, brands);
+                adapterBrands.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                break;
+            case MODEL:
+                System.out.println("INIT MODELS");
+                models = new ArrayList<>();
+                models.add(getString(R.string.choose_model));
+                adapterModels = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, models);
+                adapterModels.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                break;
+            case MODELYEAR:
+                System.out.println("INIT MODEL YEARS");
+                modelYears = new ArrayList<>();
+                modelYears.add(getString(R.string.choose_model_year));
+                adapterModelYears = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, modelYears);
+                adapterModelYears.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                break;
+            default:
+                System.out.println("NO SPINNER LIST");
+        }
+    }
+
+    private void enableSpinnerSelection(View v) {
+        if (((CheckBox) v).isChecked()) {
+            spinnerSelection.getFilteredCars(spinnerBrands, BRAND, brands);
+            adapterBrands.notifyDataSetChanged();
+        } else {
+            spinnerSelection.disableSpinner(BRAND, spinnerBrands, brands);
+            adapterBrands.notifyDataSetChanged();
+            spinnerSelection.disableSpinner(MODEL, spinnerModels, models);
+            adapterModels.notifyDataSetChanged();
+            spinnerSelection.disableSpinner(MODELYEAR, spinnerModelYears, modelYears);
+            adapterModelYears.notifyDataSetChanged();
+        }
+    }
+
+
     private void executeCarInfoApi() {
         CarInfoAPI carInfoAPI = new CarInfoAPI();
         carInfoAPI.setAddCarActivity(AddCarActivity.this);
-        //todo: valider userinput, fjerne space
+        //todo: validate user input, disable input space
         String regNr = editTextSearchRegNr.getText().toString();
         Toast.makeText(AddCarActivity.this, "regNr: " + regNr.trim(), Toast.LENGTH_SHORT).show();
         carInfoAPI.execute(regNr.trim());
@@ -244,72 +255,6 @@ public class AddCarActivity extends AppCompatActivity {
             Toast.makeText(this, "model: " + model + " : " + modelYear, Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    private void initSpinner(String dataField, Spinner spinner, List<String> list) {
-        spinner.setOnItemSelectedListener(myOnItemSelectedListener);
-        spinner.setEnabled(false);
-
-        switch (dataField) {
-            case BRAND:
-                System.out.println("BRANDS");
-                spinner.setAdapter(adapterBrands);
-                if (list.isEmpty()) System.out.println("SIZE FROM SPINNER: " + allElbilList.size());
-                //fetchFirstoreData(elbilReference, BRAND, mAdapter);
-                break;
-            case MODEL:
-                System.out.println("MODELS");
-                spinner.setAdapter(adapterModels);
-                break;
-            case MODELYEAR:
-                System.out.println("MODEL YEARS");
-                spinner.setAdapter(adapterModelYears);
-                break;
-            default:
-                System.out.println("NO MATCH..");
-        }
-    }
-
-    private void enableBrandSpinner(View v, Spinner spinner) {
-        if (((CheckBox) v).isChecked()) {
-            spinner.setEnabled(true);
-            brands = getCarBrands(brands);
-            adapterBrands.notifyDataSetChanged();
-        } else {
-            spinner.setEnabled(false);
-        }
-    }
-
-    private List<String> getCarBrands(List<String> brands) {
-        if (allElbilList.isEmpty()) {
-            Toast.makeText(this, "NO CARS AVAILABLE..!", Toast.LENGTH_SHORT).show();
-            //getInitFirestoreData(elbilReference);
-        } else {
-            brands.clear();
-            brands.add(getString(R.string.choose_nothing));
-            for (Elbil elbil : allElbilList)
-                if (!brands.contains(elbil.getBrand())) brands.add(elbil.getBrand());
-        }
-        return brands;
-    }
-
-    private List<String> getFilteredModels(List<String> models) {
-        ArrayList<Elbil> filteredCars = new ArrayList<>();
-
-        for (Elbil elbil : allElbilList)
-            if (elbil.getBrand().equals(spinnerBrands.getSelectedItem()))
-                filteredCars.add(elbil);
-
-
-        models.clear();
-        models.add(getString(R.string.choose_nothing));
-        for (Elbil elbil : filteredCars)
-            if (!models.contains(elbil.getModel())) models.add(elbil.getModel());
-
-        if (models.size() != 0) {
-            Toast.makeText(this, "FILRTRED MODELS: " + models.get(0), Toast.LENGTH_SHORT).show();
-        }
-        return models;
     }
 
 
@@ -364,8 +309,8 @@ public class AddCarActivity extends AppCompatActivity {
                             intent.putExtra("Elbil", mElbilList.get(0));
                             startActivity(intent);
                         } else {
-                            initSpinner(BRAND, spinnerBrands, brands); //todo: fjerne etter testing
-                            initSpinner(MODEL, spinnerModels, models); //todo: fjerne etter testing
+                            // initSpinner(BRAND, spinnerBrands); //todo: fjerne etter testing
+                            // initSpinner(MODEL, spinnerModels); //todo: fjerne etter testing
                         }
                     }
                 })
@@ -375,6 +320,10 @@ public class AddCarActivity extends AppCompatActivity {
                         Log.d(TAG, e.toString());
                     }
                 });
+    }
+
+    public List<Elbil> getAllCars() {
+        return this.allElbilList;
     }
 
     @Override
