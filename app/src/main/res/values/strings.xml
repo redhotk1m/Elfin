@@ -15,11 +15,14 @@
     <string name="google_map_api_key">AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU</string>
 
     <string name="manual_selection">eller velg bil manuelt</string>
+    <string name="choose_none">(INGEN VALGT)</string>
     <string name="choose_nothing">---VET IKKE---</string>
     <string name="choose_brand">Velg bilmerke</string>
     <string name="choose_model">Velg bilmodell</string>
     <string name="choose_model_year">Velg årsmodell</string>
     <string name="choose_specific_model">Velg spesifikk bilmodell</string>
+    <string name="choose_battery">Velg batterikapasitet</string>
+    <string name="choose_charging">Velg ladehastighet</string>
 
     <string-array name="year_models">
         <item>2010</item>
