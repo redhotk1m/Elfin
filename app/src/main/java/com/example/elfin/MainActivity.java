@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void initSpinner() {
         getSavedCars();
-        mCarList.add(new Elbil("Legg til bil", null, null, null, null));
+        mCarList.add(new Elbil("Legg til bil", null, null, null, null, null));
 
         adapter = new ArrayAdapter<>(MainActivity.this,
                 android.R.layout.simple_spinner_item, mCarList);
