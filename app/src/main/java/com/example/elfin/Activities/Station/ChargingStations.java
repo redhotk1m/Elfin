@@ -159,6 +159,7 @@ public class ChargingStations extends AppCompatActivity {
 
     ArrayList<LatLng> validStations;
 
+
     public Bundle getBundle(){
         return bundle;
     }

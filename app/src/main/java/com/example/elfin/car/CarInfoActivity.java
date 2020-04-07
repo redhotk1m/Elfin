@@ -91,7 +91,7 @@ public class CarInfoActivity extends AppCompatActivity {
 
     private void initSpinner() {
         loadCar();
-        mCarListAll.add(new Elbil("LEGG TIL BIL", null, null, null, null));
+        mCarListAll.add(new Elbil("LEGG TIL BIL", null, null, null, null, null));
 
         adapter = new ArrayAdapter<>(CarInfoActivity.this,
                 android.R.layout.simple_spinner_item, mCarListAll);
@@ -174,6 +174,7 @@ public class CarInfoActivity extends AppCompatActivity {
         String model = "Bilmodell: " + elbil.getModel();
         String modelYear = "Årsmodell: " + elbil.getModelYear();
         String battery = "Batterikappasitet: " + elbil.getBattery();
+        String fastCharge = "Hurtiglader: " + elbil.getFastCharge() + " ; " + elbil.getEffect();
         Map<String, Double> specs = elbil.getSpecs();
         //String fastCharge = "Ladetype: " + elbil.getFastCharge();
         //+ " " + specs.get("effect") + " kwh";
@@ -181,12 +182,12 @@ public class CarInfoActivity extends AppCompatActivity {
         //+ specs.get("battery") + " kw";
         //      String effect = specs.get("effect").toString();
 
-        getSpecs(specs);
+       // getSpecs(specs);
 
         editTextBrand.setText(brand);
         editTextModel.setText(model);
         editTextModelYear.setText(modelYear);
-        //editTextFastCharge.setText(fastCharge);
+        editTextFastCharge.setText(fastCharge);
         editTextBattery.setText(battery);
     }
 
@@ -226,7 +227,7 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextBrand.setText(brand);
         editTextModel.setText(model);
         editTextModelYear.setText(modelYear);
-        //editTextFastCharge.setText(fastCharge);
+        editTextFastCharge.setText(fastCharge);
         //editTextBattery.setText(battery);
     }
 

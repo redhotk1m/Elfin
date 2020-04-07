@@ -18,7 +18,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ public class NewCarActivity extends AppCompatActivity {
 
     private static final String TAG = "NewCarActivity";
 
-    private EditText editTextMerke, editTextModell, editTextModelYear, editTextBattery, editTextSpecs;
+    private EditText editTextMerke, editTextModell, editTextModelYear, editTextBattery, editTextFastCharge;
     private TextView textViewData;
 
     @Override
@@ -44,12 +43,13 @@ public class NewCarActivity extends AppCompatActivity {
         String model = editTextModell.getText().toString().toLowerCase();
         String modelYear = editTextModelYear.getText().toString().toLowerCase();
         String battery = editTextBattery.getText().toString().toLowerCase();
-        String specInput = editTextSpecs.getText().toString().toLowerCase();
+       // String fastCharge = editTextFastCharge.getText().toString();
+        String fastCharge[] = editTextFastCharge.getText().toString().split("\\s*,\\s*");
 
+       // String specInput = editTextSpecs.getText().toString().toLowerCase();
+        /*
         Map<String, Double> specs = new HashMap<>();
         String[] specArray = specInput.split("\\s*,\\s*");
-
-
         for(int i = 0; i < specArray.length; i++) {
             //specs.put(specArray[i], Double.parseDouble(specArray[s]));
             if (i == 0) specs.put(specArray[i], Double.parseDouble(specArray[1]));
@@ -58,6 +58,7 @@ public class NewCarActivity extends AppCompatActivity {
                 //System.out.println("battery" + " ; " + specArray[i]);
             //if (i == 1) specs.put("battery", Double.parseDouble(specArray[i]));
         }
+        */
 
         CollectionReference elbiler = FirebaseFirestore.getInstance()
                 .collection("elbiler");
@@ -68,8 +69,10 @@ public class NewCarActivity extends AppCompatActivity {
         elbilMap.put("model", model);
         elbilMap.put("modelYear", modelYear);
         elbilMap.put("battery", battery);
+        elbilMap.put("fastCharge", fastCharge[0]);
+        elbilMap.put("effect", fastCharge[1]);
         //elbilMap.put("specs", Arrays.asList(specArray));
-        elbilMap.put("specs", specs);
+        //elbilMap.put("specs", specs);
 
         elbiler.document().set(elbilMap);
 
@@ -122,7 +125,7 @@ public class NewCarActivity extends AppCompatActivity {
         editTextModell = findViewById(R.id.edit_text_add_model);
         editTextModelYear = findViewById(R.id.edit_text_add_model_year);
         editTextBattery = findViewById(R.id.edit_text_add_battery);
-        editTextSpecs = findViewById(R.id.edit_text_add_specs);
+        editTextFastCharge = findViewById(R.id.edit_text_add_fast_charge);
         textViewData = findViewById(R.id.text_view_data);
     }
 
@@ -131,7 +134,8 @@ public class NewCarActivity extends AppCompatActivity {
         String merke = elbil.getBrand();
         String modell = elbil.getModel();
         String modelYear = elbil.getModelYear();
-        String battery = elbil.getBattery().toString();
+        String battery = elbil.getBattery();
+        String fastCharge = elbil.getFastCharge();
         //String hurtiglader = elbil.getFastCharge();
 
         data += "ID: " + documentId
@@ -139,6 +143,7 @@ public class NewCarActivity extends AppCompatActivity {
                 + "\nModell: " + modell
                 + "\nModell Year: " + modelYear
                 + "\nBattery: " + battery
+                + "\nFastCharge: " + fastCharge
                 + "\nSpecs: ";
 
         for (String spec : elbil.getSpecs().keySet()) {

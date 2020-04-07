@@ -55,12 +55,12 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_text_add_model_year" />
 
     <EditText
-        android:id="@+id/edit_text_add_specs"
+        android:id="@+id/edit_text_add_fast_charge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Specs: type, effect, battery"
+        android:hint="Hurtiglader"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,10 +74,10 @@
         android:onClick="saveCar"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edit_text_add_specs"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_add_fast_charge"
         app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="@+id/edit_text_add_specs"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_add_specs"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_add_fast_charge"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_add_fast_charge"
         app:layout_constraintVertical_bias="0.0" />
 
 

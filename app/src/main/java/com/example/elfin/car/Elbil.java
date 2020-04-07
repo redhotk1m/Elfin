@@ -15,19 +15,20 @@ public class Elbil implements Parcelable {
 
 
     private String documentId, spinnerDisplay;
-    private String brand, model, modelYear, battery;
+    private String brand, model, modelYear, battery, fastCharge, effect;
     private Map<String, Double> specs;
 
     public Elbil(){
         //public no-arg constructor needed for firestore database
     }
 
-    public Elbil(String brand, String model, String modelYear, String battery, Map<String, Double> specs) {
+    public Elbil(String brand, String model, String modelYear, String battery, String fastCharge, String effect) {
         this.brand = brand;
         this.model = model;
         this.modelYear = modelYear;
         this.battery = battery;
-        this.specs = specs;
+        this.fastCharge = fastCharge;
+        this.effect = effect;
     }
 
     public Elbil(Parcel in) {
@@ -36,6 +37,8 @@ public class Elbil implements Parcelable {
         model = in.readString();
         modelYear = in.readString();
         battery = in.readString();
+        fastCharge = in.readString();
+        effect = in.readString();
         //specs = in.readHashMap();
     }
 
@@ -98,6 +101,22 @@ public class Elbil implements Parcelable {
         this.battery = battery;
     }
 
+    public String getFastCharge() {
+        return fastCharge;
+    }
+
+    public void setFastCharge(String fastCharge) {
+        this.fastCharge = fastCharge;
+    }
+
+    public String getEffect() {
+        return effect;
+    }
+
+    public void setEffect(String effect) {
+        this.effect = effect;
+    }
+
     public Map<String, Double> getSpecs() {
         return specs;
     }
@@ -118,6 +137,8 @@ public class Elbil implements Parcelable {
         parcel.writeString(model);
         parcel.writeString(modelYear);
         parcel.writeString(battery);
+        parcel.writeString(fastCharge);
+        parcel.writeString(effect);
         //parcel.writeMap(specs);
     }
 

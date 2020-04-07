@@ -1,6 +1,8 @@
 package com.example.elfin.Activities.Station.StationList;
 
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -21,8 +23,10 @@ import com.example.elfin.R;
 import com.example.elfin.adapter.RecyleViewAdapter;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -36,8 +40,8 @@ public class ChargingStationList extends Fragment {
     RecyleViewAdapter recyleViewAdapter;
 
 
-    public ChargingStationList() {
-        //this.chargingStations = chargingStations;
+    public ChargingStationList(ChargingStations chargingStations) {
+        this.chargingStations = chargingStations;
         // Required empty public constructor
     }
 
@@ -48,6 +52,14 @@ public class ChargingStationList extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_charging_station_list, container, false);
         recyclerView3 = rootView.findViewById(R.id.resyclerViewItems);
         recyclerView3.setNestedScrollingEnabled(true);
+        chargerItemList = new ArrayList<>();
+        chargerItemList.add(0,new ChargerItem("lol", "Vandre litt ",
+                "40 min", "4", "120 min", "4", "5km",
+                R.drawable.baseline_battery_charging_full_black_24dp, R.drawable.baseline_battery_charging_full_black_24dp));
+        recyleViewAdapter = new RecyleViewAdapter(getContext(), chargerItemList);
+        recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext()));
+        recyclerView3.setAdapter(recyleViewAdapter);
+        recyclerView3.setVisibility(View.INVISIBLE);
         return rootView;
 
     }
@@ -67,14 +79,17 @@ public class ChargingStationList extends Fragment {
     public void setAllValidStations(ArrayList<ChargerItem> validStations) {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
         /*chargerItemList = new ArrayList<>();
+
         for (int i = 0; i <validStations.size()-1 ; i++) {
             chargerItemList.add(i,new ChargerItem(validStations.get(i).toString(), "Vandre litt ",
                     "40 min", "4", "120 min", "4", "5km",
                     R.drawable.baseline_battery_charging_full_black_24dp, R.drawable.baseline_battery_charging_full_black_24dp));
         }
+
         recyleViewAdapter = new RecyleViewAdapter(getContext(), chargerItemList);
-        recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+        recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext()));
         recyclerView3.setAdapter(recyleViewAdapter);
-         */
+        recyclerView3.setVisibility(View.VISIBLE);
+*/
     }
 }
