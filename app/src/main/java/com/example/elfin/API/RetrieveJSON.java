@@ -3,6 +3,7 @@ package com.example.elfin.API;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -19,8 +20,10 @@ import java.nio.channels.AsynchronousCloseException;
 public class RetrieveJSON extends AsyncTask<String, Void, String>{
     HttpURLConnection urlConnection;
     Context context;
-    public RetrieveJSON(Context context){
+    Class className;
+    public RetrieveJSON(Context context, Class className){
         this.context = context;
+        this.className = className;
     }
     @Override
     protected String doInBackground(String... strings){
@@ -49,9 +52,13 @@ public class RetrieveJSON extends AsyncTask<String, Void, String>{
 
     @Override
     protected void onPostExecute(String jsonString) {
-        Intent intent = new Intent("jsonString");
-        intent.putExtra("jsonString",jsonString);
-        //TODO: Bør kjøres en løkke som sjekker om noen har mottat broadcastet, før asynctask avsluttes
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        if (className == NobilAPIHandler.class) {
+            NobilAPIHandler a = new NobilAPIHandler(jsonString);
+            Intent intent = new Intent("jsonString");
+            intent.putParcelableArrayListExtra("test",a.getChargingStationCoordinates());
+            intent.putExtra("jsonString", jsonString);
+            //TODO: Bør kjøres en løkke som sjekker om noen har mottat broadcastet, før asynctask avsluttes
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
     }
 }

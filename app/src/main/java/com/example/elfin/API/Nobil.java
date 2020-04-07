@@ -80,8 +80,8 @@ public class Nobil extends AsyncTask<Void, Void, ArrayList<LatLng>>{
             e.printStackTrace();
         }
         //TODO: Endre fra CSV til Nobil API, håndter dersom man ikke finner noen stasjoner
-        chargingStationCoordinates.sort(new LatitudeComparator());
-        mainActivity.setAllChargingStations(chargingStationCoordinates);
+        //chargingStationCoordinates.sort(new LatitudeComparator());
+        //mainActivity.setAllChargingStations(chargingStationCoordinates);
         mainActivity.setChargingStationsFound(true);
         return chargingStationCoordinates;
     }

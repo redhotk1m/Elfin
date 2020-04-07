@@ -1,5 +1,6 @@
 package com.example.elfin.Utils;
 
+import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -25,12 +26,12 @@ public class StMethods {
         return a;
     }
 
-    public static LatLng search(double value, ArrayList<LatLng> a, boolean isLatitude) {
+    public static ChargerItem search(double value, ArrayList<ChargerItem> a, boolean isLatitude) {
         if (isLatitude) {
-            if (value < a.get(0).latitude) {
+            if (value < a.get(0).getLatLng().latitude) {
                 return a.get(0);
             }
-            if (value > a.get(a.size() - 1).latitude) {
+            if (value > a.get(a.size() - 1).getLatLng().latitude) {
                 return a.get(a.size() - 1);
             }
 
@@ -40,21 +41,21 @@ public class StMethods {
             while (lo <= hi) {
                 int mid = (hi + lo) / 2;
 
-                if (value < a.get(mid).latitude) {
+                if (value < a.get(mid).getLatLng().latitude) {
                     hi = mid - 1;
-                } else if (value > a.get(mid).latitude) {
+                } else if (value > a.get(mid).getLatLng().latitude) {
                     lo = mid + 1;
                 } else {
                     return a.get(mid);
                 }
             }
             // lo == hi + 1
-            return (a.get(lo).latitude - value) < (value - a.get(hi).latitude) ? a.get(lo) : a.get(hi);
+            return (a.get(lo).getLatLng().latitude - value) < (value - a.get(hi).getLatLng().latitude) ? a.get(lo) : a.get(hi);
         } else {
-            if (value < a.get(0).longitude) {
+            if (value < a.get(0).getLatLng().longitude) {
                 return a.get(0);
             }
-            if (value > a.get(a.size() - 1).longitude) {
+            if (value > a.get(a.size() - 1).getLatLng().longitude) {
                 return a.get(a.size() - 1);
             }
 
@@ -64,16 +65,16 @@ public class StMethods {
             while (lo <= hi) {
                 int mid = (hi + lo) / 2;
 
-                if (value < a.get(mid).longitude) {
+                if (value < a.get(mid).getLatLng().longitude) {
                     hi = mid - 1;
-                } else if (value > a.get(mid).longitude) {
+                } else if (value > a.get(mid).getLatLng().longitude) {
                     lo = mid + 1;
                 } else {
                     return a.get(mid);
                 }
             }
             // lo == hi + 1
-            return (a.get(lo).longitude - value) < (value - a.get(hi).longitude) ? a.get(lo) : a.get(hi);
+            return (a.get(lo).getLatLng().longitude - value) < (value - a.get(hi).getLatLng().longitude) ? a.get(lo) : a.get(hi);
         }
     }
 

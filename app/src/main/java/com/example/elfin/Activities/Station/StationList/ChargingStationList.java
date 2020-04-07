@@ -64,9 +64,9 @@ public class ChargingStationList extends Fragment {
         System.out.println("ON PAUSE LIST");
     }
 
-    public void setAllValidStations(ArrayList<LatLng> validStations) {
+    public void setAllValidStations(ArrayList<ChargerItem> validStations) {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
-        chargerItemList = new ArrayList<>();
+        /*chargerItemList = new ArrayList<>();
         for (int i = 0; i <validStations.size()-1 ; i++) {
             chargerItemList.add(i,new ChargerItem(validStations.get(i).toString(), "Vandre litt ",
                     "40 min", "4", "120 min", "4", "5km",
@@ -75,5 +75,6 @@ public class ChargingStationList extends Fragment {
         recyleViewAdapter = new RecyleViewAdapter(getContext(), chargerItemList);
         recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         recyclerView3.setAdapter(recyleViewAdapter);
+         */
     }
 }

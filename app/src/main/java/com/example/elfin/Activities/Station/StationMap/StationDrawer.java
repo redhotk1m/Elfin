@@ -6,13 +6,14 @@ import android.os.AsyncTask;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.elfin.Activities.Station.ChargingStations;
+import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.comparators.LongditudeComparator;
 import com.example.elfin.Utils.StMethods;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-public class StationDrawer extends AsyncTask<ArrayList<LatLng>, Void, ArrayList<LatLng>> {
+public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, ArrayList<ChargerItem>> {
     private ArrayList<LatLng> points;
 
     final double LONG_DIFF = 0.0015, LAT_DIFF = 0.0015;
@@ -64,8 +65,8 @@ public class StationDrawer extends AsyncTask<ArrayList<LatLng>, Void, ArrayList<
 
 
     @Override
-    protected ArrayList<LatLng> doInBackground(ArrayList<LatLng>... allChargingStationsArr) {
-        ArrayList<LatLng>
+    protected ArrayList<ChargerItem> doInBackground(ArrayList<ChargerItem>... allChargingStationsArr) {
+        ArrayList<ChargerItem>
                 allChargingStations = allChargingStationsArr[0],
                 validLatStations = new ArrayList<>(),
                 validStations = new ArrayList<>();
@@ -73,8 +74,8 @@ public class StationDrawer extends AsyncTask<ArrayList<LatLng>, Void, ArrayList<
         int chargingStationsSize = allChargingStations.size();
         for (Object point : points) {
             for (int i = 0; i < chargingStationsSize; i++) {
-                LatLng found = StMethods.search(((LatLng) point).latitude, allChargingStations, true);
-                if (StMethods.distanceBetweenKM(found.latitude,found.longitude,((LatLng) point).latitude,((LatLng) point).longitude) <= 1){
+                ChargerItem found = StMethods.search(((LatLng) point).latitude, allChargingStations, true);
+                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,((LatLng) point).latitude,((LatLng) point).longitude) <= 1){
                     validLatStations.add(found);
                     allChargingStations.remove(found);
                 }else{
@@ -84,8 +85,8 @@ public class StationDrawer extends AsyncTask<ArrayList<LatLng>, Void, ArrayList<
             validLatStations.sort(new LongditudeComparator());
             int validLatStationSize = validLatStations.size();
             for (int i = 0; i < validLatStationSize; i++) {
-                LatLng found = StMethods.search(((LatLng) point).longitude, validLatStations, false);
-                if (StMethods.distanceBetweenKM(found.latitude,found.longitude,((LatLng) point).latitude,((LatLng) point).longitude) <= 1){
+                ChargerItem found = StMethods.search(((LatLng) point).longitude, validLatStations, false);
+                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,((LatLng) point).latitude,((LatLng) point).longitude) <= 1){
                     validStations.add(found);
                     validLatStations.remove(found);
                 }else{
@@ -102,7 +103,7 @@ public class StationDrawer extends AsyncTask<ArrayList<LatLng>, Void, ArrayList<
     }
 
     @Override
-    protected void onPostExecute(ArrayList<LatLng> allValidChargingStations) {
+    protected void onPostExecute(ArrayList<ChargerItem> allValidChargingStations) {
         System.out.println("ONPOST_EXECUTE_STATION_DRAWER"
         + allValidChargingStations.toString());
         Intent intent = new Intent("allValidChargingStations");

@@ -1,13 +1,15 @@
 package com.example.elfin.comparators;
 
+import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Comparator;
 
-public class LatitudeComparator implements Comparator<LatLng> {
+public class LatitudeComparator implements Comparator<ChargerItem> {
 
     @Override
-    public int compare(LatLng c1, LatLng c2) {
-        return Double.compare(c1.latitude, c2.latitude);
+    public int compare(ChargerItem c1, ChargerItem c2) {
+        return Double.compare(c1.getLatLng().latitude, c2.getLatLng().latitude);
     }
+
 }

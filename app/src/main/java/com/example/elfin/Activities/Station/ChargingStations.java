@@ -13,7 +13,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.elfin.API.NobilAPIHandler;
 import com.example.elfin.API.TaskRequestDirections;
+import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.R;
+import com.example.elfin.Utils.App;
 import com.example.elfin.adapter.PageAdapter;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.tabs.TabItem;
@@ -24,10 +26,10 @@ import java.util.zip.Inflater;
 
 public class ChargingStations extends AppCompatActivity {
 
-    public static Context chargingStationContext;
+    public Context chargingStationContext;
     Bundle bundle;
 
-    ArrayList<LatLng> allChargingStations;
+    ArrayList<ChargerItem> allChargingStations;
 
     PageAdapter pagerAdapter;
     public boolean
@@ -46,7 +48,9 @@ public class ChargingStations extends AppCompatActivity {
         TabItem mapTab = findViewById(R.id.mapTab);
         final ViewPager viewPager = findViewById(R.id.viewPager);
         bundle = getIntent().getBundleExtra("bundle");
-        allChargingStations = bundle.getParcelableArrayList("chargingStations");
+        allChargingStations = ((App)getApplication()).getChargerItems();
+        //allChargingStations = (ArrayList<ChargerItem>) bundle.getSerializable("chargingstations");
+        //allChargingStations = bundle.getParcelableArrayList("chargingStations");
         setContext(this);
 
         final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),this);
@@ -94,8 +98,8 @@ public class ChargingStations extends AppCompatActivity {
     private BroadcastReceiver mMessageReceiverAllValidStations = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("BLIR MOTTAT!");
-            ArrayList<LatLng> allValidStations = intent.getParcelableArrayListExtra("allValidChargingStations");
+            System.out.println("BLIR MOTTAT I STATIONS!");
+            ArrayList<ChargerItem> allValidStations = intent.getParcelableArrayListExtra("allValidChargingStations");
             if (allValidStations == null) //Bør være allValidStations.get(0).getError (ikke helt sånn)
                 System.out.println("error"); //Bør aldri skje
                 //TODO: Error message to user
@@ -108,25 +112,26 @@ public class ChargingStations extends AppCompatActivity {
         }
     };
 
-
+    //TODO: Messagereceiver i mainActivity er fortsatt aktiv, og mottar fortsatt listen med alle ladestasjonene
     private BroadcastReceiver mMessageReceiverAllStations = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("BLIR MOTTAT!");
+            System.out.println("BLIR MOTTAT I STATIONS!");
             String message = intent.getStringExtra("jsonString");
             if ("error".equals(message))
                 System.out.println("error");
                 //TODO: Error message to user
             else {
-                NobilAPIHandler nobilAPIHandler = new NobilAPIHandler(message);
-                setAllChargingStations(nobilAPIHandler.getChargingStationCoordinates());
+                setAllChargingStations(intent.<ChargerItem>getParcelableArrayListExtra("test"));
+                startRequestDirections();
                 LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiverAllStations);
             }
         }
     };
 
-    public void setAllChargingStations(ArrayList<LatLng> allChargingStations) {
+    public void setAllChargingStations(ArrayList<ChargerItem> allChargingStations) {
         this.allChargingStations = allChargingStations;
+        System.out.println("stations er satt: " + allChargingStations.toString());
     }
 
     @Override
@@ -140,7 +145,7 @@ public class ChargingStations extends AppCompatActivity {
         taskRequestDirections.execute(bundle.getString("destinationID"));
     }
 
-    public ArrayList<LatLng> getAllChargingStations() {
+    public ArrayList<ChargerItem> getAllChargingStations() {
         return allChargingStations;
     }
 

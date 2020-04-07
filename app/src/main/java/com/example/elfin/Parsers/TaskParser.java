@@ -33,7 +33,7 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
         }catch (JSONException e){
             e.printStackTrace();
         }
-        System.out.println(routes);
+        //System.out.println(routes);
         return routes;
     }
 

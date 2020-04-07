@@ -10,6 +10,7 @@
         android:required="true" />
 
     <application
+        android:name=".Utils.App"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -43,5 +44,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
     </application>
+
 
 </manifest>

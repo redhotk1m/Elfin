@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.elfin.API.TaskRequestDirections;
 import com.example.elfin.Activities.Station.ChargingStations;
+import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -168,8 +169,8 @@ public class ChargingStationMap extends Fragment {
         }
     }
 
-    ArrayList<LatLng> validStations;
-    public void setAllValidStations(ArrayList<LatLng> validStations){
+    ArrayList<ChargerItem> validStations;
+    public void setAllValidStations(ArrayList<ChargerItem> validStations){
         System.out.println("Har satt valid stations i map");
         this.validStations = validStations;
         chargingStations.validStationsFound = true;
@@ -180,14 +181,13 @@ public class ChargingStationMap extends Fragment {
     public void drawValidStations(){
         if (chargingStations.mapCreated && chargingStations.validStationsFound){
             System.out.println("går  gjennom alle valid");
-            for (Object latLng : validStations) {
-                drawChargingStations((LatLng) latLng);
+            for (Object chargerItem : validStations) {
+                drawChargingStations(((ChargerItem) chargerItem).getLatLng());
             }
         }
     }
 
     public void drawChargingStations(LatLng latLng){
-        System.out.println("tegner");
         gMap.addMarker(new MarkerOptions().position(latLng).title("test123").snippet("test9321"));
     }
 

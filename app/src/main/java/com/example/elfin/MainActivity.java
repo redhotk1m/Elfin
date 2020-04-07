@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.TimingLogger;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -29,6 +30,8 @@ import com.example.elfin.API.Nobil;
 import com.example.elfin.API.NobilAPIHandler;
 import com.example.elfin.API.RetrieveJSON;
 import com.example.elfin.Activities.Station.ChargingStations;
+import com.example.elfin.Activities.Station.StationList.ChargerItem;
+import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.car.AddCarActivity;
@@ -39,6 +42,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -49,12 +53,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     ArrayAdapter<String> arrayAdapterSuggestions;
     ArrayList<String> placeIdList = new ArrayList<>();
     String destinationID;
-    public static ArrayList<LatLng> allChargingStations;
+    public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
 
     private ArrayList<Elbil> mCarList;
     private ArrayAdapter adapter;
     private Spinner dropdown;
+    TimingLogger logger;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -97,8 +102,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //swapview
 
         //Henter JSON fra Nobil APIet
-        RetrieveJSON a = new RetrieveJSON(this);
+        logger = new TimingLogger("MyTag","MethodA");
+        RetrieveJSON a = new RetrieveJSON(this,NobilAPIHandler.class);
+        logger.addSplit("Retrieve Create");
         a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&countrycode=NOR&file=false&format=json");
+        logger.addSplit("Retrieve Execute");
+        a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("jsonString"));
     }
@@ -106,14 +115,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("BLIR MOTTAT!");
             String message = intent.getStringExtra("jsonString");
             if ("error".equals(message))
                 System.out.println("error");
                 //TODO: Error message to user
             else {
-                NobilAPIHandler nobilAPIHandler = new NobilAPIHandler(message);
-                setAllChargingStations(nobilAPIHandler.getChargingStationCoordinates());
+                System.out.println("MOTATT I MAIN");
+                //NobilAPIHandler nobilAPIHandler = new NobilAPIHandler(message);
+                //setAllChargingStations(nobilAPIHandler.getChargingStationCoordinates());
+                //System.out.println(nobilAPIHandler.getChargingStationCoordinates().toString());
+                //nobilAPIHandler = null;
+                allChargingStations = intent.getParcelableArrayListExtra("test");
+                System.out.println("joda: " + allChargingStations);
                 LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
             }
         }
@@ -228,7 +241,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //checkIfChargingStationsAreFound();
         Intent intent = new Intent(this, ChargingStations.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("chargingStations",getAllChargingStations());
+        //bundle.putParcelableArrayList("chargingStations",getAllChargingStations());
+        ((App)getApplication()).setChargerItems(allChargingStations);
         bundle.putString("destinationID",destinationID);
         intent.putExtra("bundle",bundle);
         startActivity(intent);
@@ -250,11 +264,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
 
-    public ArrayList<LatLng> getAllChargingStations() {
+    public ArrayList<ChargerItem> getAllChargingStations() {
         return allChargingStations;
     }
 
-    public void setAllChargingStations(ArrayList<LatLng> allChargingStations) {
+    public void setAllChargingStations(ArrayList<ChargerItem> allChargingStations) {
         this.allChargingStations = allChargingStations;
     }
 
