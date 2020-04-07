@@ -43,6 +43,7 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
     TextView textViewPayMethod;
 
     LatLng latLng;
+    String latLngFromList;
 
 
 
@@ -50,6 +51,14 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_charger);
+
+        latLngFromList = getIntent().getStringExtra("latlng");
+        String[] latlong =  latLngFromList.split(",");
+        double latitude = Double.parseDouble(latlong[0]);
+        double longitude = Double.parseDouble(latlong[1]);
+        latLng = new LatLng(latitude, longitude);
+
+
         Button button = findViewById(R.id.button2);
         textViewTitel= findViewById(R.id.textViewTitel);
         textViewAdress = findViewById(R.id.textViewAdress);
@@ -82,7 +91,7 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 String stringLatlng = latLng.latitude +"," +latLng.longitude;
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" +stringLatlng + "&mode=d");
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLngFromList + "&mode=d");
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 if (mapIntent.resolveActivity(getPackageManager()) != null) {
@@ -92,12 +101,12 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         });
 
 
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+        googleMap.addMarker(new MarkerOptions().position(latLng).title("Lader"));
     }
 
 
@@ -108,8 +117,8 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         //LatLng latLng = new LatLng(60.58991, 4.84047);
         //en plass cirkle k ---> 63.32481,10.30589 ... 2 hurtig -- 2 chademo
         // Esso loddefjord 60.58991, 4.84047 --> 1 lyn, 2 hurti -- 2 chademo
-        latLng = new LatLng(60.36144, 5.23441);
-        nobilInfo.execute(latLng);
+        LatLng latLng2 = new LatLng(60.36144, 5.23441);
+        nobilInfo.execute(latLng2);
     }
 
 
@@ -124,6 +133,13 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         textViewPayMethod.setText(info.get(3));
         textViewDescriptionText.setText(info.get(4));
         textViewInfoText.setText(info.get(5));
+
+
+
+        if(textViewCompany.getText().toString().equals("Fortum")&& textViewPayMethod.getText().toString().
+                equals("Cellular phone and Charging card")){
+            textViewPayMethod.setText("Hurtig --> 4 kr per minutt" + "\n" + "\n"  + "\n"+ "Lyn ---->4 kr per minutt + 2,50 kr per kWh");
+        }
 
         /*
         // Bare testing av det funeket for betalling

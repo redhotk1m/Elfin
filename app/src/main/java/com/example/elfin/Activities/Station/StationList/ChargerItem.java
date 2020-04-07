@@ -23,6 +23,7 @@ public class ChargerItem implements Parcelable {
 
     public ChargerItem() {
     }
+    /*
 
     public ChargerItem(String stationName, String description, String chargeTimeFast,
                        String availableFast, String chargeTimeSlow, String availableSlow,
@@ -38,6 +39,8 @@ public class ChargerItem implements Parcelable {
         this.imageFast=imageFast;
         this.imageSlow=imageSlow;
     }
+
+*/
 
     private String street;
     private String houseNumber;
