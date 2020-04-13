@@ -12,6 +12,7 @@ import java.util.List;
 public class CarSpinnerSelection {
 
     private AddCarActivity addCarActivity;
+    private CarSelectionActivity carSelectionActivity;
 
     private List<Elbil> allElbilList;
 
@@ -34,8 +35,14 @@ public class CarSpinnerSelection {
         allElbilList = addCarActivity.getAllCars();
     }
 
+    public CarSpinnerSelection(CarSelectionActivity carSelectionActivity) {
+        this.carSelectionActivity = carSelectionActivity;
+        allElbilList = carSelectionActivity.getAllCars();
+
+    }
+
     protected void filteredCarsSelection(Spinner spinner, String dataField, List<String> filteredList) {
-        allElbilList = addCarActivity.getAllCars();
+        // allElbilList = addCarActivity.getAllCars();
         ArrayList<Elbil> filteredCars = new ArrayList<>();
         filteredList.clear();
         switch (dataField) {
@@ -48,7 +55,7 @@ public class CarSpinnerSelection {
                 }
                 System.out.println("SPINNER FILTERED LIST: " + filteredList.size());
 
-                addCarActivity.setBrands(filteredList);
+                // addCarActivity.setBrands(filteredList);
 
                 break;
             case MODEL:
@@ -59,7 +66,7 @@ public class CarSpinnerSelection {
                     if (!filteredList.contains(elbil.getModel()))
                         filteredList.add(elbil.getModel());
                 }
-                addCarActivity.setModels(filteredList);
+                // addCarActivity.setModels(filteredList);
                 break;
             case MODELYEAR:
                 for (Elbil elbil : allElbilList) {
@@ -71,7 +78,7 @@ public class CarSpinnerSelection {
                 }
                 //  Collections.sort(filteredList);
                 filteredList.add(spinnerFields[1]);
-                addCarActivity.setModelYears(filteredList);
+                // addCarActivity.setModelYears(filteredList);
                 break;
             case BATTERY:
                 for (Elbil elbil : allElbilList) {
@@ -115,71 +122,54 @@ public class CarSpinnerSelection {
         spinner.setVisibility(View.VISIBLE);
     }
 
+    protected void spinnerOnItemSelected(String dataField, Spinner thisSpinner, Spinner nextSpinenr,
+                                         List<String> spinnerList) {
+        switch (dataField) {
+            case BRAND:
+                System.out.println("SpinnerBrands OnItemSelected!");
+                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[0])
+                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                    carSelectionActivity.disableSpinner(MODEL);
+                } else {
+                    getFilteredCars(thisSpinner, MODEL, spinnerList);
+                    setSpinnerSelection(nextSpinenr, spinnerList);
+                    carSelectionActivity.disableSpinner(MODELYEAR);
+                }
+                break;
+            case MODEL:
+                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[1])
+                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                    carSelectionActivity.disableSpinner(MODELYEAR);
+                } else {
+                    getFilteredCars(thisSpinner, MODELYEAR, spinnerList);
+                    setSpinnerSelection(nextSpinenr, spinnerList);
+                    carSelectionActivity.disableSpinner(BATTERY);
+                }
+                break;
+            case MODELYEAR:
+                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[2])
+                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                    carSelectionActivity.disableSpinner(BATTERY);
+                } else {
+                    getFilteredCars(thisSpinner, BATTERY, spinnerList);
+                    setSpinnerSelection(nextSpinenr, spinnerList);
+                    carSelectionActivity.disableSpinner(FASTCHARGE);
+                }
+                break;
+            case BATTERY:
+                break;
+            case FASTCHARGE:
+                break;
+            default:
+                System.out.println("No SPINNER OnItemSelected");
 
-    protected void spinnerBrandOnItemSelected(Spinner spinnerBrands, Spinner spinnerModels,
-                                              List<String> brands, List<String> models) {
-        if (spinnerBrands.getSelectedItem().equals(spinnerPrompts[0])) {
-            setSpinnerSelection(spinnerBrands, brands);
-            addCarActivity.disableSpinner(MODEL);
-        } else {
-            // filteredCarsSelection(spinnerBrands, MODEL, models);
-            getFilteredCars(spinnerBrands, MODEL, models);
-            setSpinnerSelection(spinnerModels, models);
-            addCarActivity.disableSpinner(MODELYEAR);
         }
     }
 
-    protected void spinnerModelsOnItemSelected(Spinner spinnerModels, Spinner spinnerModelYears,
-                                               List<String> modelYears) {
-        if (spinnerModels.getSelectedItem().equals(spinnerPrompts[1])
-                || spinnerModels.getSelectedItem().equals(spinnerFields[0])) {
-            addCarActivity.disableSpinner(MODELYEAR);
-        } else {
-            // filteredCarsSelection(spinnerModels, MODELYEAR, modelYears);
-            getFilteredCars(spinnerModels, MODELYEAR, modelYears);
-            setSpinnerSelection(spinnerModelYears, modelYears);
-            addCarActivity.disableSpinner(BATTERY);
-        }
-    }
 
-    protected void spinnerModelYearsOnItemSelected(Spinner spinnerModelYears, Spinner spinnerBatteries,
-                                                   List<String> batteries) {
-        if (spinnerModelYears.getSelectedItem().equals(spinnerPrompts[2])
-                || spinnerModelYears.getSelectedItem().equals(spinnerFields[0])) {
-            addCarActivity.disableSpinner(BATTERY);
-        } else {
-            // filteredCarsSelection(spinnerModelYears, BATTERY, batteries);
-            getFilteredCars(spinnerModelYears, BATTERY, batteries);
-            setSpinnerSelection(spinnerBatteries, batteries);
-            addCarActivity.disableSpinner(FASTCHARGE);
-        }
-    }
-
-    protected void spinnerBatteriesOnItemSelected(Spinner spinnerBatteries, Spinner spinnerCharges,
-                                                  List<String> charges) {
-        if (spinnerBatteries.getSelectedItem().equals(spinnerPrompts[3])
-                || spinnerBatteries.getSelectedItem().equals(spinnerFields[0])) {
-
-            // disableSpinner(spinnerCharges, charges, FASTCHARGE);
-        } else {
-            //  filteredCarsSelection(spinnerBatteries, FASTCHARGE, charges);
-            getFilteredCars(spinnerBatteries, FASTCHARGE, charges);
-            setSpinnerSelection(spinnerCharges, charges);
-        }
-    }
-
-    protected void spinnerChargesOnItemSelected(Spinner spinnerCharges) {
-        if (spinnerCharges.getSelectedItem().equals(spinnerPrompts[4])
-                || spinnerCharges.getSelectedItem().equals(spinnerFields[0])) {
-            addCarActivity.disableSpinner("spinner");
-        } else {
-            // getFilteredCars(spinnerBatteries, FASTCHARGE, charges);
-            // setSpinnerSelection(spinnerCharges, charges);
-        }
-    }
 
     protected void getFilteredCars(Spinner spinner, String dataField, List<String> filteredList) {
-        allElbilList = addCarActivity.getAllCars();
+//        allElbilList = addCarActivity.getAllCars();
         ArrayList<Elbil> filteredCars = new ArrayList<>();
         filteredList.clear();
         switch (dataField) {

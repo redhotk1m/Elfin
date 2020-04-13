@@ -42,6 +42,27 @@ public class Elbil implements Parcelable {
         //specs = in.readHashMap();
     }
 
+    public boolean[] exists() {
+        boolean[] exists = new boolean[5];
+        if (!this.brand.equals("")) {
+            exists[0] = true;
+        }
+        if (!this.model.equals("")) {
+            exists[1] = true;
+        }
+        if (!this.modelYear.equals("")) {
+            exists[2] = true;
+        }
+        if (!this.battery.equals("")) {
+            exists[3] = true;
+        }
+        if (!this.fastCharge.equals("")) {
+            exists[4] = true;
+        }
+
+        return exists;
+    }
+
     public static final Creator<Elbil> CREATOR = new Creator<Elbil>() {
         @Override
         public Elbil createFromParcel(Parcel in) {

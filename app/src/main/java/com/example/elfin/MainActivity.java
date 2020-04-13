@@ -35,6 +35,7 @@ import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.car.AddCarActivity;
+import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -68,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        startActivity(new Intent(this, CarSearchActivity.class));
+
         //textView = findViewById(R.id.textViewSuggest);
         listViewSuggest=findViewById(R.id.listViewSuggest);
         listViewSuggest.setVisibility(View.INVISIBLE);
