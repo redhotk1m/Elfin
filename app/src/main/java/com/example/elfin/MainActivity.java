@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(this, CarSearchActivity.class));
+       // startActivity(new Intent(this, CarSearchActivity.class));
 
         //textView = findViewById(R.id.textViewSuggest);
         listViewSuggest=findViewById(R.id.listViewSuggest);
@@ -182,7 +182,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         Elbil elbil = (Elbil) dropdown.getSelectedItem();
 
         if (elbil.getBrand().equals("Legg til bil"))
-            startActivity(new Intent(this, AddCarActivity.class));
+            startActivity(new Intent(this, CarSearchActivity.class));
+           // startActivity(new Intent(this, AddCarActivity.class));
         //Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
         //  else Toast.makeText(this, "Selected Car: \n" + elbil.getBrand(), Toast.LENGTH_LONG).show();
     }
