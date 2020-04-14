@@ -1,11 +1,14 @@
 package com.example.elfin.API;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.example.elfin.Utils.App;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,11 +21,13 @@ import java.net.URL;
 import java.nio.channels.AsynchronousCloseException;
 
 public class RetrieveJSON extends AsyncTask<String, Void, String>{
-    HttpURLConnection urlConnection;
-    Context context;
-    Class className;
-    public RetrieveJSON(Context context, Class className){
-        this.context = context;
+    private HttpURLConnection urlConnection;
+    private Class className;
+    private LocalBroadcastManager localBroadcastManager;
+    private App applicationContext;
+    public RetrieveJSON(Activity context, Class className){
+        this.localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        this.applicationContext = (App)context.getApplication();
         this.className = className;
     }
     @Override
@@ -52,13 +57,12 @@ public class RetrieveJSON extends AsyncTask<String, Void, String>{
 
     @Override
     protected void onPostExecute(String jsonString) {
+        //TODO: Bør ikke kjøre NobilAPIHandler i main Thread, tar 4s
         if (className == NobilAPIHandler.class) {
-            NobilAPIHandler a = new NobilAPIHandler(jsonString);
-            Intent intent = new Intent("jsonString");
-            intent.putParcelableArrayListExtra("test",a.getChargingStationCoordinates());
-            intent.putExtra("jsonString", jsonString);
+            NobilAPIHandler a = new NobilAPIHandler(localBroadcastManager,applicationContext);
+            a.execute(jsonString);
             //TODO: Bør kjøres en løkke som sjekker om noen har mottat broadcastet, før asynctask avsluttes
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            //localBroadcastManager.sendBroadcast(intent);
         }
     }
 }

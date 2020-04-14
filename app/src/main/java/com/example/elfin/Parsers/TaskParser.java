@@ -59,6 +59,7 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
             System.out.println("FERDIG@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             //chargingStationMap.drawPolyLines(polylineOptions);
             //chargingStationMap.addAllChargingStations();
+            //TODO: Bruke applicationContext, notify chargingStationMap om at polyline kan tegnes
             chargingStations.getPagerAdapter().getChargingStationMap().setPolyLineOptions(polylineOptions);
             StationDrawer stationDrawer = new StationDrawer(chargingStations,points);
             stationDrawer.execute(chargingStations.getAllChargingStations());

@@ -11,7 +11,7 @@
     <View
         android:id="@+id/filtrering"
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/filter_rect"
@@ -68,31 +68,14 @@
     </com.google.android.material.tabs.TabLayout>
 
 
-
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="350dp"
-        android:layout_height="500dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-        app:layout_constraintVertical_bias="0.0" >
-    </androidx.viewpager.widget.ViewPager>
-
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="350dp"
-        android:layout_height="500dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"/>
 
     <TextView
         android:id="@+id/fraTextView"

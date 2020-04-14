@@ -18,11 +18,9 @@ import com.example.elfin.R;
 import com.example.elfin.Utils.App;
 import com.example.elfin.adapter.PageAdapter;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class ChargingStations extends AppCompatActivity {
 
@@ -30,7 +28,7 @@ public class ChargingStations extends AppCompatActivity {
     Bundle bundle;
 
     ArrayList<ChargerItem> allChargingStations;
-
+    App applicationContext;
     PageAdapter pagerAdapter;
     public boolean
             mapCreated = false,
@@ -44,13 +42,11 @@ public class ChargingStations extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_test);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
-        TabItem listTab = findViewById(R.id.listTab);
-        TabItem mapTab = findViewById(R.id.mapTab);
         final ViewPager viewPager = findViewById(R.id.viewPager);
         bundle = getIntent().getBundleExtra("bundle");
-        allChargingStations = ((App)getApplication()).getChargerItems();
-        //allChargingStations = (ArrayList<ChargerItem>) bundle.getSerializable("chargingstations");
-        //allChargingStations = bundle.getParcelableArrayList("chargingStations");
+        //TODO: Fungerer ikke hvis arrayet ikke er laget
+        applicationContext = (App)getApplication();
+        setAllChargingItems();
         setContext(this);
 
         final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),this);
@@ -63,7 +59,7 @@ public class ChargingStations extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
                 if (tab.getPosition() == 0){
                     pagerAdapter.notifyDataSetChanged();
-                    System.out.println("tab Pos = 0");
+                    //Gjør ingenting, kjører bare onResume for testing
                     pagerAdapter.getItem(0).onResume();//Kjører onresume i Listen,
                     // dersom listen er valgt fra Map.
                     // Lager ikke nytt objekt siden det allerede eksisterer
@@ -71,8 +67,8 @@ public class ChargingStations extends AppCompatActivity {
                 }
                 else if (tab.getPosition() == 1){
                     pagerAdapter.notifyDataSetChanged();
+                    //Gjør ingenting, bare testing
                     getSupportFragmentManager().findFragmentById(0);
-                    System.out.println("tab Pos = 1");
                 }
             }
 
@@ -98,7 +94,6 @@ public class ChargingStations extends AppCompatActivity {
     private BroadcastReceiver mMessageReceiverAllValidStations = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("BLIR MOTTAT I STATIONS!");
             ArrayList<ChargerItem> allValidStations = intent.getParcelableArrayListExtra("allValidChargingStations");
             if (allValidStations == null) //Bør være allValidStations.get(0).getError (ikke helt sånn)
                 System.out.println("error"); //Bør aldri skje
@@ -112,17 +107,21 @@ public class ChargingStations extends AppCompatActivity {
         }
     };
 
-    //TODO: Messagereceiver i mainActivity er fortsatt aktiv, og mottar fortsatt listen med alle ladestasjonene
+    private void setAllChargingItems(){
+        allChargingStations = applicationContext.getChargerItems();
+    }
+
+    //TODO: Messagereceiver i mainActivity er fortsatt aktiv, og mottar fortsatt listen med alle ladestasjonene siden mainActivity fortsatt ligger på stacken
     private BroadcastReceiver mMessageReceiverAllStations = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("BLIR MOTTAT I STATIONS!");
             String message = intent.getStringExtra("jsonString");
             if ("error".equals(message))
                 System.out.println("error");
                 //TODO: Error message to user
             else {
-                setAllChargingStations(intent.<ChargerItem>getParcelableArrayListExtra("test"));
+                setAllChargingItems();
+                //setAllChargingStations(intent.<ChargerItem>getParcelableArrayListExtra("test"));
                 startRequestDirections();
                 LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiverAllStations);
             }
@@ -131,7 +130,6 @@ public class ChargingStations extends AppCompatActivity {
 
     public void setAllChargingStations(ArrayList<ChargerItem> allChargingStations) {
         this.allChargingStations = allChargingStations;
-        System.out.println("stations er satt: " + allChargingStations.toString());
     }
 
     @Override
@@ -158,7 +156,6 @@ public class ChargingStations extends AppCompatActivity {
     }
 
     ArrayList<LatLng> validStations;
-
 
     public Bundle getBundle(){
         return bundle;

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.R;
@@ -38,11 +39,10 @@ public class ChargingStationList extends Fragment {
     List<ChargerItem> chargerItemList;
     ChargingStations chargingStations;
     RecyleViewAdapter recyleViewAdapter;
-
+    private ProgressBar spinner;
 
     public ChargingStationList(ChargingStations chargingStations) {
         this.chargingStations = chargingStations;
-        // Required empty public constructor
     }
 
     //TODO: Sjekk hvis chargingStations.routeCreated && routeCreated = true før noe vises, bør ha loading mens disse er false.
@@ -52,6 +52,8 @@ public class ChargingStationList extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_charging_station_list, container, false);
         recyclerView3 = rootView.findViewById(R.id.resyclerViewItems);
         recyclerView3.setNestedScrollingEnabled(true);
+        spinner = (ProgressBar)rootView.findViewById(R.id.progressBar1);
+
         /*
         chargerItemList = new ArrayList<>();
         chargerItemList.add(0,new ChargerItem("lol", "Vandre litt ",
@@ -81,6 +83,7 @@ public class ChargingStationList extends Fragment {
 
     public void setAllValidStations(ArrayList<ChargerItem> validStations) {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
+        spinner.setVisibility(View.GONE);
         /*
 
         System.out.println(validStations.toString());

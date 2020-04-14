@@ -28,14 +28,6 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     private String requestDirection(String ID){
         String responseString="";
-        String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
-        String origin = "59.967771,10.731879";
-        String destination = ID;//"59.913622,10.753237";
-        String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
-        String mode = "driving";
-        String depertureTime = "now";
-        String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&departure_time=" + depertureTime + "&key=" + key;
-        System.out.println(parameters);
         // Create an InputStream object. From API
         InputStream is = null;
         if (ID != null) {
@@ -55,12 +47,12 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
         String line = "";
         // Create a list of LatLng objects.
         List<LatLng> latLngList = new ArrayList<>();
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
         try {
             while ((line = reader.readLine()) != null) {
-                stringBuffer.append(line);
+                stringBuilder.append(line);
             }
-            responseString = stringBuffer.toString();
+            responseString = stringBuilder.toString();
             reader.close();
             in.close();
         } catch (IOException e1) {
@@ -72,9 +64,7 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        String responseString = "";
-        responseString = requestDirection(strings[0]);
-        return responseString;
+        return requestDirection(strings[0]);
     }
 
     @Override
@@ -82,6 +72,18 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
         TaskParser taskParser = new TaskParser(chargingStations);
         taskParser.execute(s);
     }
+
+
+    /*
+        String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
+        String origin = "59.967771,10.731879";
+        String destination = ID;//"59.913622,10.753237";
+        String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
+        String mode = "driving";
+        String depertureTime = "now";
+        String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&departure_time=" + depertureTime + "&key=" + key;
+        System.out.println(parameters);
+     */
 }
 
 

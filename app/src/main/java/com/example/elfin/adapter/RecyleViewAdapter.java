@@ -28,14 +28,6 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
 
     public RecyleViewAdapter(Context context, List<ChargerItem> chargerItems) {
 
-        System.out.println(chargerItems.get(0).getStationName());
-        System.out.println(chargerItems.get(0).getStationName());
-        System.out.println(chargerItems.get(0).getStationName());
-        System.out.println(chargerItems.get(0).getStationName());
-        System.out.println(chargerItems.get(0).getStationName());
-        System.out.println(chargerItems.get(0).getStationName());
-        System.out.println(chargerItems.get(0).getStationName());
-
         this.context = context;
         this.chargerItems=chargerItems;
     }

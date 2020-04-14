@@ -24,46 +24,6 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
         this.points = points;
     }
 
-
-
-    private ArrayList<LatLng> findAllValidStations(ArrayList<LatLng> allChargingStations){
-        //ArrayList<LatLng>
-        //                validLatStations = new ArrayList<>(),
-        //                validStations = new ArrayList<>();
-        //        //Iterate over all points, draw all stations
-        //        int chargingStationsSize = allChargingStations.size();
-        //        for (Object point : points) {
-        //             for (int i = 0; i < chargingStationsSize; i++) {
-        //                LatLng found = StMethods.search(((LatLng) point).latitude, allChargingStations, true);
-        //                if (StMethods.distanceBetweenKM(found.latitude,found.longitude,((LatLng) point).latitude,((LatLng) point).longitude) <= 1){
-        //                    validLatStations.add(found);
-        //                    allChargingStations.remove(found);
-        //                }else{
-        //                    break;
-        //                }
-        //            }
-        //            validLatStations.sort(new LongditudeComparator());
-        //            int validLatStationSize = validLatStations.size();
-        //            for (int i = 0; i < validLatStationSize; i++) {
-        //                LatLng found = StMethods.search(((LatLng) point).longitude, validLatStations, false);
-        //                if (StMethods.distanceBetweenKM(found.latitude,found.longitude,((LatLng) point).latitude,((LatLng) point).longitude) <= 1){
-        //                    validStations.add(found);
-        //                    validLatStations.remove(found);
-        //                }else{
-        //                    break;
-        //                }
-        //            }
-        //
-        //        }
-        //        return validStations;
-        //        //TODO: Bruke sett, feil høyde/lengde dersom punkt er innenfor i høyde,
-        //        // men ikke i bredde vil det fjernes i fra array,
-        //        // selv om punktet kanskje er valid i et nytt punkt senere i ruten
-        //        //chargingStationMap.addAllChargingStations();
-        return null;
-    }
-
-
     @Override
     protected ArrayList<ChargerItem> doInBackground(ArrayList<ChargerItem>... allChargingStationsArr) {
         ArrayList<ChargerItem>
@@ -99,19 +59,13 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
         //TODO: Bruke sett, feil høyde/lengde dersom punkt er innenfor i høyde,
         // men ikke i bredde vil det fjernes i fra array,
         // selv om punktet kanskje er valid i et nytt punkt senere i ruten
-        //chargingStationMap.addAllChargingStations();
     }
 
     @Override
     protected void onPostExecute(ArrayList<ChargerItem> allValidChargingStations) {
-        System.out.println("ONPOST_EXECUTE_STATION_DRAWER"
-        + allValidChargingStations.toString());
         Intent intent = new Intent("allValidChargingStations");
         intent.putParcelableArrayListExtra("allValidChargingStations",allValidChargingStations);
         //TODO: Bør kjøres en løkke som sjekker om noen har mottat broadcastet, før asynctask avsluttes
         LocalBroadcastManager.getInstance(chargingStation.getContext()).sendBroadcast(intent);
-        //chargingStation.setValidStations(allValidChargingStations);
-        //chargingStation.getPagerAdapter().getChargingStationMap().setAllValidStations(allValidChargingStations);
-        //drawAllValidStations();
     }
 }

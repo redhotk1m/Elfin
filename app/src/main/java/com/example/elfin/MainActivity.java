@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TimingLogger;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.elfin.API.CarInfoAPI;
 import com.example.elfin.API.Nobil;
 import com.example.elfin.API.NobilAPIHandler;
 import com.example.elfin.API.RetrieveJSON;
@@ -60,12 +62,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private ArrayAdapter adapter;
     private Spinner dropdown;
     TimingLogger logger;
+    public ImageButton imageButton;
 
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        System.out.println("KJØRER ONCREATE I MAINACTIVITY__@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //textView = findViewById(R.id.textViewSuggest);
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
 
         dropdown = findViewById(R.id.chooseCar);
-        ImageButton imageButton = findViewById(R.id.imageButtonDriveNow);
+        imageButton = findViewById(R.id.imageButtonDriveNow);
         editText = findViewById(R.id.editTextToAPlace);
         editText.setCursorVisible(false);
 
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("jsonString"));
+        //Log.d("Debug2",new MainActivity().editText.getText().toString());
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -125,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 //setAllChargingStations(nobilAPIHandler.getChargingStationCoordinates());
                 //System.out.println(nobilAPIHandler.getChargingStationCoordinates().toString());
                 //nobilAPIHandler = null;
-                allChargingStations = intent.getParcelableArrayListExtra("test");
-                System.out.println("joda: " + allChargingStations);
+                //allChargingStations = intent.getParcelableArrayListExtra("test");
+                allChargingStations = ((App)getApplication()).getChargerItems();
                 LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
             }
         }
@@ -232,17 +236,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             startChargingStationActivity();//Access was granted to GPS, change activity
         else{
-            //Permission was not granted, should inform user that it's required to use the app.
-            //Gi beskjed til bruker at appen ikke kan brukes uten tilgang til GPS
+            //TODO: Permission was not granted, should inform user that it's required to use the app.
         }
     }
 
     private void startChargingStationActivity() {
-        //checkIfChargingStationsAreFound();
         Intent intent = new Intent(this, ChargingStations.class);
         Bundle bundle = new Bundle();
-        //bundle.putParcelableArrayList("chargingStations",getAllChargingStations());
         ((App)getApplication()).setChargerItems(allChargingStations);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         bundle.putString("destinationID",destinationID);
         intent.putExtra("bundle",bundle);
         startActivity(intent);
@@ -270,13 +272,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void setAllChargingStations(ArrayList<ChargerItem> allChargingStations) {
         this.allChargingStations = allChargingStations;
-    }
-
-    private void checkIfChargingStationsAreFound(){
-        while (!chargingStationsFound){
-            //TODO: Venter på alle ladestasjoner før noe mer skjer,
-            // bør håndtere hvis den ikke finner ladestajoner, eller det går en viss tid.
-        }
     }
 
     public void setChargingStationsFound(boolean found){

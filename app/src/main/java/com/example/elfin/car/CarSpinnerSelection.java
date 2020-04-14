@@ -116,6 +116,8 @@ public class CarSpinnerSelection {
     }
 
 
+
+
     protected void spinnerBrandOnItemSelected(Spinner spinnerBrands, Spinner spinnerModels,
                                               List<String> brands, List<String> models) {
         if (spinnerBrands.getSelectedItem().equals(spinnerPrompts[0])) {
