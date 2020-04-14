@@ -22,6 +22,12 @@ public class Elbil implements Parcelable {
         //public no-arg constructor needed for firestore database
     }
 
+
+    public Elbil(String model, String modelYear) {
+        this.model = model;
+        this.modelYear = modelYear;
+    }
+
     public Elbil(String brand, String model, String modelYear, String battery, String fastCharge, String effect) {
         this.brand = brand;
         this.model = model;
