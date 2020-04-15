@@ -1,12 +1,17 @@
 package com.example.elfin.Activities.Station.StationMap;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +21,7 @@ import android.view.ViewGroup;
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.R;
+import com.example.elfin.Utils.App;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -47,6 +53,8 @@ public class ChargingStationMap extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,new IntentFilter("polyLineOptions"));
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_charging_station_map, container, false);
     }
@@ -89,6 +97,21 @@ public class ChargingStationMap extends Fragment {
             }
         });
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //boolean message = intent.getBooleanExtra("polyLineOptions");
+            //if ("error".equals(message))
+            //    System.out.println("error");
+                //TODO: Error message to user
+            {
+                App applicationContext = (App)getActivity().getApplication();
+                setPolyLineOptions(applicationContext.getPolylineOptions());
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
+            }
+        }
+    };
 
     private PolylineOptions polylineOptions;
     public void setPolyLineOptions(PolylineOptions polyLineOptions){

@@ -7,6 +7,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
+import com.example.elfin.Utils.App;
 import com.example.elfin.comparators.LongditudeComparator;
 import com.example.elfin.Utils.StMethods;
 import com.google.android.gms.maps.model.LatLng;
@@ -16,11 +17,11 @@ import java.util.ArrayList;
 public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, ArrayList<ChargerItem>> {
     private ArrayList<LatLng> points;
 
-    final double LONG_DIFF = 0.0015, LAT_DIFF = 0.0015;
-    private ChargingStations chargingStation;
-
-    public StationDrawer(ChargingStations chargingStations, ArrayList<LatLng> points){
-        this.chargingStation = chargingStations;
+    private App applicationContext;
+    private LocalBroadcastManager localBroadcastManager;
+    public StationDrawer(LocalBroadcastManager localBroadcastManager, App applicationContext, ArrayList<LatLng> points){
+        this.localBroadcastManager = localBroadcastManager;
+        this.applicationContext = applicationContext;
         this.points = points;
     }
 
@@ -63,9 +64,10 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
 
     @Override
     protected void onPostExecute(ArrayList<ChargerItem> allValidChargingStations) {
-        Intent intent = new Intent("allValidChargingStations");
-        intent.putParcelableArrayListExtra("allValidChargingStations",allValidChargingStations);
+        Intent intent = new Intent("allValidStations");
+        intent.putExtra("case","allValidStations");
         //TODO: Bør kjøres en løkke som sjekker om noen har mottat broadcastet, før asynctask avsluttes
-        LocalBroadcastManager.getInstance(chargingStation.getContext()).sendBroadcast(intent);
+        applicationContext.setAllValidChargingStations(allValidChargingStations);
+        localBroadcastManager.sendBroadcast(intent);
     }
 }

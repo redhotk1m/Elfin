@@ -15,16 +15,12 @@ import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
 public class PageAdapter extends FragmentPagerAdapter {
 
     private int numberOfTabs;
-    FragmentManager fragmentManager;
-    private Bundle bundle;
-
-    ChargingStationList chargingStationList;
-    ChargingStationMap chargingStationMap;
-    ChargingStations chargingStations;
+    private ChargingStationList chargingStationList;
+    private ChargingStationMap chargingStationMap;
+    private ChargingStations chargingStations;
     public PageAdapter(FragmentManager fm, int numberOfTabs, ChargingStations chargingStations) {
         super(fm, numberOfTabs);
         this.numberOfTabs = numberOfTabs;
-        this.fragmentManager = fm;
         this.chargingStations = chargingStations;
     }
 
@@ -49,13 +45,6 @@ public class PageAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        /*if (position == 0){
-            container.getChildAt(0).setTag(0,"ChargingStationList");
-            System.out.println("LIST");
-        } else if (position == 1){
-            container.getChildAt(1).setTag(1,"ChargingStationMap");
-            System.out.println("MAP");
-        }*/
         return super.instantiateItem(container, position);
     }
 

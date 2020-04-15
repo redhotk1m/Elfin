@@ -1,11 +1,15 @@
 package com.example.elfin.Parsers;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
 import com.example.elfin.Activities.Station.StationMap.StationDrawer;
+import com.example.elfin.Utils.App;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -17,9 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String,String>>>> {
-    private ChargingStations chargingStations;
-    public TaskParser(ChargingStations chargingStations) {
-        this.chargingStations = chargingStations;
+    private App applicationContext;
+    private LocalBroadcastManager localBroadcastManager;
+    public TaskParser(LocalBroadcastManager localBroadcastManager, App applicationContext) {
+        this.localBroadcastManager = localBroadcastManager;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -60,9 +66,15 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
             //chargingStationMap.drawPolyLines(polylineOptions);
             //chargingStationMap.addAllChargingStations();
             //TODO: Bruke applicationContext, notify chargingStationMap om at polyline kan tegnes
-            chargingStations.getPagerAdapter().getChargingStationMap().setPolyLineOptions(polylineOptions);
-            StationDrawer stationDrawer = new StationDrawer(chargingStations,points);
-            stationDrawer.execute(chargingStations.getAllChargingStations());
+            applicationContext.setPolyLineOptions(polylineOptions);
+            Intent intent = new Intent("polyLineOptions");
+            boolean ready_to_use = true;
+            intent.putExtra("polyLineOptions",ready_to_use);
+            localBroadcastManager.sendBroadcast(intent);
+            //chargingStations.getPagerAdapter().getChargingStationMap().setPolyLineOptions(polylineOptions);
+
+            StationDrawer stationDrawer = new StationDrawer(localBroadcastManager,applicationContext,points);
+            stationDrawer.execute(applicationContext.getChargerItems());
         }
     }
 

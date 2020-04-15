@@ -1,13 +1,17 @@
 package com.example.elfin.API;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
 import com.example.elfin.R;
 import com.example.elfin.Parsers.TaskParser;
+import com.example.elfin.Utils.App;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -19,11 +23,13 @@ import java.util.List;
 
 public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
-    Context context;
-    ChargingStations chargingStations;
-    public TaskRequestDirections(Context context, ChargingStations chargingStations){
-        this.context = context;
-        this.chargingStations = chargingStations;
+    private LocalBroadcastManager localBroadcastManager;
+    private App applicationContext;
+    private Activity context;
+    public TaskRequestDirections(Activity activity){
+        this.localBroadcastManager = LocalBroadcastManager.getInstance(activity);
+        this.applicationContext = (App)activity.getApplication();
+        this.context = activity;
     }
 
     private String requestDirection(String ID){
@@ -69,7 +75,7 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        TaskParser taskParser = new TaskParser(chargingStations);
+        TaskParser taskParser = new TaskParser(localBroadcastManager,applicationContext);
         taskParser.execute(s);
     }
 

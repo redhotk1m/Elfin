@@ -75,7 +75,8 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
     @Override
     protected void onPostExecute(ArrayList<ChargerItem> chargerItems) {
         applicationContext.setChargerItems(chargerItems);
-        Intent intent = new Intent("jsonString");
+        Intent intent = new Intent("allStations");
+        intent.putExtra("case","allStations");
         //intent.putParcelableArrayListExtra("test",chargerItems);
         localBroadcastManager.sendBroadcast(intent);
         System.out.println("har sendt chargerItems");

@@ -112,24 +112,19 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         logger.addSplit("Retrieve Execute");
         a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("jsonString"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("allStations"));
         //Log.d("Debug2",new MainActivity().editText.getText().toString());
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra("jsonString");
+            String message = intent.getStringExtra("case");
             if ("error".equals(message))
                 System.out.println("error");
                 //TODO: Error message to user
             else {
                 System.out.println("MOTATT I MAIN");
-                //NobilAPIHandler nobilAPIHandler = new NobilAPIHandler(message);
-                //setAllChargingStations(nobilAPIHandler.getChargingStationCoordinates());
-                //System.out.println(nobilAPIHandler.getChargingStationCoordinates().toString());
-                //nobilAPIHandler = null;
-                //allChargingStations = intent.getParcelableArrayListExtra("test");
                 allChargingStations = ((App)getApplication()).getChargerItems();
                 LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
             }

@@ -1,6 +1,7 @@
 package com.example.elfin.Activities.Station.StationList;
 
 
+import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -21,6 +22,7 @@ import android.widget.ProgressBar;
 
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.R;
+import com.example.elfin.Utils.App;
 import com.example.elfin.adapter.RecyleViewAdapter;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -37,7 +39,7 @@ public class ChargingStationList extends Fragment {
 
     RecyclerView recyclerView3;
     List<ChargerItem> chargerItemList;
-    ChargingStations chargingStations;
+    private ChargingStations chargingStations;
     RecyleViewAdapter recyleViewAdapter;
     private ProgressBar spinner;
 
@@ -53,7 +55,7 @@ public class ChargingStationList extends Fragment {
         recyclerView3 = rootView.findViewById(R.id.resyclerViewItems);
         recyclerView3.setNestedScrollingEnabled(true);
         spinner = (ProgressBar)rootView.findViewById(R.id.progressBar1);
-
+        System.out.println("ON CREATE BLIR KJØRT");
         /*
         chargerItemList = new ArrayList<>();
         chargerItemList.add(0,new ChargerItem("lol", "Vandre litt ",
@@ -63,10 +65,21 @@ public class ChargingStationList extends Fragment {
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext()));
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.INVISIBLE);
-
          */
         return rootView;
 
+    }
+
+    @Override
+    public void onStart() {
+        System.out.println("ON START");
+        super.onStart();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        System.out.println("VIEW CREATED");
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -81,10 +94,12 @@ public class ChargingStationList extends Fragment {
         System.out.println("ON PAUSE LIST");
     }
 
+
     public void setAllValidStations(ArrayList<ChargerItem> validStations) {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
-        spinner.setVisibility(View.GONE);
-        /*
+        if (spinner != null)
+            spinner.setVisibility(View.GONE);
+
 
         System.out.println(validStations.toString());
         System.out.println(validStations.toString());
@@ -98,19 +113,21 @@ public class ChargingStationList extends Fragment {
 
 
 
-
+        /*
         for (int i = 0; i <validStations.size()-1 ; i++) {
             ChargerItem currentChargerItem = validStations.get(i);
 
             chargerItemList.add(i,currentChargerItem);
-            /*
+
             chargerItemList.add(i,new ChargerItem(validStations.get(i).toString(), "Vandre litt ",
                     "40 min", "4", "120 min", "4", "5km",
                     R.drawable.baseline_battery_charging_full_black_24dp, R.drawable.baseline_battery_charging_full_black_24dp));
 
 
         }
-        */
+
+             */
+
 
         System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
         System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
@@ -126,13 +143,13 @@ public class ChargingStationList extends Fragment {
         System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
         System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
         System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-
 
 
         recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations);
-        recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext()));
+        recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.VISIBLE);
+
 
     }
 }
