@@ -35,9 +35,13 @@ import java.util.Locale;
 public class ChargingStationList extends Fragment {
 
     RecyclerView recyclerView3;
-    List<ChargerItem> chargerItemList;
     ChargingStations chargingStations;
     RecyleViewAdapter recyleViewAdapter;
+
+    public ArrayList<ChargerItem> chargerItems;
+
+    View rootView;
+
 
 
     public ChargingStationList(ChargingStations chargingStations) {
@@ -49,29 +53,13 @@ public class ChargingStationList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_charging_station_list, container, false);
+        rootView = inflater.inflate(R.layout.fragment_charging_station_list, container, false);
         recyclerView3 = rootView.findViewById(R.id.resyclerViewItems);
         recyclerView3.setNestedScrollingEnabled(true);
-        /*
-        chargerItemList = new ArrayList<>();
-        chargerItemList.add(0,new ChargerItem("lol", "Vandre litt ",
-                "40 min", "4", "120 min", "4", "5km",
-                R.drawable.baseline_battery_charging_full_black_24dp, R.drawable.baseline_battery_charging_full_black_24dp));
-        recyleViewAdapter = new RecyleViewAdapter(getContext(), chargerItemList);
-        recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext()));
-        recyclerView3.setAdapter(recyleViewAdapter);
-        recyclerView3.setVisibility(View.INVISIBLE);
-
-         */
         return rootView;
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("onResume","Er i onResume Charging Stations LIST");
-    }
 
     @Override
     public void onPause() {
@@ -79,57 +67,20 @@ public class ChargingStationList extends Fragment {
         System.out.println("ON PAUSE LIST");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+    }
+
     public void setAllValidStations(ArrayList<ChargerItem> validStations) {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
-        /*
 
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-
-        chargerItemList = new ArrayList<>();
-
-
-
-
-        for (int i = 0; i <validStations.size()-1 ; i++) {
-            ChargerItem currentChargerItem = validStations.get(i);
-
-            chargerItemList.add(i,currentChargerItem);
-            /*
-            chargerItemList.add(i,new ChargerItem(validStations.get(i).toString(), "Vandre litt ",
-                    "40 min", "4", "120 min", "4", "5km",
-                    R.drawable.baseline_battery_charging_full_black_24dp, R.drawable.baseline_battery_charging_full_black_24dp));
-
-
-        }
-        */
-
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-
-
-
-        recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations);
+        recyleViewAdapter = new RecyleViewAdapter(chargingStations.getApplicationContext(),validStations);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext()));
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.VISIBLE);
+
 
     }
 }
