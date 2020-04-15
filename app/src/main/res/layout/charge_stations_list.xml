@@ -30,7 +30,7 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="48dp"
         android:text="Veikro"
         android:textSize="8sp"
@@ -42,13 +42,13 @@
         android:id="@+id/charge_time_fast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Ladetid 40 min"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageViewFast"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.546" />
+        app:layout_constraintEnd_toStartOf="@+id/imageViewSlow"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/available_fast"
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <TextView
         android:id="@+id/available_fast"
@@ -73,7 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewSlow"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.569" />
+        app:layout_constraintVertical_bias="0.639" />
 
     <TextView
         android:id="@+id/available_slow"
@@ -117,11 +117,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="132dp"
+        android:layout_marginStart="140dp"
         android:src="@drawable/baseline_battery_charging_full_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewFast"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.723" />
+
+    <TextView
+        android:id="@+id/textViewFast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Hurtig"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/charge_time_fast"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewFast" />
+
+    <TextView
+        android:id="@+id/textViewLigtning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Lyn"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/charge_time_slow"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewSlow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

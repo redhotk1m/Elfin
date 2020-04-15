@@ -10,7 +10,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.elfin.API.NobilInfo;
+import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.R;
+import com.example.elfin.Utils.App;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -44,6 +46,7 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
 
     LatLng latLng;
     String latLngFromList;
+    String ownedby;
 
 
 
@@ -53,6 +56,8 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_about_charger);
 
         latLngFromList = getIntent().getStringExtra("latlng");
+        ownedby = getIntent().getStringExtra("owned");
+
         String[] latlong =  latLngFromList.split(",");
         double latitude = Double.parseDouble(latlong[0]);
         double longitude = Double.parseDouble(latlong[1]);
@@ -129,11 +134,10 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
          */
         textViewTitel.setText(info.get(0));
         textViewAdress.setText(info.get(1));
-        textViewCompany.setText(info.get(2));
+        textViewCompany.setText(ownedby);
         textViewPayMethod.setText(info.get(3));
         textViewDescriptionText.setText(info.get(4));
         textViewInfoText.setText(info.get(5));
-
 
 
         if(textViewCompany.getText().toString().equals("Fortum")&& textViewPayMethod.getText().toString().
@@ -177,6 +181,4 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         textViewAvaiable3.setText(info.get(11));
 
     }
-
-
 }
