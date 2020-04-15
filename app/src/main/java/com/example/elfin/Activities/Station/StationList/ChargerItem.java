@@ -27,12 +27,28 @@ public class ChargerItem implements Parcelable {
     private String updated;
     private String stationStatus;
     private String[] latLng;
+    private String chademo;
+    private String numberOfChademo;
+    private String ccs;
+    private String numberOfCcs;
+    private int imageFast;
+    private int imageSlow;
+    private String fast;
+    private String ligtning;
+    private String lightningTime;
+    private String fastTime;
+
+
+
 
     public ChargerItem(String street, String houseNumber, String zipCode, String city,
                        String municipality, String county, String descriptionOfLocation,
                        String ownedBy, String numberChargingPoints, String image,
                        String availableChargingPoints, String userComment, String contactInfo,
-                       String created, String updated, String stationStatus, String[] latlng) {
+                       String created, String updated, String stationStatus, String[] latlng,
+                       String chademo, String numberOfChademo, String ccs, String numberOfCcs,
+                       int imageFast, int imageSlow, String fast, String ligtning,String lightningTime,
+                       String fastTime) {
 
         this.street = street;
         this.houseNumber = houseNumber;
@@ -51,6 +67,17 @@ public class ChargerItem implements Parcelable {
         this.updated = updated;
         this.stationStatus = stationStatus;
         this.latLng = latlng;
+        this.chademo = chademo;
+        this.numberOfChademo = numberOfChademo;
+        this.ccs = ccs;
+        this.numberOfCcs= numberOfCcs;
+        this.imageFast = imageFast;
+        this.imageSlow = imageSlow;
+        this.fast = fast;
+        this.ligtning = ligtning;
+        this.lightningTime = lightningTime;
+        this.fastTime = fastTime;
+
     }
 
 
@@ -65,6 +92,151 @@ public class ChargerItem implements Parcelable {
             return new ChargerItem[size];
         }
     };
+
+
+    public String getLightningTime() {
+        return lightningTime;
+    }
+
+    public void setLightningTime(String lightningTime) {
+        this.lightningTime = lightningTime;
+    }
+
+    public String getFastTime() {
+        return fastTime;
+    }
+
+    public void setFastTime(String fastTime) {
+        this.fastTime = fastTime;
+    }
+
+    public String getFast() {
+        return fast;
+    }
+
+    public void setFast(String fast) {
+        this.fast = fast;
+    }
+
+    public String getLigtning() {
+        return ligtning;
+    }
+
+    public void setLigtning(String ligtning) {
+        this.ligtning = ligtning;
+    }
+
+    public String getCcs() {
+        return ccs;
+    }
+
+    public void setCcs(String ccs) {
+        this.ccs = ccs;
+    }
+
+    public String getNumberOfCcs() {
+        return numberOfCcs;
+    }
+
+    public void setNumberOfCcs(String numberOfCcs) {
+        this.numberOfCcs = numberOfCcs;
+    }
+
+    public String getChademo() {
+        return chademo;
+    }
+
+    public void setChademo(String chademo) {
+        this.chademo = chademo;
+    }
+
+    public String getNumberOfChademo() {
+        return numberOfChademo;
+    }
+
+    public void setNumberOfChademo(String numberOfChademo) {
+        this.numberOfChademo = numberOfChademo;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getChargeTimeFast() {
+        return chargeTimeFast;
+    }
+
+    public void setChargeTimeFast(String chargeTimeFast) {
+        this.chargeTimeFast = chargeTimeFast;
+    }
+
+    public String getAvailableFast() {
+        return availableFast;
+    }
+
+    public void setAvailableFast(String availableFast) {
+        this.availableFast = availableFast;
+    }
+
+    public String getChargeTimeSlow() {
+        return chargeTimeSlow;
+    }
+
+    public void setChargeTimeSlow(String chargeTimeSlow) {
+        this.chargeTimeSlow = chargeTimeSlow;
+    }
+
+    public String getAvailableSlow() {
+        return availableSlow;
+    }
+
+    public void setAvailableSlow(String availableSlow) {
+        this.availableSlow = availableSlow;
+    }
+
+    public String getDistanceKm() {
+        return distanceKm;
+    }
+
+    public void setDistanceKm(String distanceKm) {
+        this.distanceKm = distanceKm;
+    }
+
+    public int getImageSlow() {
+        return imageSlow;
+    }
+
+    public void setImageSlow(int imageSlow) {
+        this.imageSlow = imageSlow;
+    }
+
+    public int getImageFast() {
+        return imageFast;
+    }
+
+    public void setImageFast(int imageFast) {
+        this.imageFast = imageFast;
+    }
+
+    public int getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(int photo) {
+        this.photo = photo;
+    }
 
     public LatLng getLatLng() {
         return new LatLng(Double.valueOf(latLng[0]),Double.valueOf(latLng[1]));
@@ -229,6 +401,16 @@ public class ChargerItem implements Parcelable {
         parcel.writeString(stationStatus);
         parcel.writeDouble(Double.valueOf(latLng[0]));
         parcel.writeDouble(Double.valueOf(latLng[1]));
+        parcel.writeString(chademo);
+        parcel.writeString(numberOfChademo);
+        parcel.writeString(ccs);
+        parcel.writeString(numberOfCcs);
+        parcel.writeInt(imageFast);
+        parcel.writeInt(imageSlow);
+        parcel.writeString(fast);
+        parcel.writeString(ligtning);
+        parcel.writeString(lightningTime);
+        parcel.writeString(fastTime);
     }
 
     ChargerItem(Parcel in){
@@ -250,5 +432,15 @@ public class ChargerItem implements Parcelable {
         this.stationStatus = in.readString();
         this.latLng[0] = Double.toString(in.readDouble());
         this.latLng[1] = Double.toString(in.readDouble());
+        this.chademo = in.readString();
+        this.numberOfChademo = in.readString();
+        this.ccs = in.readString();
+        this.numberOfCcs = in.readString();
+        this.imageFast = in.readInt();
+        this.imageSlow = in.readInt();
+        this.fast = in.readString();
+        this.ligtning = in.readString();
+        this.lightningTime = in.readString();
+        this.fastTime = in.readString();
     }
 }

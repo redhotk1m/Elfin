@@ -22,6 +22,12 @@ public class Elbil implements Parcelable {
         //public no-arg constructor needed for firestore database
     }
 
+
+    public Elbil(String model, String modelYear) {
+        this.model = model;
+        this.modelYear = modelYear;
+    }
+
     public Elbil(String brand, String model, String modelYear, String battery, String fastCharge, String effect) {
         this.brand = brand;
         this.model = model;
@@ -40,6 +46,27 @@ public class Elbil implements Parcelable {
         fastCharge = in.readString();
         effect = in.readString();
         //specs = in.readHashMap();
+    }
+
+    public boolean[] exists() {
+        boolean[] exists = new boolean[5];
+        if (!this.brand.equals("")) {
+            exists[0] = true;
+        }
+        if (!this.model.equals("")) {
+            exists[1] = true;
+        }
+        if (!this.modelYear.equals("")) {
+            exists[2] = true;
+        }
+        if (!this.battery.equals("")) {
+            exists[3] = true;
+        }
+        if (!this.fastCharge.equals("")) {
+            exists[4] = true;
+        }
+
+        return exists;
     }
 
     public static final Creator<Elbil> CREATOR = new Creator<Elbil>() {

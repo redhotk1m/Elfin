@@ -24,6 +24,16 @@
     <string name="choose_battery">Velg batterikapasitet</string>
     <string name="choose_charging">Velg ladehastighet</string>
 
+    <string name="regNrs">
+        (KUN HER FOR TESTING)\n
+        \nEK 16553\n
+        \nEK 95125\n
+        \nEV 40392\n
+        \nEB 19052\n
+        \nEV 34083\n
+    </string>
+
+
     <string-array name="year_models">
         <item>2010</item>
         <item>2011</item>

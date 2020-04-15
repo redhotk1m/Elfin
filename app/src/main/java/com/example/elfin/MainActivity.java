@@ -37,6 +37,7 @@ import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.car.AddCarActivity;
+import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         System.out.println("KJØRER ONCREATE I MAINACTIVITY__@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+       // startActivity(new Intent(this, CarSearchActivity.class));
+
         //textView = findViewById(R.id.textViewSuggest);
         listViewSuggest=findViewById(R.id.listViewSuggest);
         listViewSuggest.setVisibility(View.INVISIBLE);
@@ -177,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         Elbil elbil = (Elbil) dropdown.getSelectedItem();
 
         if (elbil.getBrand().equals("Legg til bil"))
-            startActivity(new Intent(this, AddCarActivity.class));
+            startActivity(new Intent(this, CarSearchActivity.class));
+           // startActivity(new Intent(this, AddCarActivity.class));
         //Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
         //  else Toast.makeText(this, "Selected Car: \n" + elbil.getBrand(), Toast.LENGTH_LONG).show();
     }

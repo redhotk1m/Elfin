@@ -45,6 +45,7 @@ public class ChargingStationList extends Fragment {
 
     public ChargingStationList(ChargingStations chargingStations) {
         this.chargingStations = chargingStations;
+        // Required empty public constructor
     }
 
     //TODO: Sjekk hvis chargingStations.routeCreated && routeCreated = true før noe vises, bør ha loading mens disse er false.
@@ -71,18 +72,6 @@ public class ChargingStationList extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        System.out.println("ON START");
-        super.onStart();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        System.out.println("VIEW CREATED");
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         Log.d("onResume","Er i onResume Charging Stations LIST");
@@ -93,7 +82,6 @@ public class ChargingStationList extends Fragment {
         super.onPause();
         System.out.println("ON PAUSE LIST");
     }
-
 
     public void setAllValidStations(ArrayList<ChargerItem> validStations) {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!

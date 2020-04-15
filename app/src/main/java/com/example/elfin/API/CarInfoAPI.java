@@ -3,6 +3,7 @@ package com.example.elfin.API;
 import android.os.AsyncTask;
 
 import com.example.elfin.car.AddCarActivity;
+import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
 
 import org.json.JSONException;
@@ -20,6 +21,7 @@ public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
 
     private Elbil elbil;
     private AddCarActivity addCarActivity;
+    private CarSearchActivity carSearchActivity;
 
     @Override
     protected Elbil doInBackground(String... strings) {
@@ -82,7 +84,8 @@ public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
         //if (isError(reponse.get(0))) return; //Gi beskjed til bruker om at feil har oppstått
         System.out.println(reponse.getModel() + " ; " + reponse.getModelYear() + " er responsen vi fikk");
 
-        addCarActivity.loadApiInfo(reponse);
+       // addCarActivity.loadApiInfo(reponse);
+        carSearchActivity.loadApiInfo(reponse);
     }
 
     private boolean isError(String s){
@@ -92,5 +95,9 @@ public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
 
     public void setAddCarActivity(AddCarActivity addCarActivity) {
         this.addCarActivity = addCarActivity;
+    }
+
+    public void setCarSearchActivity(CarSearchActivity carSearchActivity) {
+        this.carSearchActivity = carSearchActivity;
     }
 }

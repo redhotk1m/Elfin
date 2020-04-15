@@ -26,6 +26,7 @@ public class FirestoreQuery {
     private final String BATTERY = "battery";
 
     private AddCarActivity addCarActivity;
+    private CarSearchActivity carSearchActivity;
     private CollectionReference reference;
 
     private List<Elbil> mElbilList = new ArrayList<>();
@@ -36,6 +37,10 @@ public class FirestoreQuery {
         this.reference = reference;
     }
 
+    public FirestoreQuery(CarSearchActivity carSearchActivity, CollectionReference reference) {
+        this.carSearchActivity = carSearchActivity;
+        this.reference = reference;
+    }
 
     public void getInitFirestoreData() {
         reference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -46,7 +51,8 @@ public class FirestoreQuery {
                         Elbil elbil = documentSnapshot.toObject(Elbil.class);
                         allElbilList.add(elbil);
                     }
-                    addCarActivity.setAllCarsList(allElbilList);
+                   // addCarActivity.setAllCarsList(allElbilList);
+                    carSearchActivity.setAllCarsList(allElbilList);
                 } else
                     Toast.makeText(addCarActivity, "COULD NOT LOCATE FIRESTORE DATA..!", Toast.LENGTH_LONG).show();
             }
@@ -68,7 +74,9 @@ public class FirestoreQuery {
 
                             mElbilList.add(elbil);
                         }
-                        addCarActivity.handleFirestoreQuery(mElbilList);
+                      //  addCarActivity.handleFirestoreQuery(mElbilList);
+
+                        carSearchActivity.handleFirestoreQuery(mElbilList);
 
                         //setmElbilList(mElbilList);
                         /*

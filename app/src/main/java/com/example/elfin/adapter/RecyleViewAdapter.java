@@ -27,12 +27,10 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
 
 
     public RecyleViewAdapter(Context context, List<ChargerItem> chargerItems) {
-
         this.context = context;
         this.chargerItems=chargerItems;
     }
 
-    @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -41,25 +39,59 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         myViewHolder.chargeStationslistLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("Item click at position" + myViewHolder.getAdapterPosition());
                 LatLng latlng = chargerItems.get(myViewHolder.getAdapterPosition()).getLatLng();
+                //ChargerItem chargerItem = chargerItems.get(myViewHolder.getAdapterPosition());
                 String longLatString = latlng.latitude +"," +latlng.longitude;
                 intent = new Intent(context, AboutCharger.class);
+                /*
+
+                System.out.println(chargerItem.getOwnedBy());
+                intent.putExtra("charger", chargerItem);
+
+                 */
+
+                String owned = chargerItems.get(myViewHolder.getAdapterPosition()).getOwnedBy();
+                intent.putExtra("owned", owned);
                 intent.putExtra("latlng", longLatString);
+
                 context.startActivity(intent);
             }
         });
         return myViewHolder;
     }
-    //myViewHolder.item_contact.setOnClickListener
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
 
+        holder.stationName.setText(chargerItems.get(position).getOwnedBy());
 
-        holder.stationName.setText(chargerItems.get(position).getStreet() + " " + chargerItems.get(position).getHouseNumber());
-        holder.description.setText(chargerItems.get(position).getCity());
+        //holder.stationName.setText(chargerItems.get(position).getStreet() + " " + chargerItems.get(position).getHouseNumber());
+        holder.description.setText(chargerItems.get(position).getStreet() + " " + chargerItems.get(position).getHouseNumber()
+                + " " +chargerItems.get(position).getCity());
+        holder.chargeTimeFast.setText(chargerItems.get(position).getFastTime());
+        holder.avaiableFast.setText(chargerItems.get(position).getNumberOfChademo());
+        holder.chargeTimeSlow.setText(chargerItems.get(position).getLightningTime());
+        holder.avaiableSlow.setText(chargerItems.get(position).getNumberOfCcs());
+        holder.imageViewFast.setImageResource(chargerItems.get(position).getImageFast());
+        holder.imageViewSlow.setImageResource(chargerItems.get(position).getImageSlow());
+        holder.textViewFast.setText(chargerItems.get(position).getFast());
+        holder.textViewLigtning.setText(chargerItems.get(position).getLigtning());
+
+
+/*
+        if(chargerItems.get(position).getChademo().equals("")){
+            holder.imageViewFast.setVisibility(View.GONE);
+        }
+        if(chargerItems.get(position).getCcs().equals("")){
+            holder.imageViewSlow.setVisibility(View.GONE);
+        }
+
+ */
+
+
+
+
         /*
         holder.chargeTimeFast.setText(chargerItems.get(position).getChargeTimeFast());
         holder.avaiableFast.setText(chargerItems.get(position).getAvailableFast());
@@ -68,7 +100,6 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         holder.distanceKm.setText(chargerItems.get(position).getDistanceKm());
         holder.imageViewFast.setImageResource(chargerItems.get(position).getImageFast());
         holder.imageViewSlow.setImageResource(chargerItems.get(position).getImageSlow());
-
          */
     }
 
@@ -86,12 +117,18 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         private TextView chargeTimeFast;
         private TextView avaiableFast;
         private TextView chargeTimeSlow;
+        private TextView chargeTimeSlow2;
         private TextView avaiableSlow;
+        private TextView avaiableSlow2;
         private TextView distanceKm;
+        private TextView textViewFast;
+        private TextView textViewLigtning;
 
 
         private ImageView imageViewFast;
         private ImageView imageViewSlow;
+        private ImageView imageViewSlow2;
+
 
         private ConstraintLayout chargeStationslistLayout;
 
@@ -102,6 +139,20 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
             chargeStationslistLayout = itemView.findViewById(R.id.charge_stations_list_id);
             stationName = itemView.findViewById(R.id.station_name);
             description = itemView.findViewById(R.id.description);
+            chargeTimeFast = itemView.findViewById(R.id.charge_time_fast);
+            avaiableFast = itemView.findViewById(R.id.available_fast);
+            chargeTimeSlow = itemView.findViewById(R.id.charge_time_slow);
+            avaiableSlow = itemView.findViewById(R.id.available_slow);
+            imageViewFast = itemView.findViewById(R.id.imageViewFast);
+            imageViewSlow = itemView.findViewById(R.id.imageViewSlow);
+            textViewFast = itemView.findViewById(R.id.textViewFast);
+            textViewLigtning = itemView.findViewById(R.id.textViewLigtning);
+
+
+
+
+
+
             /*
             chargeTimeFast = itemView.findViewById(R.id.charge_time_fast);
             avaiableFast = itemView.findViewById(R.id.available_fast);

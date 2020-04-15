@@ -113,6 +113,7 @@ public class NobilInfo extends AsyncTask<LatLng, Void, ArrayList<String>>{
                     int counterCHD = 0;
                     int counterFast = 0;
                     //denne for løkken må være like stor som antall ladere
+
                     for (int j = 1; j < 10 ; j++) {
 
 

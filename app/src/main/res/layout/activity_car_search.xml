@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".car.CarSearchActivity">
+
+    <TextView
+        android:id="@+id/text_view_add_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Legg til din bil"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Search after regNr -->
+
+    <TextView
+        android:id="@+id/text_view_search_regNr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Skriv inn ditt reg.nr."
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/text_view_add_car"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_add_car" />
+
+    <View
+        android:id="@+id/rectangle_search_regNr"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:background="@color/whiteColor"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/text_view_search_regNr"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_search_regNr" />
+
+    <!-- android:src="@drawable/no_reg_plate_small" -->
+    <ImageView
+        android:id="@+id/image_view_regNr"
+        android:layout_width="25dp"
+        android:layout_height="50dp"
+        android:text="@string/to"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/rectangle_search_regNr"
+        app:layout_constraintStart_toStartOf="@+id/rectangle_search_regNr"
+        app:layout_constraintTop_toTopOf="@+id/rectangle_search_regNr"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/edit_text_search_regNr"
+        android:layout_width="206dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:background="@null"
+        android:ems="10"
+        android:hint="AB 12345"
+        android:importantForAutofill="no"
+
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/rectangle_search_regNr"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_search_icon"
+        app:layout_constraintHorizontal_bias="0.344"
+        app:layout_constraintStart_toEndOf="@+id/image_view_regNr"
+        app:layout_constraintTop_toTopOf="@+id/rectangle_search_regNr"
+        app:layout_constraintVertical_bias="0.48000002" />
+
+    <ImageButton
+        android:id="@+id/image_button_search_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_search_grey_24dp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_search_regNr"
+        app:layout_constraintEnd_toEndOf="@+id/rectangle_search_regNr"
+        app:layout_constraintTop_toTopOf="@+id/edit_text_search_regNr"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <!--  Search after car brand / model -->
+
+    <!-- MIDLERTIDIG FOR TESTING -->
+    <TextView
+        android:id="@+id/container"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:text="@string/regNrs"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_search_car"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rectangle_search_regNr"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button_search_car"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="96dp"
+        android:background="@color/blackColor"
+        android:textColor="@color/whiteColor"
+        android:text="OK"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_add_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add_grey_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

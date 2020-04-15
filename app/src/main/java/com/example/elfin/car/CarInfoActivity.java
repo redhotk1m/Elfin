@@ -21,17 +21,14 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class CarInfoActivity extends AppCompatActivity {
 
     private ArrayList<Elbil> mCarList, mCarListAll;
     private Button saveCarBtn, loadCarBtn;
-    private EditText editTextFastCharge, editTextBattery;
-    private TextView editTextBrand, editTextModel, editTextModelYear;
+   // private EditText editTextFastCharge, editTextBattery;
+    private TextView editTextBrand, editTextModel, editTextModelYear, editTextFastCharge, editTextBattery;
     private Spinner spinner;
     private ArrayAdapter adapter;
     private Elbil elbil;
@@ -132,8 +129,8 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextBrand = findViewById(R.id.text_view_brand);
         editTextModel = findViewById(R.id.text_view_model);
         editTextModelYear = findViewById(R.id.text_view_model_year);
-        editTextFastCharge = findViewById(R.id.edit_text_fast_charge);
-        editTextBattery = findViewById(R.id.edit_text_battery);
+        editTextFastCharge = findViewById(R.id.text_view_fast_charge);
+        editTextBattery = findViewById(R.id.text_view_battery);
 
         spinner = findViewById(R.id.spinner_all_cars);
 
