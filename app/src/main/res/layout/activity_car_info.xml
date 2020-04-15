@@ -71,8 +71,8 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_model" />
 
 
-    <EditText
-        android:id="@+id/edit_text_fast_charge"
+    <TextView
+        android:id="@+id/text_view_fast_charge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -85,8 +85,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_model_year" />
 
-    <EditText
-        android:id="@+id/edit_text_battery"
+    <TextView
+        android:id="@+id/text_view_battery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -97,7 +97,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_fast_charge" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_fast_charge" />
 
 
     <Button
@@ -107,10 +107,10 @@
         android:layout_marginBottom="256dp"
         android:text="Legg til Bil"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edit_text_battery"
+        app:layout_constraintEnd_toEndOf="@+id/text_view_battery"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/edit_text_battery"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_battery"
+        app:layout_constraintStart_toStartOf="@+id/text_view_battery"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_battery"
         app:layout_constraintVertical_bias="0.363" />
 
     <Button

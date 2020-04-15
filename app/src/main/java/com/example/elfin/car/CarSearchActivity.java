@@ -357,7 +357,7 @@ public class CarSearchActivity extends AppCompatActivity {
             case BATTERY:
                 if (!battery.isEmpty()) {
                     //todo: return found brand
-                    System.out.println("FOUND EXACT BATTERY: " + brand);  //exact battery found
+                    System.out.println("FOUND EXACT BATTERY: " + battery);  //exact battery found
                 } else if (!foundMatches.isEmpty()) {
                     //todo: return list of possible brands for selection
                     System.out.println("FOUND MATCHING BATTERIES: " + foundMatches); //matching batteries found
