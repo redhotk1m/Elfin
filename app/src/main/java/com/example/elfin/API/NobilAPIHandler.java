@@ -35,7 +35,6 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
 
     @Override
     protected ArrayList<ChargerItem> doInBackground(String... jsonString) {
-    public NobilAPIHandler(String jsonString){
 
         String CCS = "";
         String ligtningCCS = "";
@@ -70,32 +69,6 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 fast = "Hurtig ladning";
                 ligtningTime = "40 min til fullladet";
                 fastTime ="75 min til fullladet";
-
-                //String[] latlng = object
-                //        .getString("Position")
-                //        .replace("(","")
-                //        .replace(")","")
-                //        .split(",");
-                //street = object.getString("Street");
-                // houseNumber = object.getString("House_number");
-                //zipCode = object.getString("Zipcode");
-                //city = object.getString("City");
-                // municipality = object.getString("Municipality");
-                //county = object.getString("County");
-                //descriptionOfLocation = object.getString("Description_of_location");
-                //ownedBy = object.getString("Owned_by");
-                // numberChargingPoints = object.getString("Number_charging_points");
-                // image = object.getString("Image");
-                // availableChargingPoints = object.getString("Available_charging_points");
-                // userComment = object.getString("User_comment");
-                // contactInfo = object.getString("Contact_info");
-                // created = object.getString("Created");
-                // updated = object.getString("Updated");
-                // stationStatus = object.getString("Station_status");
-
-
-
-
 
                 try {
                     for (int j = 1; j < 10; j++) {
@@ -152,7 +125,6 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     imageSlow = 0;
                     ligtning = "";
                     ligtningTime = "";
-
                 }
 
                 if(counterlight <= 0){
@@ -168,30 +140,9 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     imageFast=0;
                     fast = "";
                     fastTime = "";
-
                 }
 
                 chargingStationCoordinates.add(new ChargerItem(
-                                object.getString("Street"),
-                                object.getString("House_number"),
-                                object.getString("Zipcode"),
-                                object.getString("City"),
-                                object.getString("Municipality"),
-                                object.getString("County"),
-                                object.getString("Description_of_location"),
-                                object.getString("Owned_by"),
-                                object.getString("Number_charging_points"),
-                                object.getString("Image"),
-                                object.getString("Available_charging_points"),
-                                object.getString("User_comment"),
-                                object.getString("Contact_info"),
-                                object.getString("Created"),
-                                object.getString("Updated"),
-                                object.getString("Station_status"),
-                                object.getString("Position")
-                                        .replace("(","")
-                                        .replace(")","")
-                                        .split(",")
                         object.getString("Street"),
                         object.getString("House_number"),
                         object.getString("Zipcode"),

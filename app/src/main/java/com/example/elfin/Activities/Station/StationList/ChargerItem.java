@@ -26,17 +26,17 @@ public class ChargerItem implements Parcelable {
     private String created;
     private String updated;
     private String stationStatus;
-    private String[] latLng;
     private String chademo;
     private String numberOfChademo;
     private String ccs;
     private String numberOfCcs;
-    private int imageFast;
-    private int imageSlow;
     private String fast;
     private String ligtning;
     private String lightningTime;
     private String fastTime;
+    private String[] latLng;
+    private int imageFast;
+    private int imageSlow;
 
 
 
@@ -158,62 +158,6 @@ public class ChargerItem implements Parcelable {
         this.numberOfChademo = numberOfChademo;
     }
 
-    public String getStationName() {
-        return stationName;
-    }
-
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getChargeTimeFast() {
-        return chargeTimeFast;
-    }
-
-    public void setChargeTimeFast(String chargeTimeFast) {
-        this.chargeTimeFast = chargeTimeFast;
-    }
-
-    public String getAvailableFast() {
-        return availableFast;
-    }
-
-    public void setAvailableFast(String availableFast) {
-        this.availableFast = availableFast;
-    }
-
-    public String getChargeTimeSlow() {
-        return chargeTimeSlow;
-    }
-
-    public void setChargeTimeSlow(String chargeTimeSlow) {
-        this.chargeTimeSlow = chargeTimeSlow;
-    }
-
-    public String getAvailableSlow() {
-        return availableSlow;
-    }
-
-    public void setAvailableSlow(String availableSlow) {
-        this.availableSlow = availableSlow;
-    }
-
-    public String getDistanceKm() {
-        return distanceKm;
-    }
-
-    public void setDistanceKm(String distanceKm) {
-        this.distanceKm = distanceKm;
-    }
-
     public int getImageSlow() {
         return imageSlow;
     }
@@ -228,14 +172,6 @@ public class ChargerItem implements Parcelable {
 
     public void setImageFast(int imageFast) {
         this.imageFast = imageFast;
-    }
-
-    public int getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(int photo) {
-        this.photo = photo;
     }
 
     public LatLng getLatLng() {
