@@ -79,7 +79,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                             counterLightning++;
                         }
 
-                        
+
                     }
                 } catch (JSONException e) {
                     //System.out.println("ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ");
@@ -89,7 +89,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 int imageSlow= R.drawable.greenstation;
                 String counterFastString = ""+counterFast +" stk";
                 String counterLightString = "" + counterLightning + " stk";
-                
+
 
                 if(counterLightning <= 0){
                     CCS = "";
@@ -98,7 +98,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     ligtning = "";
                     ligtningTime = "";
                 }
-                
+
 
                 if(counterFast <= 0){
                     chademo = "";

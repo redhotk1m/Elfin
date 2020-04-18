@@ -31,6 +31,15 @@
         app:layout_constraintStart_toStartOf="@+id/filtrering"
         app:layout_constraintTop_toTopOf="@+id/filtrering" />
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
     <View
         android:id="@+id/list_map_shadow"
         android:layout_width="match_parent"
@@ -67,15 +76,6 @@
 
     </com.google.android.material.tabs.TabLayout>
 
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout"/>
 
     <TextView
         android:id="@+id/fraTextView"

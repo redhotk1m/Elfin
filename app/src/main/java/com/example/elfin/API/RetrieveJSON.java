@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.elfin.Parsers.TaskParser;
 import com.example.elfin.Utils.App;
 
 import org.json.JSONException;
@@ -63,6 +64,12 @@ public class RetrieveJSON extends AsyncTask<String, Void, String>{
             a.execute(jsonString);
             //TODO: Bør kjøres en løkke som sjekker om noen har mottat broadcastet, før asynctask avsluttes
             //localBroadcastManager.sendBroadcast(intent);
+        }
+        if (className == TaskRequestDirections.class){
+            TaskParser taskParser = new TaskParser(localBroadcastManager,applicationContext);
+            taskParser.execute(jsonString);
+            //TaskRequestDirections a = new TaskRequestDirections(localBroadcastManager,applicationContext);
+            //a.execute(jsonString);
         }
     }
 }

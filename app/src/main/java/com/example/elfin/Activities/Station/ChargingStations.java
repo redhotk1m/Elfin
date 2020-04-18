@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.elfin.API.RetrieveJSON;
 import com.example.elfin.API.TaskRequestDirections;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Activities.Station.StationList.ChargingStationList;
@@ -167,8 +168,19 @@ public class ChargingStations extends AppCompatActivity {
     }
 
     public void startRequestDirections(){
-        TaskRequestDirections taskRequestDirections = new TaskRequestDirections(activity);
-        taskRequestDirections.execute(bundle.getString("destinationID"));
+        String ID = bundle.getString("destinationID");
+        String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
+        String origin = "58.3029517,6.6752682";
+        String destination = ID;
+        String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
+        String mode = "driving";
+        String departureTime = "now";
+        String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&key=" + key;
+        System.out.println(parameters);
+        RetrieveJSON directionFromAPI = new RetrieveJSON(activity,TaskRequestDirections.class);
+        directionFromAPI.execute(parameters);
+        //TaskRequestDirections taskRequestDirections = new TaskRequestDirections(activity);
+        //taskRequestDirections.execute(bundle.getString("destinationID"));
     }
 
     private void setPagerAdapter(PageAdapter pagerAdapter){

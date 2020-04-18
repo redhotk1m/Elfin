@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -25,12 +26,14 @@ import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.R;
 import com.example.elfin.Utils.App;
 import com.example.elfin.adapter.RecyleViewAdapter;
+import com.example.elfin.comparators.LatitudeComparator;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -118,11 +121,6 @@ public class ChargingStationList extends Fragment {
                 chargerListDistance.add(""+df2.format(distance) + " km");
             }
         }
-
-
-
-
-
 
         recyleViewAdapter = new RecyleViewAdapter(getContext(),chargerItemList, chargerListDistance);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT

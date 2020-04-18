@@ -31,6 +31,17 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
         this.applicationContext = (App)activity.getApplication();
         this.context = activity;
     }
+    public TaskRequestDirections(Activity activity, boolean CSV){
+        this.localBroadcastManager = LocalBroadcastManager.getInstance(activity);
+        this.applicationContext = (App)activity.getApplication();
+        this.context = activity;
+    }
+
+    public TaskRequestDirections(LocalBroadcastManager localBroadcastManager, App applicationContext){
+        this.localBroadcastManager = localBroadcastManager;
+        this.applicationContext = applicationContext;
+    }
+
 
     private String requestDirection(String ID){
         String responseString="";
@@ -70,7 +81,8 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        return requestDirection(strings[0]);
+        //return requestDirection(strings[0]);
+        return strings[0];
     }
 
     @Override

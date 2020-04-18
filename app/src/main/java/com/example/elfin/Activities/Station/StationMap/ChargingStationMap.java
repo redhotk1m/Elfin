@@ -1,11 +1,15 @@
 package com.example.elfin.Activities.Station.StationMap;
 
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +26,7 @@ import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.R;
 import com.example.elfin.Utils.App;
+import com.example.elfin.Utils.GPSTracker;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -39,6 +44,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChargingStationMap extends Fragment {
 
@@ -53,7 +59,7 @@ public class ChargingStationMap extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,new IntentFilter("polyLineOptions"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver, new IntentFilter("polyLineOptions"));
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_charging_station_map, container, false);
@@ -81,22 +87,30 @@ public class ChargingStationMap extends Fragment {
                 // For showing a move to my location button
                 googleMap.setMyLocationEnabled(true);
 
-                // For dropping a marker at a point on the Map
-                Task<Location> locationResult = locationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        Location location = task.getResult();
-                        LatLng currentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
-                        //LatLng currentLatLng = new LatLng(59.9139, 10.7522);
-                        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,10);
-                        googleMap.moveCamera(update);
-                    }
-                });
+                double longd = chargingStations.getBundle().getDouble("longditude");
+                double lati = chargingStations.getBundle().getDouble("latitude");
+                LatLng currentLatLng = new LatLng(lati, longd);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng, 10);
+                googleMap.moveCamera(update);
+
                 drawRoute();
                 drawValidStations();
             }
         });
+    }
+
+
+    @SuppressLint("MissingPermission")
+    public static Location getLastKnownLoaction(boolean enabledProvidersOnly, Context context) {
+        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        Location utilLocation = null;
+        List<String> providers = manager.getProviders(enabledProvidersOnly);
+        for (String provider : providers) {
+
+            utilLocation = manager.getLastKnownLocation(provider);
+            if(utilLocation != null) return utilLocation;
+        }
+        return null;
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
