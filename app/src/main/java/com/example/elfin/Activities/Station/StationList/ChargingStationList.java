@@ -24,10 +24,12 @@ import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.R;
 import com.example.elfin.Utils.App;
 import com.example.elfin.adapter.RecyleViewAdapter;
+import com.example.elfin.comparators.LatitudeComparator;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -116,22 +118,7 @@ public class ChargingStationList extends Fragment {
 
              */
 
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-        System.out.println(validStations.get(0).getDescriptionOfLocation());
-
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-        System.out.println("999999999999999999999999999999999999999999999999999999999999999999");
-
-
+        
         recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT
         recyclerView3.setAdapter(recyleViewAdapter);

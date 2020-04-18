@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.elfin.API.RetrieveJSON;
 import com.example.elfin.Parsers.JsonToString;
 import com.example.elfin.Utils.AsyncResponse;
 
@@ -86,8 +87,8 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... strings) {
         String responseString = "";
-        responseString = createTextFromCsvTrondheim();
-        //responseString= createTextFromWebJson();
+        //responseString = createTextFromCsvTrondheim();
+        responseString= createTextFromWebJson();
         return responseString;
     }
 

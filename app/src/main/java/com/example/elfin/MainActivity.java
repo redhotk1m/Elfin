@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TimingLogger;
@@ -36,6 +37,7 @@ import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
 import com.example.elfin.Utils.EditTextFunctions;
+import com.example.elfin.Utils.GPSTracker;
 import com.example.elfin.car.AddCarActivity;
 import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
@@ -47,7 +49,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
 
     public EditText editText;
     DisplaySuggestions displaySuggestions;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private Spinner dropdown;
     TimingLogger logger;
     public ImageButton imageButton;
+    GPSTracker gpsTracker;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -220,48 +223,30 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         });
     }
 
-
-
-
     public void setDestinationID(String destinationID){
         this.destinationID = destinationID;
     }
 
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
-        //This is the result when user accepts / declines GPS location.
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            startChargingStationActivity();//Access was granted to GPS, change activity
-        else{
-            //TODO: Permission was not granted, should inform user that it's required to use the app.
-        }
-    }
-
-    private void startChargingStationActivity() {
+    public void nextActivity(View view) {
         Intent intent = new Intent(this, ChargingStations.class);
         Bundle bundle = new Bundle();
-        ((App)getApplication()).setChargerItems(allChargingStations);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-        bundle.putString("destinationID",destinationID);
-        intent.putExtra("bundle",bundle);
-        startActivity(intent);
-    }
-
-    public void nextActivity(View view) {
-        //Attempts to go to chargingStation activity, checks GPS permission first
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            //If permission isn't already granted, ask for permission
+        gpsTracker = new GPSTracker(this);
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     this
-                    , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
-                    ,0);
+                    , new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}
+                    , 0);
         } else {
-            //If permission is already granted, change activity
-            startChargingStationActivity();
+            gpsTracker.getLocation();
+            if (gpsTracker.canGetLocation()) {
+                ((App)getApplication()).setChargerItems(allChargingStations);
+                LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+                bundle.putDouble("longditude", gpsTracker.getLongitude());
+                bundle.putDouble("latitude", gpsTracker.getLatitude());
+                bundle.putString("destinationID", destinationID);
+                intent.putExtra("bundle", bundle);
+                startActivity(intent);
+            }
         }
     }
 
@@ -276,5 +261,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void setChargingStationsFound(boolean found){
         this.chargingStationsFound = found;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            gpsTracker.getLocation();
+        }
+        else{
+            gpsTracker.popupMessageNeedPermission();
+        }
     }
 }

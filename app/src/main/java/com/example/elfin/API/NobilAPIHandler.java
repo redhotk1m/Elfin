@@ -142,7 +142,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     fastTime = "";
                 }
 
-                chargingStationCoordinates.add(new ChargerItem(
+                    chargingStationCoordinates.add(new ChargerItem(
                         object.getString("Street"),
                         object.getString("House_number"),
                         object.getString("Zipcode"),
