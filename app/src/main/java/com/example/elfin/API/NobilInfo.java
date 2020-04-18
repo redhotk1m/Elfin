@@ -184,7 +184,7 @@ public class NobilInfo extends AsyncTask<LatLng, Void, ArrayList<String>>{
     @Override
     protected void onPostExecute(ArrayList<String> ladestasjoninfo) {
         //aboutCharger.infoTextView.setText(ladestasjoninfo.get(0));
-        aboutCharger.setInfo(ladestasjoninfo);
+        //aboutCharger.setInfo(ladestasjoninfo);
 
     }
 

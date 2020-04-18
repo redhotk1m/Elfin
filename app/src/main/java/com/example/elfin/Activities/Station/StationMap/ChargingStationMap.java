@@ -88,6 +88,7 @@ public class ChargingStationMap extends Fragment {
                     public void onComplete(@NonNull Task<Location> task) {
                         Location location = task.getResult();
                         LatLng currentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
+                        //LatLng currentLatLng = new LatLng(59.9139, 10.7522);
                         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentLatLng,10);
                         googleMap.moveCamera(update);
                     }

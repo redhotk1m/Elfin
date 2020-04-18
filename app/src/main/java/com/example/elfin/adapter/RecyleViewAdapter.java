@@ -17,6 +17,7 @@ import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.R;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.MyViewHolder> {
@@ -24,11 +25,13 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
     Context context;
     List<ChargerItem> chargerItems;
     Intent intent;
+    ArrayList<String> chargerDistance;
 
 
-    public RecyleViewAdapter(Context context, List<ChargerItem> chargerItems) {
+    public RecyleViewAdapter(Context context, List<ChargerItem> chargerItems, ArrayList<String> chargerDistance) {
         this.context = context;
         this.chargerItems=chargerItems;
+        this.chargerDistance=chargerDistance;
     }
 
     @Override
@@ -40,15 +43,31 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
             @Override
             public void onClick(View view) {
                 LatLng latlng = chargerItems.get(myViewHolder.getAdapterPosition()).getLatLng();
-                //ChargerItem chargerItem = chargerItems.get(myViewHolder.getAdapterPosition());
+                ChargerItem chargerItem = chargerItems.get(myViewHolder.getAdapterPosition());
                 String longLatString = latlng.latitude +"," +latlng.longitude;
                 intent = new Intent(context, AboutCharger.class);
-                /*
+
 
                 System.out.println(chargerItem.getOwnedBy());
-                intent.putExtra("charger", chargerItem);
+                //intent.putExtra("charger", chargerItem);
+                /*
+                intent.getParcelableArrayExtra("charger", chargerItems);
+                intent.getParcelableArrayListExtra("charger", chargerItems);
 
                  */
+
+                ArrayList<String> infoFromList = new ArrayList<>();
+                infoFromList.add(chargerItem.getOwnedBy());
+                infoFromList.add(chargerItem.getStreet() + " " + chargerItem.getHouseNumber());
+                infoFromList.add(chargerItem.getChademo());
+                infoFromList.add(chargerItem.getCcs());
+                infoFromList.add(chargerItem.getNumberOfChademo());
+                infoFromList.add(chargerItem.getNumberOfCcs());
+                infoFromList.add(chargerItem.getDescriptionOfLocation());
+                infoFromList.add(chargerItem.getContactInfo());
+
+
+                intent.putExtra("infoFromList", infoFromList);
 
                 String owned = chargerItems.get(myViewHolder.getAdapterPosition()).getOwnedBy();
                 intent.putExtra("owned", owned);
@@ -77,6 +96,7 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         holder.imageViewSlow.setImageResource(chargerItems.get(position).getImageSlow());
         holder.textViewFast.setText(chargerItems.get(position).getFast());
         holder.textViewLigtning.setText(chargerItems.get(position).getLigtning());
+        holder.distanceKm.setText(chargerDistance.get(position));
 
 
 /*
@@ -125,6 +145,7 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         private TextView textViewLigtning;
 
 
+
         private ImageView imageViewFast;
         private ImageView imageViewSlow;
         private ImageView imageViewSlow2;
@@ -147,6 +168,7 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
             imageViewSlow = itemView.findViewById(R.id.imageViewSlow);
             textViewFast = itemView.findViewById(R.id.textViewFast);
             textViewLigtning = itemView.findViewById(R.id.textViewLigtning);
+            distanceKm = itemView.findViewById(R.id.distance_km);
 
 
 

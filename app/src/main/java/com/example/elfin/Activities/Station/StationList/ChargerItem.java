@@ -41,6 +41,7 @@ public class ChargerItem implements Parcelable {
 
 
 
+
     public ChargerItem(String street, String houseNumber, String zipCode, String city,
                        String municipality, String county, String descriptionOfLocation,
                        String ownedBy, String numberChargingPoints, String image,

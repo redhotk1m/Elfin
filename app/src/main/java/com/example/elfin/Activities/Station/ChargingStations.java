@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -25,10 +26,13 @@ import java.util.ArrayList;
 public class ChargingStations extends AppCompatActivity {
 
     Bundle bundle;
+    TextView toTextView;
 
     ArrayList<ChargerItem> allChargingStations;
     App applicationContext;
     PageAdapter pagerAdapter;
+    String toText ;
+    TextView textViewTo;
     public boolean
             mapCreated = false,
             routeCreated = false,
@@ -42,9 +46,12 @@ public class ChargingStations extends AppCompatActivity {
         setContentView(R.layout.fragment_test);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         final ViewPager viewPager = findViewById(R.id.viewPager);
+        toTextView = findViewById(R.id.tilTextView);
         bundle = getIntent().getBundleExtra("bundle");
+        toText = bundle.getString("toText");
         applicationContext = (App)getApplication();
         setAllChargingItems();
+        toTextView.setText("Til: " +toText);
         activity = this;
         final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),this);
         setPagerAdapter(pagerAdapter);

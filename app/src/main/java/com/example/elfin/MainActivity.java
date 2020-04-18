@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     ArrayAdapter<String> arrayAdapterSuggestions;
     ArrayList<String> placeIdList = new ArrayList<>();
     String destinationID;
+    View rectangleTo;
     public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
 
@@ -63,7 +64,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private ArrayAdapter adapter;
     private Spinner dropdown;
     TimingLogger logger;
+    public TextView fyllIn;
     public ImageButton imageButton;
+
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -78,12 +82,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //textView = findViewById(R.id.textViewSuggest);
         listViewSuggest=findViewById(R.id.listViewSuggest);
         listViewSuggest.setVisibility(View.INVISIBLE);
+        rectangleTo= findViewById(R.id.rectangleTo);
+        fyllIn = findViewById(R.id.textViewFyllIn);
+        fyllIn.setVisibility(View.GONE);
 
 
         dropdown = findViewById(R.id.chooseCar);
         imageButton = findViewById(R.id.imageButtonDriveNow);
         editText = findViewById(R.id.editTextToAPlace);
         editText.setCursorVisible(false);
+
 
         //dropdown.setPrompt("EB12342 VW e-Golf");
         initSpinner();
@@ -241,13 +249,21 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void startChargingStationActivity() {
-        Intent intent = new Intent(this, ChargingStations.class);
-        Bundle bundle = new Bundle();
-        ((App)getApplication()).setChargerItems(allChargingStations);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-        bundle.putString("destinationID",destinationID);
-        intent.putExtra("bundle",bundle);
-        startActivity(intent);
+
+        if(editText.getText().toString().equals("")){
+            fyllIn.setVisibility(View.VISIBLE);
+            Toast.makeText(this,"legge til noe", Toast.LENGTH_SHORT ).show();
+        } else {
+            Intent intent = new Intent(this, ChargingStations.class);
+            Bundle bundle = new Bundle();
+            ((App)getApplication()).setChargerItems(allChargingStations);
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+            bundle.putString("destinationID",destinationID);
+            bundle.putString("toText", editText.getText().toString());
+            intent.putExtra("bundle",bundle);
+            startActivity(intent);
+        }
+
     }
 
     public void nextActivity(View view) {

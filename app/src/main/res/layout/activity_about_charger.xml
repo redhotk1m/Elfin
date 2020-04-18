@@ -64,32 +64,20 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewTitel" />
 
 
-    <TextView
-        android:id="@+id/textViewCompany"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.035"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/map" />
-
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="30dp"
+        android:layout_height="440dp"
+        android:layout_marginBottom="8dp"
+        android:fadeScrollbars="false"
         android:fillViewport="true"
         android:isScrollContainer="true"
         android:orientation="vertical"
-        android:fadeScrollbars="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCompany">
+        app:layout_constraintTop_toBottomOf="@+id/map">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -101,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:text="Ladere"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -116,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="16dp"
-                android:text="Betaling"
+                android:text="Priser med SMS"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -130,13 +118,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="24dp"
-                android:text="Beskrivelse"
+                android:text="Info "
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line2_about" />
+                app:layout_constraintTop_toBottomOf="@+id/line2_about"
+                tools:text="Info " />
 
             <TextView
                 android:id="@+id/textViewHelp"
@@ -144,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="24dp"
-                android:text="Informasjon"
+                android:text="Beskrivelse"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -159,7 +148,8 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:lineSpacingMultiplier="0.7"
+                android:lineSpacingExtra="14sp"
+                android:lineSpacingMultiplier="1.1"
                 android:text="Beskrivelse"
                 android:textSize="12sp"
                 android:textStyle="normal"
@@ -185,18 +175,35 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewHelp" />
 
             <TextView
+                android:id="@+id/textViewHowToPayText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:lineSpacingMultiplier="1.1"
+                android:text="Beskrivelse"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewHowToPay" />
+
+            <TextView
                 android:id="@+id/textViewChargersAvaiable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
                 android:text="6 ledig"
-                android:textColor="#4CAF50"
+                android:textColor="#0F9D58"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.947"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line_about" />
+                app:layout_constraintHorizontal_bias="0.51"
+                app:layout_constraintStart_toEndOf="@+id/textViewChargerType"
+                app:layout_constraintTop_toBottomOf="@+id/textViewChargers" />
 
             <TextView
                 android:id="@+id/textViewChargersAvaiable2"
@@ -205,11 +212,11 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:text="6 ledig"
-                android:textColor="#4CAF50"
+                android:textColor="#0F9D58"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.416"
+                app:layout_constraintHorizontal_bias="0.51"
                 app:layout_constraintStart_toEndOf="@+id/textViewChargerType2"
                 app:layout_constraintTop_toBottomOf="@+id/textViewChargerType" />
 
@@ -217,14 +224,14 @@
                 android:id="@+id/textViewChargersAvaiable3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:text="6 ledig"
-                android:textColor="#4CAF50"
+                android:textColor="#0F9D58"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.397"
+                app:layout_constraintHorizontal_bias="0.51"
                 app:layout_constraintStart_toEndOf="@+id/textViewChargerType2"
                 app:layout_constraintTop_toBottomOf="@+id/textViewChargerType2" />
 
@@ -291,57 +298,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewDescriptionText" />
 
-            <View
-                android:id="@+id/line3"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                android:alpha="0.5
-"
-                android:background="@color/blackColor"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewInfoText" />
-
             <TextView
                 android:id="@+id/textViewChargerType"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:text="TextView"
-                app:layout_constraintEnd_toStartOf="@+id/textViewChargersAvaiable"
-                app:layout_constraintHorizontal_bias="0.564"
-                app:layout_constraintStart_toEndOf="@+id/textViewChargers"
-                app:layout_constraintTop_toTopOf="@+id/line_about" />
+                app:layout_constraintStart_toStartOf="@+id/textViewChargers"
+                app:layout_constraintTop_toBottomOf="@+id/textViewChargers" />
 
             <TextView
                 android:id="@+id/textViewChargerType2"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:text="TextView"
-                app:layout_constraintEnd_toStartOf="@+id/textViewChargersAvaiable"
-                app:layout_constraintHorizontal_bias="0.578"
-                app:layout_constraintStart_toEndOf="@+id/textViewChargers"
+                app:layout_constraintStart_toStartOf="@+id/textViewChargerType"
                 app:layout_constraintTop_toBottomOf="@+id/textViewChargerType" />
 
             <TextView
                 android:id="@+id/textViewChargerType3"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:text="TextView"
-                app:layout_constraintEnd_toStartOf="@+id/textViewChargersAvaiable"
-                app:layout_constraintHorizontal_bias="0.578"
-                app:layout_constraintStart_toEndOf="@+id/textViewChargers"
+                app:layout_constraintStart_toStartOf="@+id/textViewChargerType2"
                 app:layout_constraintTop_toBottomOf="@+id/textViewChargerType2" />
 
             <TextView
@@ -351,12 +332,59 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:lineSpacingMultiplier="0.7"
+                android:lineSpacingMultiplier="1.1"
                 android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewPayTittel" />
+
+            <View
+                android:id="@+id/line3"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="30dp"
+                android:alpha="0.5
+        "
+                android:background="@color/blackColor"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewInfoText" />
+
+            <View
+                android:id="@+id/lineHowToPay"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="30dp"
+                android:alpha="0.5
+        "
+                android:background="@color/blackColor"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewHowToPayText" />
+
+            <TextView
+                android:id="@+id/textViewHowToPay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="24dp"
+                android:text="Betaling"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/line3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
