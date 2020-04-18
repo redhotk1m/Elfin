@@ -98,31 +98,27 @@ public class ChargingStationList extends Fragment {
         selected_location.setLatitude(59.9139);
         selected_location.setLongitude(10.7522);
 
-
-
         chargerItemList = new ArrayList<>();
         ArrayList<String> chargerListDistance = new ArrayList<>();
 
         double km = 1000;
+        Location near_locations = new Location("locationB");
+
 
         for (ChargerItem chargerItem : validStations){
-            if(!chargerItem.getChademo().equals("")||!chargerItem.getCcs().equals("")){
-                chargerItemList.add(chargerItem);
 
-                Location near_locations = new Location("locationB");
                 near_locations.setLatitude(chargerItem.getLatLng().latitude);
                 near_locations.setLongitude(chargerItem.getLatLng().longitude);
-                double distance=selected_location.distanceTo(near_locations);
+                double distance = selected_location.distanceTo(near_locations);
                 if(distance > km){
                     distance/=km;
                 }
                 DecimalFormat df2 = new DecimalFormat("#.#");
                 df2.setRoundingMode(RoundingMode.UP);
                 chargerListDistance.add(""+df2.format(distance) + " km");
-            }
         }
 
-        recyleViewAdapter = new RecyleViewAdapter(getContext(),chargerItemList, chargerListDistance);
+        recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations, chargerListDistance);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.VISIBLE);

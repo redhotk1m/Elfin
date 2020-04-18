@@ -68,7 +68,8 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 try {
                     for (int j = 1; j < 10; j++) {
                         if (objectConnectors.getJSONObject("" + j).getJSONObject("4").
-                                getString("trans").equals(chademo)){
+                                getString("trans").equals(chademo) && objectConnectors.getJSONObject("" + j).getJSONObject("5").
+                                getString("trans").equals(fastCharger)){
                             counterFast++;
                         }
 
@@ -109,30 +110,33 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 }
 
 
-                chargingStationCoordinates.add(new ChargerItem(
-                        object.getString("Street"),
-                        object.getString("House_number"),
-                        object.getString("Zipcode"),
-                        object.getString("City"),
-                        object.getString("Municipality"),
-                        object.getString("County"),
-                        object.getString("Description_of_location"),
-                        object.getString("Owned_by"),
-                        object.getString("Number_charging_points"),
-                        object.getString("Image"),
-                        object.getString("Available_charging_points"),
-                        object.getString("User_comment"),
-                        object.getString("Contact_info"),
-                        object.getString("Created"),
-                        object.getString("Updated"),
-                        object.getString("Station_status"),
-                        object.getString("Position")
-                                .replace("(","")
-                                .replace(")","")
-                                .split(","),chademo,counterFastString,CCS,counterLightString,
-                        imageFast, imageSlow,fast,ligtning, ligtningTime, fastTime
-                        )
-                );
+                if(counterLightning>= 1 || counterFast >=1){
+                    chargingStationCoordinates.add(new ChargerItem(
+                                    object.getString("Street"),
+                                    object.getString("House_number"),
+                                    object.getString("Zipcode"),
+                                    object.getString("City"),
+                                    object.getString("Municipality"),
+                                    object.getString("County"),
+                                    object.getString("Description_of_location"),
+                                    object.getString("Owned_by"),
+                                    object.getString("Number_charging_points"),
+                                    object.getString("Image"),
+                                    object.getString("Available_charging_points"),
+                                    object.getString("User_comment"),
+                                    object.getString("Contact_info"),
+                                    object.getString("Created"),
+                                    object.getString("Updated"),
+                                    object.getString("Station_status"),
+                                    object.getString("Position")
+                                            .replace("(","")
+                                            .replace(")","")
+                                            .split(","),chademo,counterFastString,CCS,counterLightString,
+                                    imageFast, imageSlow,fast,ligtning, ligtningTime, fastTime
+                            )
+                    );
+                }
+
                 counterFast = 0;
                 counterLightning = 0;
                 object = null;

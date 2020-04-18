@@ -13,9 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TimingLogger;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,8 +26,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.elfin.API.CarInfoAPI;
-import com.example.elfin.API.Nobil;
 import com.example.elfin.API.NobilAPIHandler;
 import com.example.elfin.API.RetrieveJSON;
 import com.example.elfin.Activities.Station.ChargingStations;
@@ -38,16 +34,13 @@ import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.Utils.GPSTracker;
-import com.example.elfin.car.AddCarActivity;
 import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
 
@@ -60,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     String destinationID;
     public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
+    public TextView destinacionTextView;
 
     private ArrayList<Elbil> mCarList;
     private ArrayAdapter adapter;
@@ -93,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
+        destinacionTextView = findViewById(R.id.textViewFyllIn);
+        destinacionTextView.setVisibility(View.INVISIBLE);
         EditTextFunctions editTextFunctions = new EditTextFunctions(this);
         editTextFunctions.setText();
 
@@ -228,26 +224,33 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     public void nextActivity(View view) {
-        Intent intent = new Intent(this, ChargingStations.class);
-        Bundle bundle = new Bundle();
-        gpsTracker = new GPSTracker(this);
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this
-                    , new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}
-                    , 0);
-        } else {
-            gpsTracker.getLocation();
-            if (gpsTracker.canGetLocation()) {
-                ((App)getApplication()).setChargerItems(allChargingStations);
-                LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-                bundle.putDouble("longditude", gpsTracker.getLongitude());
-                bundle.putDouble("latitude", gpsTracker.getLatitude());
-                bundle.putString("destinationID", destinationID);
-                intent.putExtra("bundle", bundle);
-                startActivity(intent);
+        if(editText.getText().length()> 0){
+            Intent intent = new Intent(this, ChargingStations.class);
+            Bundle bundle = new Bundle();
+            gpsTracker = new GPSTracker(this);
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        this
+                        , new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}
+                        , 0);
+            } else {
+                gpsTracker.getLocation();
+                if (gpsTracker.canGetLocation()) {
+                    ((App)getApplication()).setChargerItems(allChargingStations);
+                    LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+                    bundle.putDouble("longditude", gpsTracker.getLongitude());
+                    bundle.putDouble("latitude", gpsTracker.getLatitude());
+                    bundle.putString("destinationID", destinationID);
+                    bundle.putString("destination",editText.getText().toString());
+                    intent.putExtra("bundle", bundle);
+                    startActivity(intent);
+                }
             }
         }
+        else {
+            destinacionTextView.setVisibility(View.VISIBLE);
+        }
+
     }
 
 

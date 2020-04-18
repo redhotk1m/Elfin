@@ -49,7 +49,7 @@ public class ChargingStations extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.viewPager);
         toTextView = findViewById(R.id.tilTextView);
         bundle = getIntent().getBundleExtra("bundle");
-        toText = bundle.getString("toText");
+        toText = bundle.getString("destination");
         applicationContext = (App)getApplication();
         setAllChargingItems();
         toTextView.setText("Til: " +toText);
