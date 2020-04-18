@@ -167,6 +167,42 @@ public class CarSpinnerSelection {
     }
 
 
+    /*
+    private void matchingCarsFound(String dataField, List<String> foundMatches) {
+        switch (dataField) {
+            case BRAND:
+                if (!brand.isEmpty()) {
+                    System.out.println("FOUND EXACT BRAND: " + brand);      //exact brand found
+                    //todo: return found brand
+                } else if (!foundMatches.isEmpty()) {
+                    System.out.println("FOUND MATCHING BRANDS: " + foundMatches);    //matching models found
+                    //todo: return list of possible brands for selection
+                } else System.out.println("NO MATCHING BRANDS FOUND...");
+                break;
+            case MODEL:
+                if (!model.isEmpty()) {
+                    //todo: return found model
+                    System.out.println("FOUND EXACT MODEL: " + model);    //exact model found
+                } else if (!foundMatches.isEmpty()) {
+                    //todo: return list of possible models for selection
+                    System.out.println("FOUND MATCHING MODELS: " + foundMatches);    //matching models found
+                } else System.out.println("NO MATCHING MODELS FOUND...");
+                break;
+            case BATTERY:
+                if (!battery.isEmpty()) {
+                    //todo: return found brand
+                    System.out.println("FOUND EXACT BATTERY: " + battery);  //exact battery found
+                } else if (!foundMatches.isEmpty()) {
+                    //todo: return list of possible brands for selection
+                    System.out.println("FOUND MATCHING BATTERIES: " + foundMatches); //matching batteries found
+                } else System.out.println("NO MATCHING BATTERIES FOUND...");
+                break;
+            default:
+                System.out.println("NO SUCH DATA FIELD TO MATCH");
+        }
+    }
+    */
+
 
     protected void getFilteredCars(Spinner spinner, String dataField, List<String> filteredList) {
 //        allElbilList = addCarActivity.getAllCars();
