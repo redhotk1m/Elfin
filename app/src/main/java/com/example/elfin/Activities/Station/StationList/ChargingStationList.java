@@ -4,6 +4,8 @@ package com.example.elfin.Activities.Station.StationList;
 import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -28,6 +30,8 @@ import com.example.elfin.comparators.LatitudeComparator;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -90,36 +94,35 @@ public class ChargingStationList extends Fragment {
         if (spinner != null)
             spinner.setVisibility(View.GONE);
 
+        Location selected_location=new Location("locationA");
+        selected_location.setLatitude(59.9139);
+        selected_location.setLongitude(10.7522);
 
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
-        System.out.println(validStations.toString());
+
 
         chargerItemList = new ArrayList<>();
+        ArrayList<String> chargerListDistance = new ArrayList<>();
 
+        double km = 1000;
 
+        for (ChargerItem chargerItem : validStations){
+            if(!chargerItem.getChademo().equals("")||!chargerItem.getCcs().equals("")){
+                chargerItemList.add(chargerItem);
 
-        /*
-        for (int i = 0; i <validStations.size()-1 ; i++) {
-            ChargerItem currentChargerItem = validStations.get(i);
-
-            chargerItemList.add(i,currentChargerItem);
-
-            chargerItemList.add(i,new ChargerItem(validStations.get(i).toString(), "Vandre litt ",
-                    "40 min", "4", "120 min", "4", "5km",
-                    R.drawable.baseline_battery_charging_full_black_24dp, R.drawable.baseline_battery_charging_full_black_24dp));
-
-
+                Location near_locations = new Location("locationB");
+                near_locations.setLatitude(chargerItem.getLatLng().latitude);
+                near_locations.setLongitude(chargerItem.getLatLng().longitude);
+                double distance=selected_location.distanceTo(near_locations);
+                if(distance > km){
+                    distance/=km;
+                }
+                DecimalFormat df2 = new DecimalFormat("#.#");
+                df2.setRoundingMode(RoundingMode.UP);
+                chargerListDistance.add(""+df2.format(distance) + " km");
+            }
         }
 
-             */
-
-        
-        recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations);
+        recyleViewAdapter = new RecyleViewAdapter(getContext(),chargerItemList, chargerListDistance);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.VISIBLE);

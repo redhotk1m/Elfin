@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:orientation="horizontal"
-    android:padding="5dp"
-    android:background="@drawable/border"
     android:id="@+id/charge_stations_list_id"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
     android:layout_margin="5dp"
-    >
+    android:background="@drawable/border"
+    android:orientation="horizontal"
+    android:padding="5dp">
 
 
     <TextView
@@ -20,6 +18,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Cirkle K"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
@@ -33,35 +33,41 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="48dp"
         android:text="Veikro"
-        android:textSize="8sp"
+        android:textColor="@color/blackColor"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/station_name" />
+        app:layout_constraintTop_toBottomOf="@+id/station_name"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/charge_time_fast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Ladetid 40 min"
-        android:textSize="10sp"
+        android:textColor="@color/blackColor"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/imageViewSlow"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/available_fast"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        app:layout_constraintTop_toBottomOf="@+id/available_fast" />
+
 
     <TextView
         android:id="@+id/available_fast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:text="4 ledige"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#0F9D58"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewSlow"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageViewFast"
-        app:layout_constraintTop_toBottomOf="@+id/charge_time_fast"
-        app:layout_constraintVertical_bias="0.137" />
-
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <TextView
         android:id="@+id/charge_time_slow"
@@ -69,11 +75,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Ladetid 75 min"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/blackColor"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageViewSlow"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.639" />
+        app:layout_constraintTop_toBottomOf="@+id/available_slow" />
 
     <TextView
         android:id="@+id/available_slow"
@@ -81,11 +89,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="1 ledig"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#0F9D58"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageViewSlow"
-        app:layout_constraintTop_toBottomOf="@+id/charge_time_slow"
-        app:layout_constraintVertical_bias="0.172" />
+        app:layout_constraintTop_toTopOf="@+id/available_fast" />
 
     <TextView
         android:id="@+id/distance_km"
@@ -93,6 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:text="5 km"
+        android:textColor="@color/blackColor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,11 +112,12 @@
 
     <ImageView
         android:id="@+id/imageViewFast"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/baseline_battery_charging_full_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,36 +126,40 @@
 
     <ImageView
         android:id="@+id/imageViewSlow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="140dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/baseline_battery_charging_full_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewFast"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.723" />
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        app:layout_constraintVertical_bias="0.148" />
 
     <TextView
         android:id="@+id/textViewFast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:text="Hurtig"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/blackColor"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/charge_time_fast"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewFast" />
+        app:layout_constraintTop_toBottomOf="@+id/charge_time_fast" />
 
     <TextView
         android:id="@+id/textViewLigtning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:text="Lyn"
-        android:textSize="10sp"
+        android:textColor="@color/blackColor"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/charge_time_slow"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewSlow" />
+        app:layout_constraintTop_toBottomOf="@+id/charge_time_slow"
+        app:layout_constraintVertical_bias="0.041" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

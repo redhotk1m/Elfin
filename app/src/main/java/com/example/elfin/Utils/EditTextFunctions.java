@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.elfin.MainActivity;
 
@@ -13,6 +14,7 @@ public class EditTextFunctions {
     MainActivity mainActivity;
     EditText editText;
     ListView listViewSuggest;
+    TextView fyllIn;
 
     /**
      * Class for setting the different functionalities for editText --> focuse changed, textchanged
@@ -23,6 +25,7 @@ public class EditTextFunctions {
         this.mainActivity=mainActivity;
         editText=mainActivity.editText;
         listViewSuggest=mainActivity.listViewSuggest;
+        fyllIn=mainActivity.fyllIn;
     }
 
 
@@ -37,6 +40,9 @@ public class EditTextFunctions {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                if(editable.toString().length()>0){
+                    fyllIn.setVisibility(View.INVISIBLE);
+                }
                 if(editable.toString().length() > 10){
                     listViewSuggest.setVisibility(View.INVISIBLE);
                 }
