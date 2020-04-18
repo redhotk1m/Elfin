@@ -43,13 +43,24 @@ public class EditTextFunctions {
                 if(editable.toString().length()>= 1){
                     destinacionTextView.setVisibility(View.INVISIBLE);
                 }
+
+                if(editable.toString().length()<=3){
+                    listViewSuggest.setVisibility(View.INVISIBLE);
+                }
+
                 if(editable.toString().length() > 10){
                     listViewSuggest.setVisibility(View.INVISIBLE);
                 }
-                else if(editable.toString().length() > 3){
+
+                else if(editable.toString().length() >= 3){
                     mainActivity.displaySuggestions(editable.toString());
-                    listViewSuggest.setVisibility(View.INVISIBLE);
+                    //listViewSuggest.setVisibility(View.INVISIBLE);
                 }
+
+
+
+
+
 
             }
         });

@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
     public TextView destinacionTextView;
+    String destionacionValidacion;
 
     private ArrayList<Elbil> mCarList;
     private ArrayAdapter adapter;
@@ -137,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public void closeKeyboard(View view){
         InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboardManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+        listViewSuggest.setVisibility(View.INVISIBLE);
+
+
     }
 
     private void initSpinner() {
@@ -212,9 +216,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
                 setDestinationID(placeIdList.get(position));
+                destionacionValidacion = editText.getText().toString();
                 listViewSuggest.setVisibility(View.INVISIBLE);
                 arrayAdapterSuggestions.clear();
                 closeKeyboard(view);
+
             }
         });
     }
@@ -223,8 +229,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         this.destinationID = destinationID;
     }
 
+
     public void nextActivity(View view) {
-        if(editText.getText().length()> 0){
+        if(editText.getText().toString().equals(destionacionValidacion)){
             Intent intent = new Intent(this, ChargingStations.class);
             Bundle bundle = new Bundle();
             gpsTracker = new GPSTracker(this);
@@ -241,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     bundle.putDouble("longditude", gpsTracker.getLongitude());
                     bundle.putDouble("latitude", gpsTracker.getLatitude());
                     bundle.putString("destinationID", destinationID);
-                    bundle.putString("destination",editText.getText().toString());
+                    bundle.putString("destination",editText.getText().toString() );
                     intent.putExtra("bundle", bundle);
                     startActivity(intent);
                 }
