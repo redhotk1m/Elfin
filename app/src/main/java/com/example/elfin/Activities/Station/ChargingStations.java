@@ -163,7 +163,9 @@ public class ChargingStations extends AppCompatActivity {
     public void startRequestDirections(){
         String ID = bundle.getString("destinationID");
         String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
-        String origin = "58.3029517,6.6752682";
+        String longditude = String.valueOf(bundle.getDouble("longditude"));
+        String latitude = String.valueOf(bundle.getDouble("latitude"));
+        String origin = latitude + "," + longditude;
         String destination = ID;
         String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
         String mode = "driving";
