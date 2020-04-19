@@ -19,8 +19,8 @@ public class CarFilteredList {
     }
 
     public String filterExactMatch(String dataField, String matchingField) {
-        if (dataField.equals(matchingField) && dataField.length() == matchingField.length()) {
-            System.out.println("BRAND " + dataField + " EQUALS " + matchingField +
+        if (dataField.equals(matchingField)) { //&& dataField.length() == matchingField.length()
+            System.out.println("DATA FIELD: " + dataField + " EQUALS " + matchingField +
                     " ; LENGTH: " + dataField.length() + " == " + matchingField.length());
             dataField = matchingField;
            // missing[0] = true;
