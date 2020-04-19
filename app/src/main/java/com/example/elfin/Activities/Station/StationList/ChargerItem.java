@@ -37,7 +37,8 @@ public class ChargerItem implements Parcelable {
     private String[] latLng;
     private int imageFast;
     private int imageSlow;
-
+    private double[] pointLatLng;
+    private String KMFromStartLocation;
 
 
 
@@ -379,5 +380,30 @@ public class ChargerItem implements Parcelable {
         this.ligtning = in.readString();
         this.lightningTime = in.readString();
         this.fastTime = in.readString();
+    }
+
+    public void setPointLatLng(double[] pointLatLng) {
+        this.pointLatLng = pointLatLng;
+    }
+
+    public void setPointLatLng(LatLng latLng) {
+        this.pointLatLng[0] = latLng.latitude;
+        this.pointLatLng[1] = latLng.longitude;
+    }
+
+    public double[] getPointLatLng() {
+        return pointLatLng;
+    }
+
+    public String getKMFromStartLocation() {
+        return KMFromStartLocation;
+    }
+
+    public void setKMFromStartLocation(String KMFromStartLocation) {
+        this.KMFromStartLocation = KMFromStartLocation;
+    }
+
+    public void setKMFromStartLocation(float KMFromStartLocation) {
+        this.KMFromStartLocation = String.valueOf(KMFromStartLocation);
     }
 }

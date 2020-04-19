@@ -115,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         logger = new TimingLogger("MyTag","MethodA");
         RetrieveJSON a = new RetrieveJSON(this,NobilAPIHandler.class);
         logger.addSplit("Retrieve Create");
-        a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&countrycode=NOR&file=false&format=json");
+        //countrycode=NOR&
+        a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&file=false&countrycode=NOR&format=json");
         logger.addSplit("Retrieve Execute");
         a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
@@ -126,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            logger.addSplit("finished");
+            logger.dumpToLog();
             String message = intent.getStringExtra("case");
             if ("error".equals(message))
                 System.out.println("error");

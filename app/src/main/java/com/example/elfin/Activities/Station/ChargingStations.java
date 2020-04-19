@@ -177,7 +177,8 @@ public class ChargingStations extends AppCompatActivity {
         String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
         String mode = "driving";
         String departureTime = "now";
-        String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&key=" + key;
+        String region = "no";
+        String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&region=" + region + "&key=" + key;
         System.out.println(parameters);
         RetrieveJSON directionFromAPI = new RetrieveJSON(activity,TaskRequestDirections.class);
         directionFromAPI.execute(parameters);

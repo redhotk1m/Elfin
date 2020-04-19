@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="TerminalProjectOptionsProvider">
+    <envs>
+      <env key="C:/android-sdk/platform-tools" value="C:/android-sdk/platform-tools" />
+      <env key="C:\Program Files\Android\Android Studio\" value="jre=lib=C:\Program Files\Android\Android Studio\jre\lib" />
+    </envs>
     <option name="myStartingDirectory" value="C:\Users\Eier\AppData\Local\Android\Sdk\platform-tools" />
   </component>
 </project>
