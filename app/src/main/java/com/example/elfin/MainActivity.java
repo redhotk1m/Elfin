@@ -182,7 +182,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void getSelectedCar() {
         Elbil elbil = (Elbil) dropdown.getSelectedItem();
-        if (elbil.getSpinnerDisplay().equals(getString(R.string.add_car)))
+        String display = elbil.getSpinnerDisplay();
+        if (display.equals(getString(R.string.add_car)))
             startActivity(new Intent(this, CarSearchActivity.class));
         else System.out.println("ITEM SELECTED: " + elbil.toString());
     }
