@@ -45,7 +45,7 @@ public class FirestoreQuery {
         this.reference = reference;
     }
 
-    public void getInitFirestoreData() {
+    protected void getInitFirestoreData() {
         reference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -56,18 +56,40 @@ public class FirestoreQuery {
                     }
                     // addCarActivity.setAllCarsList(allElbilList);
                     carSearchActivity.setAllCarsList(allElbilList);
-                } else
-                    Toast.makeText(addCarActivity, "COULD NOT LOCATE FIRESTORE DATA..!", Toast.LENGTH_LONG).show();
+                } else {
+                    System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
+                    System.out.println("UNABLE TO FETCH INIT FIRESTORE DATA...!");
+                    System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
+                    Toast.makeText(addCarActivity, "UNABLE TO FETCH FIRESTORE DATA..!", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
 
-    public void executeCompoundQuery(Query query) {
-        executeQuery(query);
+    protected void executeCompoundQuery(Query query) {
+        mElbilList.clear();
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        Elbil elbil = documentSnapshot.toObject(Elbil.class);
+                        elbil.setDocumentId(documentSnapshot.getId());
+
+                        System.out.println("FIRESTORE ELBIL: " + elbil.toString());
+
+                        mElbilList.add(elbil);
+                    }
+                } else System.out.println("TASK FAILED, UNABLE TO FETCH FIRESTORE DATA..!");
+
+                carSearchActivity.handleFirestoreQuery(mElbilList);
+            }
+        });
     }
 
-    public Query makeCompoundQuery(CollectionReference reference, String modelResponse,
-                                   HashMap<String, String> fieldsMap) {
+    protected Query makeCompoundQuery(CollectionReference reference, String modelResponse,
+                                      HashMap<String, String> fieldsMap) {
         System.out.println("\n\nMAKING COMPOUND FIRESTORE QUERY>\n");
         query = reference;
         switch (modelResponse) {
@@ -120,133 +142,5 @@ public class FirestoreQuery {
         } else System.out.println("MODEL YEAR EMPTY: " + fieldsMap.get(MODELYEAR));
 
         return query;
-    }
-
-    private void executeQuery(Query query) {
-        mElbilList.clear();
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        Elbil elbil = documentSnapshot.toObject(Elbil.class);
-                        elbil.setDocumentId(documentSnapshot.getId());
-
-                        System.out.println("FIRESTORE ELBIL: " + elbil.toString());
-
-                        mElbilList.add(elbil);
-                    }
-                } else {
-                    System.out.println("TASK FAILED, COULD NOT LOCATE FIRESTORE DATA..!");
-                }
-
-                carSearchActivity.handleFirestoreQuery(mElbilList);
-            }
-        });
-
-                /*
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot querySnapshot) {
-                        findElbil(querySnapshot);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
-                        //todo: handle Firestore Query in Activity..?
-                        // searchCarActivity.handleFirestoreQuery(mElbilList);
-                    }
-                });
-
-                 */
-    }
-
-    private void findElbil(QuerySnapshot querySnapshot) {
-        mElbilList.clear();
-        for (DocumentSnapshot documentSnapshot : querySnapshot) {
-            Elbil elbil = documentSnapshot.toObject(Elbil.class);
-            elbil.setDocumentId(documentSnapshot.getId());
-
-            System.out.println("FIRESTORE ELBIL: " + elbil.toString());
-
-            mElbilList.add(elbil);
-        }
-        //  addCarActivity.handleFirestoreQuery(mElbilList);
-
-        carSearchActivity.handleFirestoreQuery(mElbilList);
-    }
-
-
-    public void compoundFirestoreQuery(String model, String modelYear) {
-        reference.whereEqualTo(MODEL, model)
-                .whereEqualTo(MODELYEAR, modelYear)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot querySnapshot) {
-                        mElbilList.clear();
-                        for (DocumentSnapshot documentSnapshot : querySnapshot) {
-                            Elbil elbil = documentSnapshot.toObject(Elbil.class);
-                            elbil.setDocumentId(documentSnapshot.getId());
-
-                            mElbilList.add(elbil);
-                        }
-                        //  addCarActivity.handleFirestoreQuery(mElbilList);
-
-                        carSearchActivity.handleFirestoreQuery(mElbilList);
-
-                        //setmElbilList(mElbilList);
-                        /*
-                        if (mElbilList.size() == 1) {
-                            Intent intent = new Intent(AddCarActivity.this, CarInfoActivity.class);
-                            intent.putExtra("Elbil", mElbilList.get(0));
-                            startActivity(intent);
-                        } else {
-                            // initSpinner(BRAND, spinnerBrands); //todo: fjerne etter testing
-                            // initSpinner(MODEL, spinnerModels); //todo: fjerne etter testing
-                        }
-
-                         */
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
-                    }
-                });
-    }
-
-    private void compoundFirestoreQuery(String brand, String model, String modelYear) {
-    }
-
-    private void fetchFirstoreData(CollectionReference querySearch, final String dataField,
-                                   final ArrayAdapter<String> adapter) {
-        querySearch.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    //allElbilList.clear();
-                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                        String data = documentSnapshot.getString(dataField);
-                        //  if (dataField.equals(BRAND) && !brands.contains(data)) brands.add(data);
-                        //  else if (dataField.equals(MODEL) && !models.contains(data)) models.add(data);
-                        //  else System.out.println("...");
-                        //Toast.makeText(AddCarActivity.this, "NO SUCH DATAFIELD!", Toast.LENGTH_SHORT).show();
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
-    }
-
-    public List<Elbil> getmElbilList() {
-        return mElbilList;
-    }
-
-    public void setmElbilList(List<Elbil> mElbilList) {
-        this.mElbilList = mElbilList;
     }
 }
