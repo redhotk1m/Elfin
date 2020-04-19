@@ -36,13 +36,11 @@ import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.Utils.GPSTracker;
 import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.example.elfin.car.SharedCarPreferences;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     public EditText editText;
     DisplaySuggestions displaySuggestions;
@@ -62,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public ImageButton imageButton;
     GPSTracker gpsTracker;
 
+    private SharedPreferences sharedPreferences;
+    private SharedCarPreferences sharedCarPreferences;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -70,10 +70,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // startActivity(new Intent(this, CarSearchActivity.class));
+        // startActivity(new Intent(this, CarSearchActivity.class));
 
         //textView = findViewById(R.id.textViewSuggest);
-        listViewSuggest=findViewById(R.id.listViewSuggest);
+        listViewSuggest = findViewById(R.id.listViewSuggest);
         listViewSuggest.setVisibility(View.INVISIBLE);
 
 
@@ -82,8 +82,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         editText = findViewById(R.id.editTextToAPlace);
         editText.setCursorVisible(false);
 
-        //dropdown.setPrompt("EB12342 VW e-Golf");
-        initSpinner();
+        //get added cars from shared preferences to be displayed in dropdown spinner
+        sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        getSharedCarPreferences(sharedPreferences);
 
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
@@ -108,14 +109,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //swapview
 
         //Henter JSON fra Nobil APIet
-        logger = new TimingLogger("MyTag","MethodA");
-        RetrieveJSON a = new RetrieveJSON(this,NobilAPIHandler.class);
+        logger = new TimingLogger("MyTag", "MethodA");
+        RetrieveJSON a = new RetrieveJSON(this, NobilAPIHandler.class);
         logger.addSplit("Retrieve Create");
         a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&countrycode=NOR&file=false&format=json");
         logger.addSplit("Retrieve Execute");
         a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,new IntentFilter("allStations"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("allStations"));
         //Log.d("Debug2",new MainActivity().editText.getText().toString());
     }
 
@@ -128,24 +129,28 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 //TODO: Error message to user
             else {
                 System.out.println("MOTATT I MAIN");
-                allChargingStations = ((App)getApplication()).getChargerItems();
+                allChargingStations = ((App) getApplication()).getChargerItems();
                 LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
             }
         }
     };
 
-    public void closeKeyboard(View view){
+    public void closeKeyboard(View view) {
         InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboardManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+        keyboardManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         listViewSuggest.setVisibility(View.INVISIBLE);
 
 
     }
 
-    private void initSpinner() {
-        getSavedCars();
-        mCarList.add(new Elbil("Legg til bil", null, null, null, null, null));
+    private void getSharedCarPreferences(SharedPreferences sharedPreferences) {
+        sharedCarPreferences = new SharedCarPreferences();
+        mCarList = sharedCarPreferences.getSavedCars(sharedPreferences);
+        //dropdown.setPrompt("EB12342 VW e-Golf");
+        initCarSpinner();
+    }
 
+    private void initCarSpinner() {
         adapter = new ArrayAdapter<>(MainActivity.this,
                 android.R.layout.simple_spinner_item, mCarList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -168,30 +173,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         });
     }
 
-    private void getSavedCars() {
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("car list", null);
-        Type type = new TypeToken<ArrayList<Elbil>>() {
-        }.getType();
-        mCarList = gson.fromJson(json, type);
-
-        if (mCarList == null) mCarList = new ArrayList<>();
-    }
-
     private void getSelectedCar() {
         Elbil elbil = (Elbil) dropdown.getSelectedItem();
-
-        if (elbil.getBrand().equals("Legg til bil"))
+        if (elbil.getBrand().equals(getString(R.string.add_car)))
             startActivity(new Intent(this, CarSearchActivity.class));
-           // startActivity(new Intent(this, AddCarActivity.class));
-        //Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
-        //  else Toast.makeText(this, "Selected Car: \n" + elbil.getBrand(), Toast.LENGTH_LONG).show();
     }
 
-    public void displaySuggestions(String adress){
+    public void displaySuggestions(String adress) {
         final ArrayList<String> placeIdList = new ArrayList<>();
-        
         displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
             ArrayList<String> list = new ArrayList<>();
 
@@ -199,11 +188,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
-                for (int i = 0; i <lists.size() ; i++) {
-                    for (int j = 0; j <lists.get(i).size() ; j++) {
-                        if(i == 0){
+                for (int i = 0; i < lists.size(); i++) {
+                    for (int j = 0; j < lists.get(i).size(); j++) {
+                        if (i == 0) {
                             list.add(lists.get(i).get(j));
-                        }else {
+                        } else {
                             placeIdList.add(lists.get(i).get(j));
                         }
                     }
@@ -220,10 +209,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
-
-
                 setDestinationID(placeIdList.get(position));
                 destionacionValidacion = editText.getText().toString();
                 listViewSuggest.setVisibility(View.INVISIBLE);
@@ -252,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             } else {
                 gpsTracker.getLocation();
                 if (gpsTracker.canGetLocation()) {
-                    ((App)getApplication()).setChargerItems(allChargingStations);
+                    ((App) getApplication()).setChargerItems(allChargingStations);
                     LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
                     bundle.putDouble("longditude", gpsTracker.getLongitude());
                     bundle.putDouble("latitude", gpsTracker.getLatitude());
@@ -278,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         this.allChargingStations = allChargingStations;
     }
 
-    public void setChargingStationsFound(boolean found){
+    public void setChargingStationsFound(boolean found) {
         this.chargingStationsFound = found;
     }
 
@@ -287,9 +273,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             gpsTracker.getLocation();
-        }
-        else{
+        } else {
             gpsTracker.popupMessageNeedPermission();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSharedCarPreferences(sharedPreferences);
     }
 }

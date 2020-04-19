@@ -41,6 +41,12 @@ public class CarSpinnerSelection {
 
     }
 
+    protected void missingFieldSelection(Spinner spinner, String dataField, List<String> filteredList) {
+        switch (dataField) {
+
+        }
+    }
+
     protected void filteredCarsSelection(Spinner spinner, String dataField, List<String> filteredList) {
         // allElbilList = addCarActivity.getAllCars();
         ArrayList<Elbil> filteredCars = new ArrayList<>();
@@ -123,37 +129,43 @@ public class CarSpinnerSelection {
     }
 
     protected void spinnerOnItemSelected(String dataField, Spinner thisSpinner, Spinner nextSpinenr,
-                                         List<String> spinnerList) {
+                                         List<String> spinnerList, boolean manualSelection) {
         switch (dataField) {
             case BRAND:
                 System.out.println("SpinnerBrands OnItemSelected!");
-                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[0])
-                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
-                    carSelectionActivity.disableSpinner(MODEL);
-                } else {
-                    getFilteredCars(thisSpinner, MODEL, spinnerList);
-                    setSpinnerSelection(nextSpinenr, spinnerList);
-                    carSelectionActivity.disableSpinner(MODELYEAR);
+                if (manualSelection) {
+                    if (thisSpinner.getSelectedItem().equals(spinnerPrompts[0])
+                            || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                        carSelectionActivity.disableSpinner(MODEL);
+                    } else {
+                        getFilteredCars(thisSpinner, MODEL, spinnerList);
+                        setSpinnerSelection(nextSpinenr, spinnerList);
+                        carSelectionActivity.disableSpinner(MODELYEAR);
+                    }
                 }
                 break;
             case MODEL:
-                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[1])
-                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
-                    carSelectionActivity.disableSpinner(MODELYEAR);
-                } else {
-                    getFilteredCars(thisSpinner, MODELYEAR, spinnerList);
-                    setSpinnerSelection(nextSpinenr, spinnerList);
-                    carSelectionActivity.disableSpinner(BATTERY);
+                if (manualSelection) {
+                    if (thisSpinner.getSelectedItem().equals(spinnerPrompts[1])
+                            || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                        carSelectionActivity.disableSpinner(MODELYEAR);
+                    } else {
+                        getFilteredCars(thisSpinner, MODELYEAR, spinnerList);
+                        setSpinnerSelection(nextSpinenr, spinnerList);
+                        carSelectionActivity.disableSpinner(BATTERY);
+                    }
                 }
                 break;
             case MODELYEAR:
-                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[2])
-                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
-                    carSelectionActivity.disableSpinner(BATTERY);
-                } else {
-                    getFilteredCars(thisSpinner, BATTERY, spinnerList);
-                    setSpinnerSelection(nextSpinenr, spinnerList);
-                    carSelectionActivity.disableSpinner(FASTCHARGE);
+                if (manualSelection) {
+                    if (thisSpinner.getSelectedItem().equals(spinnerPrompts[2])
+                            || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                        carSelectionActivity.disableSpinner(BATTERY);
+                    } else {
+                        getFilteredCars(thisSpinner, BATTERY, spinnerList);
+                        setSpinnerSelection(nextSpinenr, spinnerList);
+                        carSelectionActivity.disableSpinner(FASTCHARGE);
+                    }
                 }
                 break;
             case BATTERY:

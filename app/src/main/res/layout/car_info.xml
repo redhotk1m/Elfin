@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".car.CarInfoActivity"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/whiteColor">
 
     <TextView
         android:id="@+id/txtclose"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_view_add_car"
+        android:id="@+id/txt_add_car"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -44,7 +44,7 @@
     />
 
     <TextView
-        android:id="@+id/text_view_brand"
+        android:id="@+id/txt_brand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_add_car" />
 
     <TextView
-        android:id="@+id/text_view_model"
+        android:id="@+id/txt_model"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_brand" />
 
     <TextView
-        android:id="@+id/text_view_model_year"
+        android:id="@+id/txt_model_year"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -87,7 +87,7 @@
 
 
     <TextView
-        android:id="@+id/text_view_fast_charge"
+        android:id="@+id/txt_fast_charge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -101,7 +101,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_model_year" />
 
     <TextView
-        android:id="@+id/text_view_battery"
+        android:id="@+id/txt_battery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
