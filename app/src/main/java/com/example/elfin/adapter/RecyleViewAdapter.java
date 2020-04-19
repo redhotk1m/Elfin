@@ -25,14 +25,13 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
     Context context;
     List<ChargerItem> chargerItems;
     Intent intent;
-    ArrayList<String> chargerDistance;
 
 
-    public RecyleViewAdapter(Context context, List<ChargerItem> chargerItems, ArrayList<String> chargerDistance) {
+    public RecyleViewAdapter(Context context, List<ChargerItem> chargerItems) {
         this.context = context;
         this.chargerItems=chargerItems;
-        this.chargerDistance=chargerDistance;
     }
+
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,7 +95,9 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         holder.imageViewSlow.setImageResource(chargerItems.get(position).getImageSlow());
         holder.textViewFast.setText(chargerItems.get(position).getFast());
         holder.textViewLigtning.setText(chargerItems.get(position).getLigtning());
-        holder.distanceKm.setText(chargerDistance.get(position));
+        //TODO: Vise med decimaltall, dersom vi har mindre enn 100KM i lengde, bare teksthåndtering
+        long KM = Math.round(Double.parseDouble(chargerItems.get(position).getMFromStartLocation()) / 1000);
+        holder.distanceKm.setText(String.valueOf(KM) + " KM");
 
 
 /*

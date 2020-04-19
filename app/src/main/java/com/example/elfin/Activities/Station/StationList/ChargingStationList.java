@@ -27,6 +27,7 @@ import com.example.elfin.R;
 import com.example.elfin.Utils.App;
 import com.example.elfin.adapter.RecyleViewAdapter;
 import com.example.elfin.comparators.LatitudeComparator;
+import com.example.elfin.comparators.MetersComparator;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -94,7 +95,7 @@ public class ChargingStationList extends Fragment {
         if (spinner != null)
             spinner.setVisibility(View.GONE);
 
-        Location selected_location=new Location("locationA");
+        /*Location selected_location=new Location("locationA");
         selected_location.setLatitude(59.9139);
         selected_location.setLongitude(10.7522);
 
@@ -116,9 +117,10 @@ public class ChargingStationList extends Fragment {
                 DecimalFormat df2 = new DecimalFormat("#.#");
                 df2.setRoundingMode(RoundingMode.UP);
                 chargerListDistance.add(""+df2.format(distance) + " km");
-        }
+        }*/
 
-        recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations, chargerListDistance);
+        validStations.sort(new MetersComparator());
+        recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.VISIBLE);

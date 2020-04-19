@@ -1,11 +1,12 @@
 package com.example.elfin.Activities.Station.StationMap;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.util.TimingLogger;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Utils.App;
 import com.example.elfin.comparators.LongditudeComparator;
@@ -27,16 +28,35 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
 
     @Override
     protected ArrayList<ChargerItem> doInBackground(ArrayList<ChargerItem>... allChargingStationsArr) {
+        TimingLogger logger = new TimingLogger("MyTag", "MethodAAA");
+        logger.addSplit("A");
         ArrayList<ChargerItem>
                 allChargingStations = allChargingStationsArr[0],
                 validLatStations = new ArrayList<>(),
                 validStations = new ArrayList<>();
         //Iterate over all points, draw all stations
         int chargingStationsSize = allChargingStations.size();
-        for (Object point : points) {
+
+        float totalDistance = 0;
+        LatLng currPoint;
+        Location currLocation = new Location("this");
+        LatLng lastPoint;
+        Location lastLocation = new Location("this");
+
+        for (int k = 1; k < points.size(); k++){
+
+            currPoint = points.get(k);
+
+            currLocation.setLatitude(currPoint.latitude);
+            currLocation.setLongitude(currPoint.longitude);
+            lastPoint = points.get(k - 1);
+            lastLocation.setLatitude(lastPoint.latitude);
+            lastLocation.setLongitude(lastPoint.longitude);
+            totalDistance += lastLocation.distanceTo(currLocation);
+
             for (int i = 0; i < chargingStationsSize; i++) {
-                ChargerItem found = StMethods.search(((LatLng) point).latitude, allChargingStations, true);
-                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,((LatLng) point).latitude,((LatLng) point).longitude) <= 1){
+                ChargerItem found = StMethods.search(currPoint.latitude, allChargingStations, true);
+                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.latitude,currPoint.longitude) <= 1){
                     validLatStations.add(found);
                     allChargingStations.remove(found);
                 }else{
@@ -46,16 +66,20 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
             validLatStations.sort(new LongditudeComparator());
             int validLatStationSize = validLatStations.size();
             for (int i = 0; i < validLatStationSize; i++) {
-                ChargerItem found = StMethods.search(((LatLng) point).longitude, validLatStations, false);
-                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,((LatLng) point).latitude,((LatLng) point).longitude) <= 1){
+                ChargerItem found = StMethods.search(currPoint.longitude, validLatStations, false);
+                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.latitude,currPoint.longitude) <= 1){
+                    found.setMFromStartLocation(totalDistance);
+                    System.out.println("Ladestasjon: " + found.getStreet() + " er" + (totalDistance + 500)/1000 + "km ifra startpunkt");
                     validStations.add(found);
                     validLatStations.remove(found);
                 }else{
                     break;
                 }
+                //TODO: Kanskje gjøre ditanceBetweenKM om til å bruke location.DistanceTo();
             }
-
         }
+        logger.addSplit("B");
+        logger.dumpToLog();
         return validStations;
         //TODO: Bruke sett, feil høyde/lengde dersom punkt er innenfor i høyde,
         // men ikke i bredde vil det fjernes i fra array,

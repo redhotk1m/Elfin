@@ -49,7 +49,7 @@ public class ChargingStations extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.viewPager);
         toTextView = findViewById(R.id.tilTextView);
         bundle = getIntent().getBundleExtra("bundle");
-        toText = bundle.getString("destination");
+        toText = bundle.getString("destinatinasjon");
         applicationContext = (App)getApplication();
         setAllChargingItems();
         toTextView.setText("Til: " +toText);
@@ -169,6 +169,9 @@ public class ChargingStations extends AppCompatActivity {
 
     public void startRequestDirections(){
         String ID = bundle.getString("destinationID");
+
+
+
         String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
         String longditude = String.valueOf(bundle.getDouble("longditude"));
         String latitude = String.valueOf(bundle.getDouble("latitude"));
@@ -177,7 +180,8 @@ public class ChargingStations extends AppCompatActivity {
         String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
         String mode = "driving";
         String departureTime = "now";
-        String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&key=" + key;
+        String region = "no";
+        String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&region=" + region + "&key=" + key;
         System.out.println(parameters);
         RetrieveJSON directionFromAPI = new RetrieveJSON(activity,TaskRequestDirections.class);
         directionFromAPI.execute(parameters);

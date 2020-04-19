@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     //TextView textView;
     public ListView listViewSuggest;
     ArrayAdapter<String> arrayAdapterSuggestions;
-    ArrayList<String> placeIdList = new ArrayList<>();
     String destinationID;
     public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
@@ -114,7 +113,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         logger = new TimingLogger("MyTag", "MethodA");
         RetrieveJSON a = new RetrieveJSON(this, NobilAPIHandler.class);
         logger.addSplit("Retrieve Create");
-        a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&countrycode=NOR&file=false&format=json");
+        //countrycode=NOR&
+        a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&file=false&countrycode=NOR&format=json");
         logger.addSplit("Retrieve Execute");
         a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            logger.addSplit("finished");
+            logger.dumpToLog();
             String message = intent.getStringExtra("case");
             if ("error".equals(message))
                 System.out.println("error");
@@ -186,8 +188,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     public void displaySuggestions(String adress) {
+        final ArrayList<String> placeIdList = new ArrayList<>();
         displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
             ArrayList<String> list = new ArrayList<>();
+
+
 
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
@@ -201,10 +206,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     }
                 }
                 listViewSuggest.setVisibility(View.VISIBLE);
-                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1, list);
+                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
             }
         });
+
+
+
         displaySuggestions.execute("");
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -220,13 +228,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         });
     }
 
-    public void setDestinationID(String destinationID) {
+    public void setDestinationID(String destinationID){
         this.destinationID = destinationID;
     }
 
 
     public void nextActivity(View view) {
-        if (editText.getText().toString().equals(destionacionValidacion)) {
+        if(editText.getText().toString().equals(destionacionValidacion)){
             Intent intent = new Intent(this, ChargingStations.class);
             Bundle bundle = new Bundle();
             gpsTracker = new GPSTracker(this);
@@ -243,12 +251,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     bundle.putDouble("longditude", gpsTracker.getLongitude());
                     bundle.putDouble("latitude", gpsTracker.getLatitude());
                     bundle.putString("destinationID", destinationID);
-                    bundle.putString("destination", editText.getText().toString());
+                    bundle.putString("destinatinasjon",editText.getText().toString() );
                     intent.putExtra("bundle", bundle);
                     startActivity(intent);
                 }
             }
-        } else {
+        }
+        else {
             destinacionTextView.setVisibility(View.VISIBLE);
         }
 

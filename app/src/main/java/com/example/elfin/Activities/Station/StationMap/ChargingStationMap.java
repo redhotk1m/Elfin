@@ -113,6 +113,8 @@ public class ChargingStationMap extends Fragment {
         return null;
     }
 
+    
+
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
