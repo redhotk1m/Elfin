@@ -16,6 +16,7 @@
 
     <string name="add_car">Legg til bil</string>
     <string name="manual_selection">eller velg bil manuelt</string>
+    <!-- Choose Car Field -->
     <string name="choose_none">(INGEN VALGT)</string>
     <string name="choose_nothing">---VET IKKE---</string>
     <string name="choose_brand">Velg bilmerke</string>
@@ -24,6 +25,13 @@
     <string name="choose_specific_model">Velg spesifikk bilmodell</string>
     <string name="choose_battery">Velg batterikapasitet</string>
     <string name="choose_charging">Velg ladehastighet</string>
+    <!-- Chosen Car Field -->
+    <string name="chosen_brand">Valgt bilmerke:</string>
+    <string name="chosen_model">Valgt bilmodell:</string>
+    <string name="chosen_model_year">Valgt årsmodell:</string>
+    <string name="chosen_specific_model">Valgt spesifikk bilmodell:</string>
+    <string name="chosen_battery">Velgt batterikapasitet:</string>
+    <string name="chosen_charging">Velgt ladehastighet:</string>
 
     <string name="regNrs">
         (KUN HER FOR TESTING)\n
