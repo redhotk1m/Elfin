@@ -57,11 +57,6 @@ public class EditTextFunctions {
                     //listViewSuggest.setVisibility(View.INVISIBLE);
                 }
 
-
-
-
-
-
             }
         });
 
@@ -77,7 +72,5 @@ public class EditTextFunctions {
 
     }
     //enums fasiliteter
-
-
 
 }

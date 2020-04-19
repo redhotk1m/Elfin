@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     //TextView textView;
     public ListView listViewSuggest;
     ArrayAdapter<String> arrayAdapterSuggestions;
-    ArrayList<String> placeIdList = new ArrayList<>();
     String destinationID;
     public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
@@ -191,8 +190,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     public void displaySuggestions(String adress){
+        final ArrayList<String> placeIdList = new ArrayList<>();
+        
         displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
             ArrayList<String> list = new ArrayList<>();
+
+
 
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
@@ -210,11 +213,17 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
             }
         });
+
+
+
         displaySuggestions.execute("");
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
+
+
                 setDestinationID(placeIdList.get(position));
                 destionacionValidacion = editText.getText().toString();
                 listViewSuggest.setVisibility(View.INVISIBLE);
@@ -248,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     bundle.putDouble("longditude", gpsTracker.getLongitude());
                     bundle.putDouble("latitude", gpsTracker.getLatitude());
                     bundle.putString("destinationID", destinationID);
-                    bundle.putString("destination",editText.getText().toString() );
+                    bundle.putString("destinatinasjon",editText.getText().toString() );
                     intent.putExtra("bundle", bundle);
                     startActivity(intent);
                 }
