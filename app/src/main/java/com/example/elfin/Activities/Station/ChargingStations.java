@@ -49,7 +49,7 @@ public class ChargingStations extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.viewPager);
         toTextView = findViewById(R.id.tilTextView);
         bundle = getIntent().getBundleExtra("bundle");
-        toText = bundle.getString("destination");
+        toText = bundle.getString("destinatinasjon");
         applicationContext = (App)getApplication();
         setAllChargingItems();
         toTextView.setText("Til: " +toText);
@@ -169,6 +169,9 @@ public class ChargingStations extends AppCompatActivity {
 
     public void startRequestDirections(){
         String ID = bundle.getString("destinationID");
+
+
+
         String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
         String longditude = String.valueOf(bundle.getDouble("longditude"));
         String latitude = String.valueOf(bundle.getDouble("latitude"));

@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     //TextView textView;
     public ListView listViewSuggest;
     ArrayAdapter<String> arrayAdapterSuggestions;
-    ArrayList<String> placeIdList = new ArrayList<>();
     String destinationID;
     public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
@@ -184,8 +183,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     public void displaySuggestions(String adress) {
+        final ArrayList<String> placeIdList = new ArrayList<>();
         displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
             ArrayList<String> list = new ArrayList<>();
+
+
 
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
@@ -199,10 +201,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     }
                 }
                 listViewSuggest.setVisibility(View.VISIBLE);
-                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1, list);
+                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
             }
         });
+
+
+
         displaySuggestions.execute("");
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -218,13 +223,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         });
     }
 
-    public void setDestinationID(String destinationID) {
+    public void setDestinationID(String destinationID){
         this.destinationID = destinationID;
     }
 
 
     public void nextActivity(View view) {
-        if (editText.getText().toString().equals(destionacionValidacion)) {
+        if(editText.getText().toString().equals(destionacionValidacion)){
             Intent intent = new Intent(this, ChargingStations.class);
             Bundle bundle = new Bundle();
             gpsTracker = new GPSTracker(this);
@@ -241,12 +246,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     bundle.putDouble("longditude", gpsTracker.getLongitude());
                     bundle.putDouble("latitude", gpsTracker.getLatitude());
                     bundle.putString("destinationID", destinationID);
-                    bundle.putString("destination", editText.getText().toString());
+                    bundle.putString("destinatinasjon",editText.getText().toString() );
                     intent.putExtra("bundle", bundle);
                     startActivity(intent);
                 }
             }
-        } else {
+        }
+        else {
             destinacionTextView.setVisibility(View.VISIBLE);
         }
 
