@@ -14,6 +14,7 @@ public class EditTextFunctions {
     MainActivity mainActivity;
     EditText editText;
     ListView listViewSuggest;
+    TextView destinacionTextView;
 
     /**
      * Class for setting the different functionalities for editText --> focuse changed, textchanged
@@ -24,6 +25,7 @@ public class EditTextFunctions {
         this.mainActivity=mainActivity;
         editText=mainActivity.editText;
         listViewSuggest=mainActivity.listViewSuggest;
+        destinacionTextView=mainActivity.destinacionTextView;
     }
 
 
@@ -38,17 +40,30 @@ public class EditTextFunctions {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                if(editable.toString().length()>= 1){
+                    destinacionTextView.setVisibility(View.INVISIBLE);
+                }
+
+                if(editable.toString().length()<=3){
+                    listViewSuggest.setVisibility(View.INVISIBLE);
+                }
+
                 if(editable.toString().length() > 10){
                     listViewSuggest.setVisibility(View.INVISIBLE);
                 }
-                else if(editable.toString().length() > 3){
+
+                else if(editable.toString().length() >= 3){
                     mainActivity.displaySuggestions(editable.toString());
-                    listViewSuggest.setVisibility(View.INVISIBLE);
+                    //listViewSuggest.setVisibility(View.INVISIBLE);
                 }
+
+
+
+
+
 
             }
         });
-
 
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

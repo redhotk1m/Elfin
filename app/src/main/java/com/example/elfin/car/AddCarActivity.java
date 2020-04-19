@@ -207,7 +207,7 @@ public class AddCarActivity extends AppCompatActivity {
             String model = elbil.getModel();
             String modelYear = elbil.getModelYear();
             if (model != null && model.length() != 0 && modelYear != null && modelYear.length() != 0)
-                firestoreQuery.compoundFirestoreQuery(model.toLowerCase(), modelYear.toLowerCase());
+               // firestoreQuery.compoundFirestoreQuery(model.toLowerCase(), modelYear.toLowerCase());
             Toast.makeText(this, "FIRESTORE SIZE: " + mCarList.size(), Toast.LENGTH_SHORT).show();
             //compoundFirestoreQuery(model.toLowerCase(), modelYear.toLowerCase());
             Toast.makeText(this, "model: " + model + " : " + modelYear, Toast.LENGTH_SHORT).show();

@@ -22,6 +22,9 @@ public class Elbil implements Parcelable {
         //public no-arg constructor needed for firestore database
     }
 
+    public Elbil(String brand) {
+        this.brand = brand;
+    }
 
     public Elbil(String model, String modelYear) {
         this.model = model;
@@ -81,11 +84,13 @@ public class Elbil implements Parcelable {
         }
     };
 
+    /*
     Boolean isError = false;
 
     public Elbil(String error) {
         isError = true;
     }
+     */
 
     @Exclude
     public String getDocumentId() {

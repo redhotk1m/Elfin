@@ -62,8 +62,8 @@ public class CarSearchActivity extends AppCompatActivity {
 
 
     private Dialog myCarInfo;
-    private TextView tvBrand, tvModel, tvModelYear, tvFastCharge, tvBattery;
-    private TextView textView, txtclose;
+   // private TextView tvBrand, tvModel, tvModelYear, tvFastCharge, tvBattery;
+   // private TextView textView, txtclose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,23 +143,12 @@ public class CarSearchActivity extends AppCompatActivity {
             startActivity(intent);
         } else if (mElbilList.size() > 1) {
             Intent intent = new Intent(this, CarSelectionActivity.class);
-           // ArrayList<Elbil> carList = new ArrayList<>(mElbilList);
             intent.putParcelableArrayListExtra("CarList", new ArrayList<>(mElbilList));
-           // intent.putExtra("Elbils", mElbilList);
             intent.putExtra("Missing", missing);
             intent.putExtra("FieldMap", fieldMap);
             intent.putExtra("FoundFieldsMap", foundFieldsMap);
             //todo: get HashMap data in next activity by using getSearializedExtra like this
             startActivity(intent);
-
-            /*
-            Toast.makeText(this, "EXACT FIELDS FOUND:\n\n"
-                            + BRAND + " ; " + fieldMap.get(BRAND) + "\n\n"
-                            + MODEL + " ; " + fieldMap.get(MODEL) + "\n\n"
-                            + MODELYEAR + " ; " + fieldMap.get(MODELYEAR) + "\n\n"
-                            + BATTERY + " ; " + fieldMap.get(BATTERY) + "\n\n"
-                    , Toast.LENGTH_LONG).show();
-             */
         } else {
             //todo: show popup dialog choice of "try again?" or "manual selection"?
             System.out.println("NO FIRESTORE CARS FOUND: " + mElbilList.size());
@@ -358,26 +347,26 @@ public class CarSearchActivity extends AppCompatActivity {
         myCarInfo.setContentView(R.layout.car_info);
 
         //  String documentId = elbil.getDocumentId();
-        String brand = "Bilmerke: " + fieldMap.get(BRAND);
-        String model = "Bilmodell: " + fieldMap.get(MODEL);
-        String modelYear = "Årsmodell: " + fieldMap.get(MODELYEAR);
-        String battery = "Batterikappasitet: " + fieldMap.get(BATTERY);
-        // String fastCharge = "Hurtiglader: " + elbil.getFastCharge() + " ; " + elbil.getEffect();
+        String brand = "Bilmerke: " + "nissan"; //+ fieldMap.get(BRAND);
+        String model = "Bilmodell: " + "leaf"; //+ fieldMap.get(MODEL);
+        String modelYear = "Årsmodell: " + "2018";//+ fieldMap.get(MODELYEAR);
+        String battery = "Batterikappasitet: " + "24 kwh"; //+ fieldMap.get(BATTERY);
+        String fastCharge = "Hurtiglader: " + "CCS ; 110"; //elbil.getFastCharge() + " ; " + elbil.getEffect();
 
-        tvBrand = findViewById(R.id.text_view_brand);
-        tvModel = findViewById(R.id.text_view_model);
-        tvModelYear = findViewById(R.id.text_view_model_year);
-        tvBattery = findViewById(R.id.text_view_battery);
-        tvFastCharge = findViewById(R.id.text_view_fast_charge);
+        TextView tvBrand = findViewById(R.id.txt_brand);
+        TextView tvModel = findViewById(R.id.txt_model);
+        TextView tvModelYear = findViewById(R.id.txt_model_year);
+        TextView tvBattery = findViewById(R.id.txt_battery);
+        TextView tvFastCharge = findViewById(R.id.txt_fast_charge);
 
-        tvBrand.setText(brand);
-        tvModel.setText(model);
-        tvModelYear.setText(modelYear);
-        // tvFastCharge.setText(fastCharge);
-        tvBattery.setText(battery);
+        tvBrand.setText("BRAND");
+        tvModel.setText("MODEL");
+        tvModelYear.setText("MODEL YEAR");
+        tvFastCharge.setText("FAST CHARGE");
+        tvBattery.setText("BATTERY");
 
 
-        txtclose = myCarInfo.findViewById(R.id.txtclose);
+        TextView txtclose = myCarInfo.findViewById(R.id.txtclose);
         txtclose.setText("X");
         txtclose.setOnClickListener(new View.OnClickListener() {
             @Override
