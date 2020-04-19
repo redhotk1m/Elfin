@@ -7,7 +7,6 @@ import android.util.TimingLogger;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Utils.App;
 import com.example.elfin.comparators.LongditudeComparator;
@@ -69,13 +68,14 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
             for (int i = 0; i < validLatStationSize; i++) {
                 ChargerItem found = StMethods.search(currPoint.longitude, validLatStations, false);
                 if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.latitude,currPoint.longitude) <= 1){
-                    found.setKMFromStartLocation(totalDistance / 1000);
-                    System.out.println("Ladestasjon: " + found.getStreet() + " er" + totalDistance/1000 + "km ifra startpunkt");
+                    found.setMFromStartLocation(totalDistance);
+                    System.out.println("Ladestasjon: " + found.getStreet() + " er" + (totalDistance + 500)/1000 + "km ifra startpunkt");
                     validStations.add(found);
                     validLatStations.remove(found);
                 }else{
                     break;
                 }
+                //TODO: Kanskje gjøre ditanceBetweenKM om til å bruke location.DistanceTo();
             }
         }
         logger.addSplit("B");
