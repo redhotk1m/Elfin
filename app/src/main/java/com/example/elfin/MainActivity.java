@@ -34,6 +34,7 @@ import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.Utils.GPSTracker;
+import com.example.elfin.adapter.CarAdapter;
 import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
 import com.example.elfin.car.SharedCarPreferences;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public ImageButton imageButton;
     GPSTracker gpsTracker;
 
+    private CarAdapter mCarAdapter;
     private SharedPreferences sharedPreferences;
     private SharedCarPreferences sharedCarPreferences;
 
@@ -77,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         listViewSuggest = findViewById(R.id.listViewSuggest);
         listViewSuggest.setVisibility(View.INVISIBLE);
 
-
-        dropdown = findViewById(R.id.chooseCar);
         imageButton = findViewById(R.id.imageButtonDriveNow);
         editText = findViewById(R.id.editTextToAPlace);
         editText.setCursorVisible(false);
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //get added cars from shared preferences to be displayed in dropdown spinner
         sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         getSharedCarPreferences(sharedPreferences);
+        initCarSpinner();
 
         //Intent intent = new Intent(this,AboutCharger.class);
         //startActivity(intent);
@@ -147,23 +148,26 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private void getSharedCarPreferences(SharedPreferences sharedPreferences) {
         sharedCarPreferences = new SharedCarPreferences();
         mCarList = sharedCarPreferences.getSavedCars(sharedPreferences);
-        //dropdown.setPrompt("EB12342 VW e-Golf");
+        for (Elbil elbil : mCarList) {
+            elbil.setIconImage(R.drawable.ic_car_black_24dp);
+            elbil.setSpinnerDisplay(elbil.toString());
+        }
         initCarSpinner();
     }
 
     private void initCarSpinner() {
-        adapter = new ArrayAdapter<>(MainActivity.this,
-                android.R.layout.simple_spinner_item, mCarList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
+        mCarList.add(new Elbil(R.drawable.ic_add_box_black_24dp, getString(R.string.add_car)));
+        mCarAdapter = new CarAdapter(this, mCarList);
 
-        dropdown.setAdapter(adapter);
+        dropdown = findViewById(R.id.chooseCar);
+        dropdown.setAdapter(mCarAdapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 Toast.makeText(adapterView.getContext(),
                         "OnItemSelectedListener: \n" + adapterView.getItemAtPosition(position).toString(),
                         Toast.LENGTH_LONG).show();
-
                 getSelectedCar();
             }
 
@@ -176,8 +180,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private void getSelectedCar() {
         Elbil elbil = (Elbil) dropdown.getSelectedItem();
-        if (elbil.getBrand().equals(getString(R.string.add_car)))
+        if (elbil.getSpinnerDisplay().equals(getString(R.string.add_car)))
             startActivity(new Intent(this, CarSearchActivity.class));
+        else System.out.println("ITEM SELECTED: " + elbil.toString());
     }
 
     public void displaySuggestions(String adress) {

@@ -44,7 +44,7 @@ public class CarSelectionActivity extends AppCompatActivity {
     private TextView tvSpinnerBrands;
     private Button searchCarBtn;
 
-    private boolean manualSelection;
+    private boolean manualSelection = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

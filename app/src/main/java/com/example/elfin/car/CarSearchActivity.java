@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +35,7 @@ public class CarSearchActivity extends AppCompatActivity {
     private final String BATTERY = "battery";
     private final String FASTCHARGE = "fastCharge";
 
-    private boolean[] missing;
+    private boolean[] found;
     private String[] modelResponse;
     private String[] fields = new String[4];
     private String brand, model, modelYear, battery;
@@ -60,10 +59,11 @@ public class CarSearchActivity extends AppCompatActivity {
     private ImageButton searchRegNrBtn;
     private Button searchCarBtn;
 
+    private CarFilteredList carFilteredList;
 
     private Dialog myCarInfo;
-   // private TextView tvBrand, tvModel, tvModelYear, tvFastCharge, tvBattery;
-   // private TextView textView, txtclose;
+    // private TextView tvBrand, tvModel, tvModelYear, tvFastCharge, tvBattery;
+    // private TextView textView, txtclose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +128,9 @@ public class CarSearchActivity extends AppCompatActivity {
     }
 
     private void checkAPIResponse(Elbil elbil) {
+        //Sets foundBrand, foundModel, foundModelYear & foundBattery inside found array to be false
+        Arrays.fill(found, Boolean.FALSE);
+
         checkFilteredCars(MODELYEAR, elbil, elbil.getModelYear());
         checkFilteredCars("default", elbil, elbil.getModel().toLowerCase());
 
@@ -140,15 +143,15 @@ public class CarSearchActivity extends AppCompatActivity {
         if (mElbilList.size() == 1) {
             Intent intent = new Intent(CarSearchActivity.this, CarInfoActivity.class);
             intent.putExtra("Elbil", mElbilList.get(0));
-            startActivity(intent);
+            // startActivity(intent);
         } else if (mElbilList.size() > 1) {
             Intent intent = new Intent(this, CarSelectionActivity.class);
             intent.putParcelableArrayListExtra("CarList", new ArrayList<>(mElbilList));
-            intent.putExtra("Missing", missing);
+            intent.putExtra("Missing", found);
             intent.putExtra("FieldMap", fieldMap);
             intent.putExtra("FoundFieldsMap", foundFieldsMap);
             //todo: get HashMap data in next activity by using getSearializedExtra like this
-            startActivity(intent);
+            // startActivity(intent);
         } else {
             //todo: show popup dialog choice of "try again?" or "manual selection"?
             System.out.println("NO FIRESTORE CARS FOUND: " + mElbilList.size());
@@ -171,65 +174,73 @@ public class CarSearchActivity extends AppCompatActivity {
                 checkFilteredCars(BATTERY, elbil, response);
             }
         }
+        foundFieldsMap.put(BRAND, foundBrands);
+        foundFieldsMap.put(MODEL, foundModels);
+       // foundFieldsMap.put(MODELYEAR, foundModelYears);
+        foundFieldsMap.put(BATTERY, foundBatteries);
 
-        System.out.println("MISSING: " + Arrays.toString(missing));
+        //  initHashMapFields();
+
+        System.out.println("MISSING: " + Arrays.toString(found));
         System.out.println("FIELDS MAP: " + fieldMap);
         System.out.println("FOUND FIELDS MAP: " + foundFieldsMap);
 
-        determineMissing(missing, fields);
+        // determineMissing(found, fields);
     }
 
     private void checkFilteredCars(String dataField, Elbil elbil, String response) {
         switch (dataField) {
             case BRAND:
-                if (elbil.getBrand().contains(response)) {
-                    if (!foundBrands.contains(response)) foundBrands.add(elbil.getBrand());
-                    if (elbil.getBrand().equals(response) && elbil.getBrand().length() == response.length()) {
-                        System.out.println("BRAND " + elbil.getBrand() + " EQUALS " + response +
-                                " ; LENGTH: " + elbil.getBrand().length() + " == " + response.length());
-                        brand = response;
-                        missing[0] = true;
+                foundBrands = carFilteredList.filterFields(elbil.getBrand(), response, foundBrands);
+                if (brand.isEmpty()) {
+                    brand = carFilteredList.filterExactMatch(elbil.getBrand(), response);
+                    if (!brand.isEmpty()) {
+                        fieldMap.put(BRAND, brand);
+                        found[0] = true;
                     }
                 }
-                fieldMap.put(BRAND, brand);
-                foundFieldsMap.put(BRAND, foundBrands);
                 break;
             case MODEL:
-                if (elbil.getModel().contains(response)) {
-                    System.out.println("FOUND MODEL: " + elbil.getModel() + " CONTAINS " + response);
-                    if (!foundModels.contains(response)) foundModels.add(elbil.getModel());
-                    if (elbil.getModel().equals(response) && elbil.getModel().length() == response.length()) {
-                        System.out.println("MODEL " + elbil.getModel() + " EQUALS " + response +
-                                " ; LENGTH: " + elbil.getModel().length() + " == " + response.length());
-                        model = response;
-                        missing[1] = true;
+                foundModels = carFilteredList.filterFields(elbil.getModel(), response, foundModels);
+                if (model.isEmpty()) {
+                    model = carFilteredList.filterExactMatch(elbil.getModel(), response);
+                    if (!model.isEmpty()) {
+                        fieldMap.put(MODEL, model);
+                        found[1] = true;
                     }
                 }
-                fieldMap.put(MODEL, model);
-                foundFieldsMap.put(MODEL, foundModels);
                 break;
             case MODELYEAR:
+                foundModelYears = carFilteredList.filterFields(elbil.getModelYear(), response, foundModelYears);
+                if (modelYear.isEmpty()) {
+                    modelYear = carFilteredList.filterExactMatch(elbil.getModelYear(), response);
+                    if (!modelYear.isEmpty()) {
+                        fieldMap.put(MODELYEAR, modelYear);
+                        found[2] = true;
+                    }
+                }
+
+                /*
                 if (response != null) modelYear = response;
                 if (!modelYear.isEmpty()) {
-                    missing[2] = true;
+                    found[2] = true;
                     foundModelYears.add(modelYear);
                 }
                 fieldMap.put(MODELYEAR, modelYear);
                 foundFieldsMap.put(MODELYEAR, foundModelYears);
+                */
                 break;
             case BATTERY:
-                String r = response.replace("kwh", "");
-                if (elbil.getBattery().contains(r)) {
-                    System.out.println("FOUND BATTERY: " + elbil.getBattery() + " CONTAINS " + response);
-                    if (!foundBatteries.contains(r)) foundBatteries.add(elbil.getBattery());
-                    if (elbil.getBattery().equals(r)) {
-                        System.out.println("BATTERY " + elbil.getBrand() + " EQUALS " + response);
-                        battery = r.toLowerCase();
-                        missing[3] = true;
+                String br = response.replace("kwh", "");
+
+                foundBatteries = carFilteredList.filterFields(elbil.getBattery(), br, foundBatteries);
+                if (battery.isEmpty()) {
+                    battery = carFilteredList.filterExactMatch(elbil.getBattery(), br);
+                    if (!battery.isEmpty()) {
+                        fieldMap.put(BATTERY, battery);
+                        found[3] = true;
                     }
                 }
-                fieldMap.put(BATTERY, battery);
-                foundFieldsMap.put(BATTERY, foundBatteries);
                 break;
             default:
                 System.out.println("NO SUCH DATA FIELD..");
@@ -300,7 +311,7 @@ public class CarSearchActivity extends AppCompatActivity {
 
 
     private void initHashMapFields() {
-        initFoundResponseLists();
+        // initFoundResponseLists();
 
         fieldMap = new HashMap<>();
         fieldMap.put(BRAND, brand);
@@ -337,8 +348,10 @@ public class CarSearchActivity extends AppCompatActivity {
         if (foundBatteries == null) foundBatteries = new ArrayList<>();
         else foundBatteries.clear();
 
-        missing = new boolean[4]; //foundBrand, foundModel, foundModelYear, foundBattery
-        Arrays.fill(missing, Boolean.FALSE);
+        found = new boolean[4]; //foundBrand, foundModel, foundModelYear, foundBattery
+        //todo: make all true at first and change to false if exact field is found
+        // or change name to "found" instad of "found"
+        Arrays.fill(found, Boolean.FALSE);
     }
 
 

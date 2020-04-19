@@ -2,7 +2,6 @@ package com.example.elfin.car;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,14 +11,18 @@ import java.util.Map;
 
 public class Elbil implements Parcelable {
 
-
-
-    private String documentId, spinnerDisplay;
-    private String brand, model, modelYear, battery, fastCharge, effect;
+    private int iconImage;
+    private String spinnerDisplay;
+    private String  documentId, brand, model, modelYear, battery, fastCharge, effect;
     private Map<String, Double> specs;
 
     public Elbil(){
         //public no-arg constructor needed for firestore database
+    }
+
+    public Elbil(int iconImage, String spinnerDisplay) {
+        this.iconImage = iconImage;
+        this.spinnerDisplay = spinnerDisplay;
     }
 
     public Elbil(String brand) {
@@ -91,6 +94,25 @@ public class Elbil implements Parcelable {
         isError = true;
     }
      */
+
+
+    @Exclude
+    public int getIconImage() {
+        return iconImage;
+    }
+
+    public void setIconImage(int iconImage) {
+        this.iconImage = iconImage;
+    }
+
+    @Exclude
+    public String getSpinnerDisplay() {
+        return spinnerDisplay;
+    }
+
+    public void setSpinnerDisplay(String spinnerDisplay) {
+        this.spinnerDisplay = spinnerDisplay;
+    }
 
     @Exclude
     public String getDocumentId() {
@@ -177,8 +199,8 @@ public class Elbil implements Parcelable {
     @NonNull
     @Override
     public String toString() {
+        if (documentId == null) return spinnerDisplay;
         spinnerDisplay = brand + " " + model + " ( " + modelYear + ")";
-        if (documentId == null) return brand;
         return spinnerDisplay;
         //return super.toString();
     }
