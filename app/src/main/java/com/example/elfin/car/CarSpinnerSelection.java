@@ -13,6 +13,7 @@ public class CarSpinnerSelection {
 
     private AddCarActivity addCarActivity;
     private CarSelectionActivity carSelectionActivity;
+    private CarFilteredList carFilteredList;
 
     private List<Elbil> allElbilList;
 
@@ -38,7 +39,8 @@ public class CarSpinnerSelection {
     public CarSpinnerSelection(CarSelectionActivity carSelectionActivity) {
         this.carSelectionActivity = carSelectionActivity;
         allElbilList = carSelectionActivity.getAllCars();
-
+        //Todo: use carFilteredList to get filtered lists
+        carFilteredList = new CarFilteredList();
     }
 
     protected void missingFieldSelection(Spinner spinner, String dataField, List<String> filteredList) {
