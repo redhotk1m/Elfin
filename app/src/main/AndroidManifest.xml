@@ -26,7 +26,8 @@
         <activity android:name=".car.AddCarActivity" />
         <activity android:name=".Activities.AboutCharger"/>
         <activity android:name=".testing.FilterTestActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask">    <!-- CLOSES ALL ACTIVITIES ON TOP OF THIS ONE BY USING startActivity THE STANDARD WAY-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

@@ -23,6 +23,7 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class CarSearchActivity extends AppCompatActivity {
     private final String BATTERY = "battery";
     private final String FASTCHARGE = "fastCharge";
 
+    private BitSet bitSet;
     private boolean[] found;
     private String[] modelResponse;
     private String[] fields = new String[4];
@@ -75,6 +77,7 @@ public class CarSearchActivity extends AppCompatActivity {
         firestoreQuery = new FirestoreQuery(this, elbilReference);
         // initFoundResponseLists();
         carFilteredList = new CarFilteredList();
+        bitSet = new BitSet(4);
         initHashMapFields();
 
         searchRegNrBtn.setOnClickListener(myOnClickListener);
@@ -178,20 +181,66 @@ public class CarSearchActivity extends AppCompatActivity {
         System.out.println("API MODEL RESPONSE: " + Arrays.toString(responses) + "; LENGTH: " + responses.length);
 
 
+        System.out.println("INIT BIT SET LENGTH / SIZE: " + bitSet.length() + " / " + bitSet.size());
+
+        System.out.println("RESPONSE LENGTH: " + responses.length);
+
+        int count = 0;
+
         for (Elbil elbil : allCarsList) {
             for (String response : responses) {
+                System.out.println("FOUND ARRAY: " + Arrays.toString(found) + " ( " +BRAND+ " )");
                 if (!found[0]) checkFilteredCars(BRAND, elbil, response);
+                else System.out.println("FOUND: " + BRAND + " ==> " + found[0]);
+
+                System.out.println("FOUND ARRAY: " + Arrays.toString(found) + " ( " +MODEL+ " )");
                 if (!found[1]) checkFilteredCars(MODEL, elbil, response);
+                else System.out.println("FOUND: " + MODEL + " ==> " + found[1]);
+
+                System.out.println("FOUND ARRAY: " + Arrays.toString(found) + " ( " +BATTERY+ " )");
                 // if (!found[2]) checkFilteredCars(MODELYEAR, elbil, modelYear);
                 if (!found[3]) checkFilteredCars(BATTERY, elbil, response);
+                else System.out.println("FOUND: " + BATTERY + " ==> " + found[2]);
+
+
+                System.out.println("CURRENT BIT SET LENGTH: " + bitSet.length());
+
+                count++;
+                System.out.println("COUNT: " + count + " / " + allCarsList.size());
+
+                if (bitSet.length() == responses.length) {
+                    System.out.println("(INNER) RETURNING at count: " + count);
+                    System.out.println("BIT LENGTH: " + bitSet.length() + " == " + responses.length);
+                   // return;
+                }
             }
             //todo: Check out Java Bits ==> java bitset to boolean array?
             // return if (responses.length <==> number of values in boolean array that is found)
+
+            // if (bitSet.length() == responses.length) System.out.println("BIT SET == RESPONSES!");
+
+            System.out.println("CURRENT BIT SET LENGTH: " + bitSet.length() + " <===> " + "RESPONSES LENGTH: " + responses.length);
+
+            /*
+            System.out.println("CURRENT BIT SET LENGTH: " + bitSet.length());
+
+            count++;
+            System.out.println("COUNT: " + count + " / " + allCarsList.size());
+
+             */
+
+            if (bitSet.length() == responses.length) {
+                System.out.println("RETURNING at count: " + count);
+                return;
+            }
         }
         // foundFieldsMap.put(BRAND, foundBrands);
         // foundFieldsMap.put(MODEL, foundModels);
         // foundFieldsMap.put(MODELYEAR, foundModelYears);
         // foundFieldsMap.put(BATTERY, foundBatteries);
+
+
+        System.out.println("FINISHED BIT SET LENGTH: " + bitSet.length());
 
         System.out.println("MISSING: " + Arrays.toString(found));
         System.out.println("FIELDS MAP: " + foundHashMap);
@@ -210,10 +259,21 @@ public class CarSearchActivity extends AppCompatActivity {
                     String brandResponse = carFilteredList.filterExactMatch(elbil.getBrand(), response);
                     if (brandResponse.equals(response)) {
                         brand = brandResponse;
-                    }
-                    if (!brand.isEmpty()) {
+
+                        System.out.println("FOUND[1] == " + found[0]);
+
+                        // }
+                        // if (!brand.isEmpty()) {
                         System.out.println("FOUND BRAND: " + brand + " EQUALS " + response);
                         foundHashMap.put(BRAND, brand);
+                        //  found[0] = true;
+
+                        System.out.println("BIT SET BRAND LENGTH: " + bitSet.length());
+                        //  bitSet.set(0, true);
+                      //  if (!found[0])
+                            setBitSetValue(bitSet, found[0]);
+                        System.out.println("BIT SET BRAND LENGTH: " + bitSet.length());
+
                         found[0] = true;
                     }
                 }
@@ -226,11 +286,28 @@ public class CarSearchActivity extends AppCompatActivity {
                     String modelResponse = carFilteredList.filterExactMatch(elbil.getModel(), response);
                     if (modelResponse.equals(response)) {
                         model = modelResponse;
-                    }
-                    if (!model.isEmpty()) {
-                        System.out.println("FOUND MODEL: " + model + " EQUALS " + response);
-                        foundHashMap.put(MODEL, model);
-                        found[1] = true;
+                        // found[1] = true;
+
+                        if (!found[1]) {
+
+                            System.out.println("FOUND[1] == " + found[1]);
+
+                            // if (!model.isEmpty()) {
+                            System.out.println("FOUND MODEL: " + model + " EQUALS " + response);
+                            foundHashMap.put(MODEL, model);
+                            // found[1] = true;
+                            System.out.println("BIT SET MODEL LENGTH: " + bitSet.length());
+                            // bitSet.set(1, true);
+                           // if (!found[1])
+                                setBitSetValue(bitSet, found[0]);
+                            System.out.println("BIT SET MODEL LENGTH: " + bitSet.length());
+                            //}
+
+                            found[1] = true;
+                            // System.out.println("FOUND[1] == " + found[1]);
+
+
+                        }
                     }
                 }
                 break;
@@ -239,6 +316,7 @@ public class CarSearchActivity extends AppCompatActivity {
                     modelYear = response;
                     if (!modelYear.isEmpty()) {
                         found[2] = true;
+
                         // foundModelYears.add(modelYear);
                     }
                 }
@@ -248,6 +326,9 @@ public class CarSearchActivity extends AppCompatActivity {
             case BATTERY:
                 String br = response.replace("kwh", "");
                 // foundBatteries = carFilteredList.filterFields(elbil.getBattery(), br, foundBatteries);
+
+                System.out.println("FOUND[1] == " + found[3]);
+
                 if (battery.isEmpty()) {
                     System.out.println("FILTER BATTERY: " + elbil.getBattery() + " ; " + response);
                     String batteryResponse = carFilteredList.filterExactMatch(elbil.getBattery(), br);
@@ -257,8 +338,16 @@ public class CarSearchActivity extends AppCompatActivity {
                     if (!battery.isEmpty()) {
                         System.out.println("FOUND BATTERY: " + battery + " EQUALS " + response);
                         foundHashMap.put(BATTERY, battery);
-                        found[3] = true;
+                     //   found[3] = true;
+
+
+                        System.out.println("BIT SET BATTERY LENGTH: " + bitSet.length());
+                        // bitSet.set(2, true);
+                        setBitSetValue(bitSet, found[3]);
+                        System.out.println("BIT SET BATTERY LENGTH: " + bitSet.length());
                     }
+
+                    found[3] = true;
                 }
                 break;
             default:
@@ -268,6 +357,29 @@ public class CarSearchActivity extends AppCompatActivity {
                 searchFilteredCars(modelResponse);
         }
     }
+
+    private void setBitSetValue(BitSet bitSet, boolean found) {
+        if (bitSet.length() == 0 && !found) {
+            System.out.println(bitSet.length() + " == " + 0);
+            bitSet.set(0, true);
+            System.out.println(bitSet.length() + " ===> " + 1);
+        } else if (bitSet.length() == 1 && !found) {
+            System.out.println("BIT SET LENGTH: " + bitSet.length() + " == " + 1);
+            bitSet.set(1, true);
+            System.out.println("BIT SET LENGTH: " + bitSet.length() + " ===> " + 1);
+        } else if (bitSet.length() == 2 && !found) {
+            System.out.println("BIT SET LENGTH: " + bitSet.length() + " == " + 2);
+            bitSet.set(2, true);
+            System.out.println("BIT SET LENGTH: " + bitSet.length() + " ===> " + 3);
+        } else if (bitSet.length() == 3 && !found) {
+            System.out.println("BIT SET LENGTH: " + bitSet.length() + " == " + 3);
+            bitSet.set(3, true);
+            System.out.println("BIT SET LENGTH: " + bitSet.length() + " ===> " + 3);
+        } else {
+            System.out.println(found + " BIT SET LENGTH: " + bitSet.length());
+        }
+    }
+
 
     private void determineMissing(boolean[] missing, String[] fields) {
         System.out.println("<FROM DETERMINE MISSING>");
