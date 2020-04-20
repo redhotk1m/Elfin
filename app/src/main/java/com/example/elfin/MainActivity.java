@@ -16,7 +16,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.TimingLogger;
 import android.view.MenuItem;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,15 +48,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     public EditText editText;
-    DisplaySuggestions displaySuggestions;
+    public DisplaySuggestions displaySuggestions;
     //TextView textView;
     public ListView listViewSuggest;
-    ArrayAdapter<String> arrayAdapterSuggestions;
+    public ArrayAdapter<String> arrayAdapterSuggestions;
     String destinationID;
     public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
     public TextView destinacionTextView;
-    String destionacionValidacion;
+    public String destionacionValidacion;
+    public Boolean isSelected = false;
+
 
     private ArrayList<Elbil> mCarList;
     private ArrayAdapter adapter;
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private SharedPreferences sharedPreferences;
     private SharedCarPreferences sharedCarPreferences;
     private boolean initDropDown;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -95,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //startActivity(intent);
         destinacionTextView = findViewById(R.id.textViewFyllIn);
         destinacionTextView.setVisibility(View.INVISIBLE);
+
+
         EditTextFunctions editTextFunctions = new EditTextFunctions(this);
         editTextFunctions.setText();
 
@@ -123,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("allStations"));
+
         //Log.d("Debug2",new MainActivity().editText.getText().toString());
     }
 
@@ -251,15 +259,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         }
                     }
                 }
+
                 listViewSuggest.setVisibility(View.VISIBLE);
                 arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1, list);
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
+
             }
         });
 
 
-        displaySuggestions.execute("");
+
+
+
+        displaySuggestions.execute();
+
+
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
@@ -271,9 +287,27 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             }
         });
+
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && (i == KeyEvent.KEYCODE_ENTER || i == KeyEvent.KEYCODE_DPAD_CENTER)){
+                    editText.setText(listViewSuggest.getItemAtPosition(0).toString());
+                    closeKeyboard(view);
+
+                }
+                return false;
+            }
+        });
+
+
+
     }
 
-    public void setDestinationID(String destinationID) {
+
+
+
+    public void setDestinationID(String destinationID){
         this.destinationID = destinationID;
     }
 
@@ -311,6 +345,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public ArrayList<ChargerItem> getAllChargingStations() {
         return allChargingStations;
     }
+
 
     public void setAllChargingStations(ArrayList<ChargerItem> allChargingStations) {
         this.allChargingStations = allChargingStations;
