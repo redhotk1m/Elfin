@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private boolean initDropDown;
 
 
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             }
         });
+
 
 
 
