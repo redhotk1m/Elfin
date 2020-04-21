@@ -135,11 +135,19 @@ public class FirestoreQuery {
             default:
                 System.out.println("...");
         }
+
+
+        //todo: handle if FOUND MODEL YEAR IS NOT IN DATABASE
+
+        /*
+
         if (!fieldsMap.get(MODELYEAR).isEmpty()) {
             query = query
                     .whereEqualTo(MODELYEAR, fieldsMap.get(MODELYEAR));
             System.out.println("MODEL YEAR: " + fieldsMap.get(MODELYEAR));
         } else System.out.println("MODEL YEAR EMPTY: " + fieldsMap.get(MODELYEAR));
+
+         */
 
         return query;
     }

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.elfin.MainActivity;
 import com.example.elfin.R;
+import com.example.elfin.Utils.DialogBox;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -50,6 +51,8 @@ public class CarInfoActivity extends AppCompatActivity {
 
     private SharedCarPreferences sharedCarPreferences;
 
+    private DialogBox dialogBox1, dialogBox2, dialogBox3, dialogBox4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,7 @@ public class CarInfoActivity extends AppCompatActivity {
 
         found = intent.getBooleanArrayExtra("Missing");
         if (found != null) {
-            Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
+            // Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
             System.out.println("INTEN MISSING[]: " + Arrays.toString(found));
         } else System.out.println("FOUND FIELDS[] NOT RECEIVED");
 
@@ -81,12 +84,20 @@ public class CarInfoActivity extends AppCompatActivity {
         if (fieldMap != null) {
             System.out.println("INTENT HASH MAP: " + fieldMap);
             //  Toast.makeText(this, "INTENT HASH MAP: " + fieldMap, Toast.LENGTH_LONG).show();
+            /*
             Toast.makeText(this, "EXACT FIELDS FOUND:\n\n"
                             + BRAND + " ; " + fieldMap.get(BRAND) + "\n\n"
                             + MODEL + " ; " + fieldMap.get(MODEL) + "\n\n"
                             + MODELYEAR + " ; " + fieldMap.get(MODELYEAR) + "\n\n"
                             + BATTERY + " ; " + fieldMap.get(BATTERY) + "\n\n"
                     , Toast.LENGTH_LONG).show();
+             */
+            System.out.println("INTENT EXACT FIELDS: \n\n"
+                    + BRAND + " ; " + fieldMap.get(BRAND) + "\n\n"
+                    + MODEL + " ; " + fieldMap.get(MODEL) + "\n\n"
+                    + MODELYEAR + " ; " + fieldMap.get(MODELYEAR) + "\n\n"
+                    + BATTERY + " ; " + fieldMap.get(BATTERY) + "\n\n"
+            );
         } else System.out.println("getParcelable fieldMap not received");
         /*
 
@@ -98,7 +109,7 @@ public class CarInfoActivity extends AppCompatActivity {
 
 
         elbils = getIntent().getParcelableArrayListExtra("CarList");
-        if (elbils != null) {
+        if (elbils != null && elbils.size() > 0) {
             System.out.println("ELBILS RECEIVED: " + elbils.get(0).toString());
             // for (Elbil elbil : elbils) System.out.println(elbil.getModel());
         } else System.out.println("NO ELBILS RECEIVED!");
@@ -110,7 +121,6 @@ public class CarInfoActivity extends AppCompatActivity {
         // clearSharedPrefferences();
 
         // loadCar();
-
 
         getCarAttributes(elbil, elbilFound);
 
@@ -125,6 +135,17 @@ public class CarInfoActivity extends AppCompatActivity {
         }
         */
 
+
+        initDialog();
+
+
+        if (elbilFound) {
+            dialogBox1.createDialogBox();
+        } else {
+            dialogBox3.createDialogBox();
+        }
+
+
         saveCarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,14 +154,21 @@ public class CarInfoActivity extends AppCompatActivity {
 
                 if (elbilFound) {
                     mCarList.add(elbil);
+
+                    //  dialogBox1.createDialogBox();
+
                     saveCar();
-                   // clearAttributes();
+                    // clearAttributes();
                 } else {
+
+                    // dialogBox3.createDialogBox();
+
                     Intent intent = new Intent(CarInfoActivity.this, CarSelectionActivity.class);
-                   // intent.putParcelableArrayListExtra("CarList", new ArrayList<>(mElbilList));
+                    intent.putParcelableArrayListExtra("CarList", new ArrayList<>(elbils));
                     intent.putExtra("Missing", found);
                     intent.putExtra("FieldMap", fieldMap);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -149,13 +177,23 @@ public class CarInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(CarInfoActivity.this, "IKKE LEGG TIL BIL", Toast.LENGTH_SHORT).show();
-
+              //  Toast.makeText(CarInfoActivity.this, "IKKE LEGG TIL BIL", Toast.LENGTH_SHORT).show();
                 finish();
+                /*
+                if (elbilFound) {
+                    dialogBox2.createDialogBox();
+                    finish();
+                } else {
+                    dialogBox4.createDialogBox();
+                    finish();
+                }
+
+
+
 
                 // mCarList.clear();
 
-               // initSpinner();
+                // initSpinner();
 
                 /*
                 Toast.makeText(CarInfoActivity.this, "SIZE: " + mCarListAll.size(), Toast.LENGTH_LONG).show();
@@ -183,6 +221,8 @@ public class CarInfoActivity extends AppCompatActivity {
     }
 
     private void saveCar() {
+        loadCar();
+
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //editor.clear(); //clear shared preferences
@@ -198,6 +238,7 @@ public class CarInfoActivity extends AppCompatActivity {
     }
 
     private void loadCar() {
+
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("car list", null);
@@ -226,9 +267,11 @@ public class CarInfoActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
+            /*
             Toast.makeText(adapterView.getContext(),
                     "OnItemSelectedListener : " + adapterView.getItemAtPosition(position).toString(),
                     Toast.LENGTH_SHORT).show();
+            */
 
             getSelectedCar();
         }
@@ -252,7 +295,7 @@ public class CarInfoActivity extends AppCompatActivity {
     private void getCarAttributes(Elbil elbil, boolean elbilFound) {
 
         if (elbilFound) {
-            String documentId = elbil.getDocumentId();
+//            String documentId = elbil.getDocumentId();
             brand += elbil.getBrand();
             model += elbil.getModel();
             modelYear += elbil.getModelYear();
@@ -261,7 +304,7 @@ public class CarInfoActivity extends AppCompatActivity {
 
             //todo: lag popup dialog ==> "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT? "
             loadCarBtn.setText("IKKE MIN BIL");
-        } else {
+        } else if (fieldMap != null) {
 
             if (found[0]) brand += fieldMap.get(BRAND);
             else brand += "[IKKE FUNNET]";
@@ -328,6 +371,23 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextFastCharge.setText(fastCharge);
     }
 
+    private void initDialog() {
+        dialogBox1 = new DialogBox(this, "ER DETTE DIN BIL?",
+                "Vil du legge til denne bilen i appen?",
+                "LEGG TIL", "SØK IGJEN", 2);
+
+        dialogBox2 = new DialogBox(this, "ER DETTE IKKE DIN BIL?",
+                "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT?",
+                "VELG MANUELT", "SØK IGJEN", 2);
+
+        dialogBox3 = new DialogBox(this, "ER DETTE DIN BIL?",
+                "Vi mangler noen opplysninger om bilen din, vennligst velg blant de opplysningen som passer din bil",
+                "FYLL IN MANGLER", "SØK IGJEN", 2);
+
+        dialogBox4 = new DialogBox(this, "ER DETTE IKKE DIN BIL?",
+                "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT?",
+                "VELG MANUELT", "SØK IGJEN", 2);
+    }
 
     /*
     private void clearAttributes() {

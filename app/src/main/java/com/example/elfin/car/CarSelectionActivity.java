@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.elfin.R;
+import com.example.elfin.Utils.DialogBox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +45,9 @@ public class CarSelectionActivity extends AppCompatActivity {
     private TextView tvSpinnerBrands;
     private Button searchCarBtn;
 
-    private boolean manualSelection = true;
+    private DialogBox dialogBox;
+
+    private boolean manualSelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +59,20 @@ public class CarSelectionActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         fieldMap = (HashMap<String, String>) intent.getSerializableExtra("FieldMap");
-      //  System.out.println("INTENT HASH MAP: " + fieldMap);
-      //  Toast.makeText(this, "INTENT HASH MAP: " + fieldMap, Toast.LENGTH_LONG).show();
+        //  System.out.println("INTENT HASH MAP: " + fieldMap);
+        //  Toast.makeText(this, "INTENT HASH MAP: " + fieldMap, Toast.LENGTH_LONG).show();
+        /*
         Toast.makeText(this, "EXACT FIELDS FOUND:\n\n"
                         + BRAND + " ; " + fieldMap.get(BRAND) + "\n\n"
                         + MODEL + " ; " + fieldMap.get(MODEL) + "\n\n"
                         + MODELYEAR + " ; " + fieldMap.get(MODELYEAR) + "\n\n"
                         + BATTERY + " ; " + fieldMap.get(BATTERY) + "\n\n"
                 , Toast.LENGTH_LONG).show();
+
+         */
         /*
+
+
 
         foundFieldsMap = (HashMap<String, List<String>>) intent.getSerializableExtra("FoundFieldsMap");
         System.out.println("INTENT HASH MAP 2: " + foundFieldsMap);
@@ -73,27 +81,36 @@ public class CarSelectionActivity extends AppCompatActivity {
          */
 
         found = intent.getBooleanArrayExtra("Missing");
-        Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
         System.out.println("INTEN MISSING[]: " + Arrays.toString(found));
 
         ArrayList<Elbil> elbils = getIntent().getParcelableArrayListExtra("CarList");
         if (elbils != null) {
             System.out.println("ELBILS RECEIVED: " + elbils.get(0).toString());
-           // for (Elbil elbil : elbils) System.out.println(elbil.getModel());
-        } else System.out.println("NO ELBILS RECEIVED!");
+            // for (Elbil elbil : elbils) System.out.println(elbil.getModel());
+           // manualSelection = false;
+        } else {
+            System.out.println("NO ELBILS RECEIVED!");
+            manualSelection = true;
+        }
 
         setAllCarsList(elbils);
 
-        if (!found[0]) {
+
+        if (fieldMap.isEmpty()) manualSelection = true;
+
+        if (manualSelection) {
             tvSpinnerBrands.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    manualSelection = true;
+                   // manualSelection = true;
                     enableManualCarSelection();
                 }
             });
         } else {
-            manualSelection = false;
+            // manualSelection = false;
+
+            //todo: handle else to show all missing selection
 
             tvSpinnerBrands.setVisibility(View.GONE);
             // spinnerSelection = new CarSpinnerSelection(this);
@@ -102,7 +119,8 @@ public class CarSelectionActivity extends AppCompatActivity {
             // brands.addAll(foundFieldsMap.get(BRAND));
             // brands = foundFieldsMap.get(BRAND);
             if (found[0]) brands.add(fieldMap.get(BRAND));
-            else brands.add("GET SELECTION BRANDS");
+            else brands.add(elbils.get(0).getBrand());
+            // else brands.add("GET SELECTION BRANDS");
             adapterBrands.notifyDataSetChanged();
             spinnerBrands.setVisibility(View.VISIBLE);
             spinnerBrands.setEnabled(true);
@@ -111,7 +129,8 @@ public class CarSelectionActivity extends AppCompatActivity {
             initSpinner(MODEL, spinnerModels);
             // models.addAll(foundFieldsMap.get(MODEL));
             if (found[1]) models.add(fieldMap.get(MODEL));
-            else models.add("GET SELECTION MODELS");
+            else models.add(elbils.get(0).getModel());
+            // else models.add("GET SELECTION MODELS");
             adapterModels.notifyDataSetChanged();
             spinnerModels.setVisibility(View.VISIBLE);
             spinnerModels.setEnabled(true);
@@ -119,7 +138,8 @@ public class CarSelectionActivity extends AppCompatActivity {
             initSpinner(MODELYEAR, spinnerModelYears);
             // modelYears.addAll(foundFieldsMap.get(MODELYEAR));
             if (found[2]) modelYears.add(fieldMap.get(MODELYEAR));
-            else modelYears.add("GET SELECTION MODEL YEARS");
+            else modelYears.add(elbils.get(0).getModelYear());
+            // else modelYears.add("GET SELECTION MODEL YEARS");
             adapterModelYears.notifyDataSetChanged();
             spinnerModelYears.setVisibility(View.VISIBLE);
             spinnerModelYears.setEnabled(true);
@@ -127,7 +147,8 @@ public class CarSelectionActivity extends AppCompatActivity {
             initSpinner(BATTERY, spinnerBatteries);
             // batteries.addAll(foundFieldsMap.get(BATTERY));
             if (found[3]) batteries.add(fieldMap.get(BATTERY));
-            else batteries.add("GET SELECTION BATTERIES");
+            else batteries.add(elbils.get(0).getBattery());
+            // else batteries.add("GET SELECTION BATTERIES");
             adapterBattery.notifyDataSetChanged();
             spinnerBatteries.setVisibility(View.VISIBLE);
             spinnerBatteries.setEnabled(true);
@@ -150,6 +171,13 @@ public class CarSelectionActivity extends AppCompatActivity {
                     intent.putExtra("Elbil", mCarList.get(0));
                     startActivity(intent);
                 } else {
+                    //todo: HANDLE THIS!
+                    Intent intent = new Intent(CarSelectionActivity.this, CarInfoActivity.class);
+                    intent.putParcelableArrayListExtra("CarList", new ArrayList<>(mCarList));
+                    startActivity(intent);
+                }
+                /*
+                else {
                     initSpinner(BATTERY, spinnerBatteries);
                     spinnerSelection.filteredCarsSelection(spinnerModelYears, BATTERY, batteries);
                     adapterBattery.notifyDataSetChanged();
@@ -157,6 +185,8 @@ public class CarSelectionActivity extends AppCompatActivity {
                     // initSpinner(BATTERY, spinnerBatteries);
                     // initSpinner(FASTCHARGE, spinnerCharges);
                 }
+
+                 */
             }
         });
     }
@@ -321,7 +351,7 @@ public class CarSelectionActivity extends AppCompatActivity {
             case BATTERY:
                 spinnerSelection.spinnerOnItemSelected(BATTERY, spinnerBatteries, spinnerCharges, fastCharges, manualSelection);
                 // spinnerSelection.spinnerBatteriesOnItemSelected(spinnerBatteries, spinnerCharges, fastCharges);
-                Toast.makeText(this, "BATTERY SELECTED: " + spinnerBatteries.getSelectedItem(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "BATTERY SELECTED: " + spinnerBatteries.getSelectedItem(), Toast.LENGTH_SHORT).show();
                 String selectedBattery = spinnerBatteries.getSelectedItem().toString();
                 makeSpinnerDisplay(BATTERY, selectedBattery, view);
                 if (!selectedBattery.equals(getString(R.string.choose_none))) {
@@ -409,6 +439,7 @@ public class CarSelectionActivity extends AppCompatActivity {
 
     private List<Elbil> searchCar() {
         mCarList = new ArrayList<>();
+        //todo: get allCarsList from CAR INFO!!!
         for (Elbil elbil : allCarsList) {
             if (spinnerBrands.getSelectedItem().equals(elbil.getBrand())
                     && spinnerModels.getSelectedItem().equals(elbil.getModel())

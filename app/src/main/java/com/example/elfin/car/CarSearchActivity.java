@@ -186,7 +186,7 @@ public class CarSearchActivity extends AppCompatActivity {
         } else {
             //todo: show popup dialog choice of "try again?" or "manual selection"?
             System.out.println("NO FIRESTORE CARS FOUND: " + mElbilList.size());
-            Toast.makeText(this, "[POPUP MELDING] SJEKK AT REG NR STEMMER ELLER VELG BIL MANUELT \n (INGEN BIL MATCH FRA API)", Toast.LENGTH_LONG).show();
+        //    Toast.makeText(this, "[POPUP MELDING] SJEKK AT REG NR STEMMER ELLER VELG BIL MANUELT \n (INGEN BIL MATCH FRA API)", Toast.LENGTH_LONG).show();
             //todo: check if manual selection:
             handleFirestoreQuery(allCarsList);
             //todo: else "try different regNr"

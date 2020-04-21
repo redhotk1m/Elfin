@@ -50,7 +50,7 @@ public class CarSpinnerSelection {
     }
 
     protected void filteredCarsSelection(Spinner spinner, String dataField, List<String> filteredList) {
-        // allElbilList = addCarActivity.getAllCars();
+       // allElbilList = addCarActivity.getAllCars();
         ArrayList<Elbil> filteredCars = new ArrayList<>();
         filteredList.clear();
         switch (dataField) {
