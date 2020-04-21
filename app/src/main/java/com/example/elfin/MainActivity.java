@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TimingLogger;
 import android.view.MenuItem;
 import android.view.KeyEvent;
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             logger.dumpToLog();
             String message = intent.getStringExtra("case");
             if ("error".equals(message))
-                System.out.println("error");
+                System.out.println("error i main receiver");
                 //TODO: Error message to user
             else {
                 System.out.println("MOTATT I MAIN");
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         initDropDown = true;
         initCarSpinner();
     }
+
 
     private void initCarSpinner() {
         // mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
@@ -252,6 +254,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             ArrayList<String> list = new ArrayList<>();
 
 
+
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
                 for (int i = 0; i < lists.size(); i++) {
@@ -322,16 +325,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
 
     public void nextActivity(View view) {
-        if (editText.getText().toString().equals(destionacionValidacion)) {
-            Intent intent = new Intent(this, ChargingStations.class);
-            Bundle bundle = new Bundle();
-            gpsTracker = new GPSTracker(this);
+        if(editText.getText().toString().equals(destionacionValidacion)){
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(
                         this
                         , new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}
                         , 0);
             } else {
+                Intent intent = new Intent(this, ChargingStations.class);
+                Bundle bundle = new Bundle();
+                gpsTracker = new GPSTracker(this);
                 gpsTracker.getLocation();
                 if (gpsTracker.canGetLocation()) {
                     ((App) getApplication()).setChargerItems(allChargingStations);

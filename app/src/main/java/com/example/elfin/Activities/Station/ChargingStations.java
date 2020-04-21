@@ -105,6 +105,9 @@ public class ChargingStations extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(
                         receiver,new IntentFilter("allValidStations"));
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(
+                        receiver,new IntentFilter("updateKMList"));
     }
 
     private void setAllChargingItems(){
@@ -134,13 +137,20 @@ public class ChargingStations extends AppCompatActivity {
                 case "unregisterBroadcastReceivers":
                     unregisterBroadcastReceivers();
                     break;
+                case "updateKMList":
+                    handleUpdateKMList(intent.getDoubleExtra("drivenMetersSoFar",0));
+                    break;
                 default:
-                        System.out.println("error");
+                        System.out.println("error i ChargingStations default switch case");
                         handleError();
                         break;
             }
         }
     };
+
+    public void handleUpdateKMList(double drivenMetersSoFar){
+        pagerAdapter.getChargingStationList().updateListKM(drivenMetersSoFar);
+    }
 
     private void handleAllStations(){
         setAllChargingItems();
