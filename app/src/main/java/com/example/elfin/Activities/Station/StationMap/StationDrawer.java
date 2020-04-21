@@ -16,11 +16,11 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, ArrayList<ChargerItem>> {
-    private ArrayList<LatLng> points;
+    private ArrayList<PolyPoint> points;
 
     private App applicationContext;
     private LocalBroadcastManager localBroadcastManager;
-    public StationDrawer(LocalBroadcastManager localBroadcastManager, App applicationContext, ArrayList<LatLng> points){
+    public StationDrawer(LocalBroadcastManager localBroadcastManager, App applicationContext, ArrayList<PolyPoint> points){
         this.localBroadcastManager = localBroadcastManager;
         this.applicationContext = applicationContext;
         this.points = points;
@@ -29,7 +29,7 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
     @Override
     protected ArrayList<ChargerItem> doInBackground(ArrayList<ChargerItem>... allChargingStationsArr) {
         TimingLogger logger = new TimingLogger("MyTag", "MethodAAA");
-        logger.addSplit("A");
+        logger.addSplit("Start");
         ArrayList<ChargerItem>
                 allChargingStations = allChargingStationsArr[0],
                 validLatStations = new ArrayList<>(),
@@ -38,25 +38,31 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
         int chargingStationsSize = allChargingStations.size();
 
         float totalDistance = 0;
-        LatLng currPoint;
+        PolyPoint currPoint;
         Location currLocation = new Location("this");
-        LatLng lastPoint;
+        PolyPoint lastPoint;
         Location lastLocation = new Location("this");
+        currLocation.setLatitude(0);
+        currLocation.setLongitude(1);
+        lastLocation.setLatitude(1);
+        lastLocation.setLongitude(0);
+        points.get(0).setDrivenKM(totalDistance);
 
         for (int k = 1; k < points.size(); k++){
 
             currPoint = points.get(k);
-
-            currLocation.setLatitude(currPoint.latitude);
-            currLocation.setLongitude(currPoint.longitude);
+            currLocation.setLatitude(currPoint.getLatitude());
+            currLocation.setLongitude(currPoint.getLongditude());
             lastPoint = points.get(k - 1);
-            lastLocation.setLatitude(lastPoint.latitude);
-            lastLocation.setLongitude(lastPoint.longitude);
+            lastLocation.setLatitude(lastPoint.getLatitude());
+            lastLocation.setLongitude(lastPoint.getLongditude());
             totalDistance += lastLocation.distanceTo(currLocation);
+            points.get(k).setDrivenKM(totalDistance);
+
 
             for (int i = 0; i < chargingStationsSize; i++) {
-                ChargerItem found = StMethods.search(currPoint.latitude, allChargingStations, true);
-                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.latitude,currPoint.longitude) <= 1){
+                ChargerItem found = StMethods.search(currPoint.getLatitude(), allChargingStations, true);
+                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.getLatitude(),currPoint.getLongditude()) <= 1){
                     validLatStations.add(found);
                     allChargingStations.remove(found);
                 }else{
@@ -66,8 +72,8 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
             validLatStations.sort(new LongditudeComparator());
             int validLatStationSize = validLatStations.size();
             for (int i = 0; i < validLatStationSize; i++) {
-                ChargerItem found = StMethods.search(currPoint.longitude, validLatStations, false);
-                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.latitude,currPoint.longitude) <= 1){
+                ChargerItem found = StMethods.search(currPoint.getLongditude(), validLatStations, false);
+                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.getLatitude(),currPoint.getLongditude()) <= 1){
                     found.setMFromStartLocation(totalDistance);
                     System.out.println("Ladestasjon: " + found.getStreet() + " er" + (totalDistance + 500)/1000 + "km ifra startpunkt");
                     validStations.add(found);
@@ -78,6 +84,7 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
                 //TODO: Kanskje gjøre ditanceBetweenKM om til å bruke location.DistanceTo();
             }
         }
+        System.out.println("STØRRELSE ER: " + points.size());
         logger.addSplit("B");
         logger.dumpToLog();
         return validStations;

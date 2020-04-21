@@ -127,4 +127,8 @@ public class ChargingStationList extends Fragment {
 
 
     }
+
+    public void updateListKM(double drivenMetersSoFar) {
+        System.out.println("Nå har vi kjørt: " + drivenMetersSoFar + " meter, og dette vises i denne klassen");
+    }
 }

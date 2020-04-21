@@ -56,8 +56,8 @@ public class CarSelectionActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         fieldMap = (HashMap<String, String>) intent.getSerializableExtra("FieldMap");
-        System.out.println("INTENT HASH MAP: " + fieldMap);
-        Toast.makeText(this, "INTENT HASH MAP: " + fieldMap, Toast.LENGTH_LONG).show();
+      //  System.out.println("INTENT HASH MAP: " + fieldMap);
+      //  Toast.makeText(this, "INTENT HASH MAP: " + fieldMap, Toast.LENGTH_LONG).show();
         Toast.makeText(this, "EXACT FIELDS FOUND:\n\n"
                         + BRAND + " ; " + fieldMap.get(BRAND) + "\n\n"
                         + MODEL + " ; " + fieldMap.get(MODEL) + "\n\n"
@@ -78,7 +78,8 @@ public class CarSelectionActivity extends AppCompatActivity {
 
         ArrayList<Elbil> elbils = getIntent().getParcelableArrayListExtra("CarList");
         if (elbils != null) {
-            for (Elbil elbil : elbils) System.out.println(elbil.getModel());
+            System.out.println("ELBILS RECEIVED: " + elbils.get(0).toString());
+           // for (Elbil elbil : elbils) System.out.println(elbil.getModel());
         } else System.out.println("NO ELBILS RECEIVED!");
 
         setAllCarsList(elbils);

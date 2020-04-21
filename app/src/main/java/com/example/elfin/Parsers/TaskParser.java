@@ -3,11 +3,13 @@ package com.example.elfin.Parsers;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.TimingLogger;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationMap.ChargingStationMap;
+import com.example.elfin.Activities.Station.StationMap.PolyPoint;
 import com.example.elfin.Activities.Station.StationMap.StationDrawer;
 import com.example.elfin.Utils.App;
 import com.google.android.gms.maps.model.LatLng;
@@ -72,8 +74,12 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
             intent.putExtra("polyLineOptions",ready_to_use);
             localBroadcastManager.sendBroadcast(intent);
             //chargingStations.getPagerAdapter().getChargingStationMap().setPolyLineOptions(polylineOptions);
-
-            StationDrawer stationDrawer = new StationDrawer(localBroadcastManager,applicationContext,points);
+            ArrayList<PolyPoint> polyPoints = new ArrayList<>();
+            for (LatLng point : points){
+                polyPoints.add(new PolyPoint(point));
+            }
+            applicationContext.setPolyPoints(polyPoints);
+            StationDrawer stationDrawer = new StationDrawer(localBroadcastManager,applicationContext,polyPoints);
             stationDrawer.execute(applicationContext.getChargerItems());
         }
     }
