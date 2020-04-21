@@ -23,6 +23,7 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,19 +36,14 @@ public class CarSearchActivity extends AppCompatActivity {
     private final String BATTERY = "battery";
     private final String FASTCHARGE = "fastCharge";
 
+    private BitSet bitSet;
     private boolean[] found;
-    private String[] modelResponse;
-    private String[] fields = new String[4];
     private String brand, model, modelYear, battery;
     private HashMap<String, String> foundHashMap;
-    private HashMap<String, List<String>> foundFieldsMap;
-    // private String[] fields = {brand, model, modelYear, battery};
 
     private Elbil elbil;
     private List<Elbil> allCarsList = new ArrayList<>();
     private List<Elbil> mCarList = new ArrayList<>();
-
-    private List<String> foundBrands, foundModels, foundModelYears, foundBatteries;
 
     private FirestoreQuery firestoreQuery;
     private Query query;
@@ -69,19 +65,21 @@ public class CarSearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_search);
-
+        //private method used to assign views by id
         findViewsById();
 
+        //Custom Class to make and handle Fire Store queries
         firestoreQuery = new FirestoreQuery(this, elbilReference);
-        // initFoundResponseLists();
-        carFilteredList = new CarFilteredList();
-        initHashMapFields();
 
+        //Custom Class used to filter lists
+        carFilteredList = new CarFilteredList();
+
+        //Set custom myOnClickListener on buttons to handle all onClicks
         searchRegNrBtn.setOnClickListener(myOnClickListener);
         searchCarBtn.setOnClickListener(myOnClickListener);
 
         //Todo: comment out in activity_car_search.xml after all the cars have been added
-        // or use .hide() method on buttonAddCar
+        // or use .hide() method to hide buttonAddCar
         FloatingActionButton buttonAddCar = findViewById(R.id.button_add_car);
         buttonAddCar.setOnClickListener(myOnClickListener);
         // buttonAddCar.hide();
@@ -99,23 +97,40 @@ public class CarSearchActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.image_button_search_icon:
-                    initFoundResponseLists();
+                    initFoundHashMapFields();
                     executeCarInfoApi();
                     break;
                 case R.id.button_search_car:
-                    initFoundResponseLists();
+                    initFoundHashMapFields();
                     if (!editTextSearchRegNr.getText().toString().isEmpty()) executeCarInfoApi();
                     else handleFirestoreQuery(allCarsList);
                     break;
                 case R.id.button_add_car:
-                    // startActivity(new Intent(CarSearchActivity.this, NewCarActivity.class));
-                    showCarInfo(v);
+                    startActivity(new Intent(CarSearchActivity.this, NewCarActivity.class));
+                    // showCarInfo(v);
                     break;
                 default:
                     Toast.makeText(CarSearchActivity.this, "CLICKABLE ID NOT FOUND..", Toast.LENGTH_SHORT).show();
             }
         }
     };
+
+    private void initFoundHashMapFields() {
+        initFields();
+        if (foundHashMap == null) foundHashMap = new HashMap<>();
+        foundHashMap.put(BRAND, brand);
+        foundHashMap.put(MODEL, model);
+        foundHashMap.put(MODELYEAR, modelYear);
+        foundHashMap.put(BATTERY, battery);
+        // foundHashMap.put(FASTCHARGE, fastCharge);
+        System.out.println("INIT FIELDS MAP: " + foundHashMap);
+
+        if (found == null)
+            found = new boolean[4]; //foundBrand, foundModel, foundModelYear, foundBattery
+        //Sets foundBrand, foundModel, foundModelYear & foundBattery inside found array to be false
+        Arrays.fill(found, Boolean.FALSE);
+        System.out.println("INIT FOUND ARRAY: " + Arrays.toString(found));
+    }
 
     private void executeCarInfoApi() {
         CarInfoAPI carInfoAPI = new CarInfoAPI();
@@ -126,26 +141,30 @@ public class CarSearchActivity extends AppCompatActivity {
     }
 
     public void loadApiInfo(Elbil elbil) {
-        initFoundResponseLists();
         checkAPIResponse(elbil);
     }
 
     private void checkAPIResponse(Elbil elbil) {
-        //Sets foundBrand, foundModel, foundModelYear & foundBattery inside found array to be false
-        Arrays.fill(found, Boolean.FALSE);
+        System.out.println("API RESPONSES: " + elbil.getModel() + " ; " + elbil.getModelYear());
+        String modelResponse = "";
+        if (elbil.getModel() != null) modelResponse = elbil.getModel().toLowerCase();
+        String modelYearResponse = "";
+        if (elbil.getModelYear() != null) modelYearResponse = elbil.getModelYear();
+        System.out.println("CHECK FILTERED RESPONSES: " + modelResponse + " ; " + modelYearResponse);
 
-        initHashMapFields();
+        checkFilteredCars(MODELYEAR, elbil, modelYearResponse);
+        checkFilteredCars("default", elbil, modelResponse.toLowerCase());
 
         //todo: handle if ModelYear is not found in amongst matching cars in database; exclude in the query if no match
         // ,or provide manual selection with all possible model years (i.e. 2010 - 2020) in selection
-        checkFilteredCars(MODELYEAR, elbil, elbil.getModelYear());
-        checkFilteredCars("default", elbil, elbil.getModel().toLowerCase());
 
         //todo: check out regNr: EK23827
 
+        System.out.println("RETURNED TO CHECK_API_RESPONSE ; NOW HANDLING FIRESTORE QUERY");
+        System.out.println("FOUND FIELDS: " + Arrays.toString(found));
+        System.out.println("FIELDS MAP: " + foundHashMap);
 
-        //todo: Request Manual SELECTION (EXCLUDE modelYEAR if not null or empty)
-        handleFirestoreQuery(allCarsList);
+        determineFoundFields(found);
     }
 
     public void handleFirestoreQuery(List<Elbil> mElbilList) {
@@ -155,6 +174,7 @@ public class CarSearchActivity extends AppCompatActivity {
             intent.putExtra("Elbil", mElbilList.get(0));
             startActivity(intent);
         } else if (mElbilList.size() > 1) {
+            //todo startActivity CarInfoActivity ==> CarSelectionActivity ==> CarInfoActivity
             Intent intent = new Intent(this, CarSelectionActivity.class);
             intent.putParcelableArrayListExtra("CarList", new ArrayList<>(mElbilList));
             intent.putExtra("Missing", found);
@@ -165,159 +185,205 @@ public class CarSearchActivity extends AppCompatActivity {
         } else {
             //todo: show popup dialog choice of "try again?" or "manual selection"?
             System.out.println("NO FIRESTORE CARS FOUND: " + mElbilList.size());
+            Toast.makeText(this, "[POPUP MELDING] SJEKK AT REG NR STEMMER ELLER VELG BIL MANUELT \n (INGEN BIL MATCH FRA API)", Toast.LENGTH_LONG).show();
+            //todo: check if manual selection:
+            handleFirestoreQuery(allCarsList);
+            //todo: else "try different regNr"
         }
     }
 
 
-    private void searchFilteredCars(String[] responses) {
+    private void iterateFilteredCars(String[] responses) {
         Toast.makeText(this,
                 "API MODEL RESPONSE:\n" + Arrays.toString(responses)
                         + "\n; (LENGTH: " + responses.length + " )\n"
                         + "\n API MODEL YEAR RESPONSE: " + modelYear,
                 Toast.LENGTH_LONG).show();
-        System.out.println("API MODEL RESPONSE: " + Arrays.toString(responses) + "; LENGTH: " + responses.length);
+        System.out.println("API MODEL RESPONSE: " + Arrays.toString(responses) + " ; LENGTH: " + responses.length);
 
+        if (Arrays.toString(responses).isEmpty()) {
+            System.out.println("MODEL RESPONSE FROM API IS EMPTY ; RETURNING");
+            return;
+        }
 
+        bitSet = new BitSet(4);
+        System.out.println("INIT BIT SET LENGTH: " + bitSet.length() + " [Size: " + bitSet.size() + "]");
+        System.out.println("RESPONSE LENGTH: " + responses.length);
+
+        int count = 0;
         for (Elbil elbil : allCarsList) {
             for (String response : responses) {
-                if (!found[0]) checkFilteredCars(BRAND, elbil, response);
-                if (!found[1]) checkFilteredCars(MODEL, elbil, response);
-                // if (!found[2]) checkFilteredCars(MODELYEAR, elbil, modelYear);
-                if (!found[3]) checkFilteredCars(BATTERY, elbil, response);
+                int bitSetLength = bitSet.length();
+                System.out.println("CURRENT BIT SET/RESPONSES LENGTH: " + bitSetLength + " / " + responses.length);
+
+                //check filtered car brands if brand not found
+                if (!found[0]) {
+                    System.out.println("( " + BRAND + " ) CURRENT RESPONSE: " + response + " ; COUNT [" + count + "]");
+                    System.out.println("( " + BRAND + " ) CURRENT FOUND ARRAY: " + Arrays.toString(found));
+                    checkFilteredCars(BRAND, elbil, response);
+                    if (found[0]) {
+                        System.out.println("FOUND EXACT BRAND: "
+                                + foundHashMap.get(BRAND) + " ; " + found[0] + " ; CONTINUE");
+                        continue;
+                    } else System.out.println(BRAND + " WAS NOT FOUND ; " + found[0]);
+                } else System.out.println(BRAND + " HAS ALREADY BEEN FOUND ==> " + found[0]);
+
+                //check filtered car models if model not found
+                if (!found[1]) {
+                    System.out.println("( " + MODEL + " ) CURRENT RESPONSE: " + response + " ; COUNT [" + count + "]");
+                    System.out.println("( " + MODEL + " ) CURRENT FOUND ARRAY: " + Arrays.toString(found));
+                    checkFilteredCars(MODEL, elbil, response);
+                    if (found[1]) {
+                        System.out.println("FOUND EXACT MODEL: "
+                                + foundHashMap.get(MODEL) + " ; " + found[1] + " ; CONTINUE");
+                        continue;
+                    } else System.out.println(MODEL + " WAS NOT FOUND ; " + found[1]);
+                } else System.out.println(MODEL + " HAS ALREADY BEEN FOUND ==> " + found[1]);
+
+                //check filtered car batteries if battery not found
+                if (!found[3]) {
+                    System.out.println("( " + BATTERY + " ) CURRENT RESPONSE: " + response + " ; COUNT [" + count + "]");
+                    System.out.println("( " + BATTERY + " ) CURRENT FOUND ARRAY: " + Arrays.toString(found));
+                    checkFilteredCars(BATTERY, elbil, response);
+                    if (found[3]) {
+                        System.out.println("FOUND EXACT BATTERY: "
+                                + foundHashMap.get(BATTERY) + " ; " + found[3] + " ; CONTINUE");
+                        continue;
+                    } else System.out.println(BATTERY + " WAS NOT FOUND ; " + found[3]);
+                } else System.out.println(BATTERY + " HAS ALREADY BEEN FOUND ==> " + found[3]);
+
+                System.out.println("FINAL RESPONSE: " + response);
+                System.out.println("CURRENT BIT SET LENGTH: " + bitSet.length() + " ; "
+                        + " RESPONSES LENGTH: " + responses.length);
             }
-            //todo: Check out Java Bits ==> java bitset to boolean array?
-            // return if (responses.length <==> number of values in boolean array that is found)
+            count++;
+            if (bitSet.length() == responses.length) {
+                System.out.println("RETURNING @ COUNT: " + count);
+                System.out.println("FINISHED BIT SET LENGTH: " + bitSet.length()
+                        + " ; RESPONSES [" + responses.length + "]");
+                return;
+            }
+            System.out.println("COUNT: " + count + " / " + allCarsList.size());
         }
-        // foundFieldsMap.put(BRAND, foundBrands);
-        // foundFieldsMap.put(MODEL, foundModels);
-        // foundFieldsMap.put(MODELYEAR, foundModelYears);
-        // foundFieldsMap.put(BATTERY, foundBatteries);
-
-        System.out.println("MISSING: " + Arrays.toString(found));
-        System.out.println("FIELDS MAP: " + foundHashMap);
-        System.out.println("FOUND FIELDS MAP: " + foundFieldsMap);
-
-        determineMissing(found, fields);
+        System.out.println("FINISHED BIT SET LENGTH: " + bitSet.length()
+                + " ; RESPONSES [" + responses.length + "]");
+        //  determineFoundFields(found);
     }
 
     private void checkFilteredCars(String dataField, Elbil elbil, String response) {
-        //todo: ONLY NEED EXACT FIELDS HERE ==> FILTER LISTS TO BE USED IN SPINNER SELECTION INSTEAD
         switch (dataField) {
             case BRAND:
                 // foundBrands = carFilteredList.filterFields(elbil.getBrand(), response, foundBrands);
-                if (brand.isEmpty()) {
-                    System.out.println("FILTER BRAND: " + elbil.getBrand() + " ; " + response);
-                    String brandResponse = carFilteredList.filterExactMatch(elbil.getBrand(), response);
-                    if (brandResponse.equals(response)) {
-                        brand = brandResponse;
-                    }
-                    if (!brand.isEmpty()) {
-                        System.out.println("FOUND BRAND: " + brand + " EQUALS " + response);
-                        foundHashMap.put(BRAND, brand);
-                        found[0] = true;
-                    }
-                }
+                System.out.println("FILTER BRAND: " + elbil.getBrand() + " ; " + response + " ; " + found[0]);
+                String brandResponse = carFilteredList.filterExactMatch(elbil.getBrand(), response);
+                if (response.equals(brandResponse)) {
+                    brand = brandResponse;
+                    System.out.println("EXACT BRAND RESPONSE " + brandResponse + " EQUALS " + response);
+                    setBitSetValue(bitSet, found[0]);
+                    System.out.println("BIT SET BRAND LENGTH: " + bitSet.length());
+                    found[0] = true;
+                    foundHashMap.put(BRAND, brandResponse);
+                    System.out.println(response + " EQUALS " + foundHashMap.get(BRAND) + " IS " + found[0]);
+                } else System.out.println("EXACT BRAND NOT FOUND ==> " + found[0]);
                 break;
             case MODEL:
-                // foundModels = carFilteredList.filterFields(elbil.getModel(), response, foundModels);
-                // System.out.println("MODEL: " + elbil.getModel() + "===============> " + model);
-                if (model.isEmpty()) {
-                    System.out.println("FILTER MODEL: " + elbil.getModel() + " ; " + response);
-                    String modelResponse = carFilteredList.filterExactMatch(elbil.getModel(), response);
-                    if (modelResponse.equals(response)) {
-                        model = modelResponse;
-                    }
-                    if (!model.isEmpty()) {
-                        System.out.println("FOUND MODEL: " + model + " EQUALS " + response);
-                        foundHashMap.put(MODEL, model);
-                        found[1] = true;
-                    }
-                }
+                System.out.println("FILTER MODEL: " + elbil.getModel() + " ; " + response + " ; " + found[1]);
+                String modelResponse = carFilteredList.filterExactMatch(elbil.getModel(), response);
+                if (response.equals(modelResponse)) {
+                    model = modelResponse;
+                    System.out.println("EXACT MODEL RESPONSE " + modelResponse + " EQUALS " + response);
+                    setBitSetValue(bitSet, found[1]);
+                    System.out.println("BIT SET MODEL LENGTH: " + bitSet.length());
+                    found[1] = true;
+                    foundHashMap.put(MODEL, model);
+                    System.out.println(response + " EQUALS " + foundHashMap.get(MODEL) + " IS " + found[1]);
+                } else System.out.println("EXACT MODEL NOT FOUND ==> " + found[1]);
                 break;
             case MODELYEAR:
                 if (response != null) {
                     modelYear = response;
                     if (!modelYear.isEmpty()) {
                         found[2] = true;
-                        // foundModelYears.add(modelYear);
+                        foundHashMap.put(MODELYEAR, modelYear);
                     }
                 }
-                foundHashMap.put(MODELYEAR, modelYear);
-                foundFieldsMap.put(MODELYEAR, foundModelYears);
                 break;
             case BATTERY:
-                String br = response.replace("kwh", "");
-                // foundBatteries = carFilteredList.filterFields(elbil.getBattery(), br, foundBatteries);
-                if (battery.isEmpty()) {
-                    System.out.println("FILTER BATTERY: " + elbil.getBattery() + " ; " + response);
-                    String batteryResponse = carFilteredList.filterExactMatch(elbil.getBattery(), br);
-                    if (batteryResponse.equals(br)) {
-                        battery = br;
-                    }
-                    if (!battery.isEmpty()) {
-                        System.out.println("FOUND BATTERY: " + battery + " EQUALS " + response);
-                        foundHashMap.put(BATTERY, battery);
-                        found[3] = true;
-                    }
-                }
+                System.out.println("FILTER BATTERY: " + elbil.getBattery() + " ; " + response + " ; " + found[3]);
+                String batteryResponse = response.replace("kwh", "");
+                batteryResponse = carFilteredList.filterExactMatch(elbil.getBattery(), batteryResponse);
+                if (response.replace("kwh", "").equals(batteryResponse)) {
+                    battery = batteryResponse;
+                    System.out.println("EXACT BATTERY RESPONSE " + batteryResponse + " EQUALS " + response);
+                    setBitSetValue(bitSet, found[3]);
+                    System.out.println("BIT SET BATTERY LENGTH: " + bitSet.length());
+                    found[3] = true;
+                    foundHashMap.put(BATTERY, batteryResponse);
+                    System.out.println(response + " EQUALS " + foundHashMap.get(BATTERY) + " IS " + found[3]);
+                } else System.out.println("EXACT BATTERY NOT FOUND ==> " + found[3]);
                 break;
             default:
-                if (response != null)
-                    modelResponse = response.toLowerCase().split("\\W+"); //The \\W+ will match all non-alphabetic characters occurring one or more times.
-                else System.out.println("NO SUCH DATA...");
-                searchFilteredCars(modelResponse);
+                if (response != null) {
+                    String[] modelResponses = response.toLowerCase().split("\\W+"); //The \\W+ will match all non-alphabetic characters occurring one or more times.
+                    iterateFilteredCars(modelResponses);
+                } else System.out.println("NO SUCH DATA...");
         }
     }
 
-    private void determineMissing(boolean[] missing, String[] fields) {
+    private void setBitSetValue(BitSet bitSet, boolean found) {
+        int currentLength = bitSet.length();
+        if (bitSet.length() == 0 && !found) {
+            System.out.println("BIT SET LENGTH: " + currentLength + " == " + bitSet.length());
+            bitSet.set(0, true);
+            System.out.println("BIT SET LENGTH: " + currentLength + " ===> " + bitSet.length());
+        } else if (bitSet.length() == 1 && !found) {
+            System.out.println("BIT SET LENGTH: " + currentLength + " == " + bitSet.length());
+            bitSet.set(1, true);
+            System.out.println("BIT SET LENGTH: " + currentLength + " ===> " + bitSet.length());
+        } else if (bitSet.length() == 2 && !found) {
+            System.out.println("BIT SET LENGTH: " + currentLength + " == " + bitSet.length());
+            bitSet.set(2, true);
+            System.out.println("BIT SET LENGTH: " + currentLength + " ===> " + bitSet.length());
+        } else if (bitSet.length() == 3 && !found) {
+            System.out.println("BIT SET LENGTH: " + currentLength + " == " + bitSet.length());
+            bitSet.set(3, true);
+            System.out.println("BIT SET LENGTH: " + currentLength + " ===> " + bitSet.length());
+        } else {
+            System.out.println(found + " ; BIT SET LENGTH: " + currentLength);
+        }
+    }
+
+    private void determineFoundFields(boolean[] found) {
         System.out.println("<FROM DETERMINE MISSING>");
-        if (missing[0] && missing[1] && missing[2]) {
-            System.out.println("(FOUND_BRAND && FOUND_MODEL && FOUND_BATTERY) == TRUE");
+        //todo: check found[2] ==> foundModelYear
+        if (found[0] && found[1] && found[3]) {
+            System.out.println("(FOUND_BRAND && FOUND_MODEL && FOUND_BATTERY) == TRUE ; "
+                    + brand + " && " + model + " && " + battery + " [" + modelYear + "]");
             String modelResponse = BRAND + MODEL + BATTERY;
-            System.out.println("API MODEL RESPONSE FIELDS: " + modelResponse);
-
-            System.out.println(BRAND + " == " + brand);
-            System.out.println(MODEL + " == " + model);
-            System.out.println(MODELYEAR + " == " + modelYear);
-            System.out.println(BATTERY + " == " + battery);
-
-            // query = firestoreQuery.makeCompoundQuery(elbilReference, modelResponse, foundHashMap);
-            //todo: remove below query after testing
-            query = elbilReference
-                    .whereEqualTo(BRAND, brand)
-                    .whereEqualTo(MODEL, model)
-                    .whereEqualTo(BATTERY, battery);
+            query = firestoreQuery.makeCompoundQuery(elbilReference, modelResponse, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
-        } else if (missing[0] && missing[1]) {
-            System.out.println("(FOUND_BRAND && FOUND_MODEL) == TRUE");
+        } else if (found[0] && found[1]) {
+            System.out.println("(FOUND_BRAND && FOUND_MODEL) == TRUE ; " + brand + " && " + model + " [" + modelYear + "]");
             query = firestoreQuery.makeCompoundQuery(elbilReference, BRAND + MODEL, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
-        } else if (missing[0] && missing[2]) {
-            System.out.println("(FOUND_BRAND && FOUND_BATTERY) == TRUE");
+        } else if (found[0] && found[3]) {
+            System.out.println("(FOUND_BRAND && FOUND_BATTERY) == TRUE ; " + brand + " && " + battery + " [" + modelYear + "]");
             query = firestoreQuery.makeCompoundQuery(elbilReference, BRAND + BATTERY, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
-        } else if (missing[1] && missing[2]) {
-            System.out.println("(FOUND_MODEL && FOUND_BATTERY) == TRUE");
+        } else if (found[1] && found[3]) {
+            System.out.println("(FOUND_MODEL && FOUND_BATTERY) == TRUE ; " + model + " && " + battery + " [" + modelYear + "]");
             query = firestoreQuery.makeCompoundQuery(elbilReference, MODEL + BATTERY, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
-        } else if (missing[0]) {
-            System.out.println("FOUND_BRAND == TRUE");
+        } else if (found[0]) {
+            System.out.println("FOUND_BRAND == TRUE ; " + brand + " [" + modelYear + "]");
             query = firestoreQuery.makeCompoundQuery(elbilReference, BRAND, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
-        } else if (missing[1]) {
-            System.out.println("FOUND_MODEL == TRUE");
-            System.out.println("MODEL: " + model + "; MODEL YEAR: " + modelYear);
-
-            System.out.println("API MODEL RESPONSE FIELDS: " + MODEL);
-            System.out.println("API RESPONSE FIELDS" + Arrays.toString(fields));
-
+        } else if (found[1]) {
+            System.out.println("FOUND_MODEL == TRUE ; " + model + " [" + modelYear + "]");
             query = firestoreQuery.makeCompoundQuery(elbilReference, MODEL, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
-
-            //  Toast.makeText(this, "EXECUTING COMPOUND FIRESTORE QUERY..)", Toast.LENGTH_LONG).show();
-            //  if (!modelYear.isEmpty()) firestoreQuery.compoundFirestoreQuery(model, modelYear);
-        } else if (missing[2]) {
-            System.out.println("FOUND_BATTERY == TRUE");
+        } else if (found[3]) {
+            System.out.println("FOUND_BATTERY == TRUE ; " + battery + " [" + modelYear + "]");
             query = firestoreQuery.makeCompoundQuery(elbilReference, BATTERY, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
         } else {
@@ -326,49 +392,13 @@ public class CarSearchActivity extends AppCompatActivity {
         }
     }
 
-
-    private void initHashMapFields() {
-        foundHashMap = new HashMap<>();
-        foundHashMap.put(BRAND, brand);
-        foundHashMap.put(MODEL, model);
-        foundHashMap.put(MODELYEAR, modelYear);
-        foundHashMap.put(BATTERY, battery);
-        // foundHashMap.put(FASTCHARGE, fastCharge);
-        System.out.println("FIELDS MAP: " + foundHashMap);
-
-        foundFieldsMap = new HashMap<>();
-        foundFieldsMap.put(BRAND, foundBrands);
-        foundFieldsMap.put(MODEL, foundModels);
-        foundFieldsMap.put(MODELYEAR, foundModelYears);
-        foundFieldsMap.put(BATTERY, foundBatteries);
-        // foundFieldsMap.put(FASTCHARGE, fastCharges);
-        System.out.println("FOUND FIELDS MAP: " + foundFieldsMap);
-    }
-
-    private void initFoundResponseLists() {
-        //Init new or clear existing foundBrands
+    private void initFields() {
         brand = "";
-        if (foundBrands == null) foundBrands = new ArrayList<>();
-        else foundBrands.clear();
-        //Init new or clear existing foundModels
         model = "";
-        if (foundModels == null) foundModels = new ArrayList<>();
-        else foundModels.clear();
-        //Init new or clear existing foundModelYears
         modelYear = "";
-        if (foundModelYears == null) foundModelYears = new ArrayList<>();
-        else foundModelYears.clear();
-        //Init new or clear existing foundBatteries
         battery = "";
-        if (foundBatteries == null) foundBatteries = new ArrayList<>();
-        else foundBatteries.clear();
-
-        found = new boolean[4]; //foundBrand, foundModel, foundModelYear, foundBattery
-        //todo: make all true at first and change to false if exact field is found
-        // or change name to "found" instad of "found"
-        Arrays.fill(found, Boolean.FALSE);
+        // fastCharge = "";
     }
-
 
     public void showCarInfo(View view) {
         myCarInfo = new Dialog(this);

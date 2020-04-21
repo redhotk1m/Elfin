@@ -3,7 +3,9 @@ package com.example.elfin.car;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.example.elfin.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -25,9 +27,43 @@ public class SharedCarPreferences {
 
         if (mCarList == null) mCarList = new ArrayList<>();
        // mCarList.add(new Elbil("Legg til bil", null, null, null, null, null));
-        mCarList.add(new Elbil("Legg til bil"));
+       // mCarList.add(new Elbil("Legg til bil"));
         return mCarList;
     }
 
+    public List<Elbil> updateSavedCars(SharedPreferences sharedPreferences, ArrayList<Elbil> elbils) {
+        // SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+       // ArrayList<Elbil> elbils = getSavedCars(sharedPreferences);
+       // ArrayList<Elbil> elbils = new ArrayList<>();
+       // elbils = getSavedCars(sharedPreferences);
+       // elbils.add(elbil);
+        System.out.println("mCarList: " + elbils);
+       // elbils.remove(elbil);
+       // System.out.println("REMOVED LIST: " + elbils);
+        mCarList = new ArrayList<>();
+        for (Elbil elbil : elbils) {
+            if (elbil != null) {
+                mCarList.add(elbil);
+            }
+        }
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //editor.clear(); //clear shared preferences
+        Gson gson = new Gson();
+        //to contain ArrayList as Json form
+       // mCarList.addAll(mCarListAll);
+        String json = gson.toJson(elbils);
+        editor.putString("car list", json);
+        editor.apply();
+
+        return elbils;
+    }
+
+    public void clearSharedPreferences(SharedPreferences sharedPreferences) {
+       // SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear(); //clear shared preferences
+        editor.apply();
+    }
 
 }

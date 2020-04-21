@@ -16,13 +16,17 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TimingLogger;
+import android.view.MenuItem;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,15 +49,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     public EditText editText;
-    DisplaySuggestions displaySuggestions;
+    public DisplaySuggestions displaySuggestions;
     //TextView textView;
     public ListView listViewSuggest;
-    ArrayAdapter<String> arrayAdapterSuggestions;
+    public ArrayAdapter<String> arrayAdapterSuggestions;
     String destinationID;
     public ArrayList<ChargerItem> allChargingStations;
     private boolean chargingStationsFound = false;
     public TextView destinacionTextView;
-    String destionacionValidacion;
+    public String destionacionValidacion;
+    public Boolean isSelected = false;
+
 
     private ArrayList<Elbil> mCarList;
     private ArrayAdapter adapter;
@@ -65,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private CarAdapter mCarAdapter;
     private SharedPreferences sharedPreferences;
     private SharedCarPreferences sharedCarPreferences;
+    private boolean initDropDown;
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -75,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         // startActivity(new Intent(this, CarSearchActivity.class));
 
+        dropdown = findViewById(R.id.chooseCar);
         //textView = findViewById(R.id.textViewSuggest);
         listViewSuggest = findViewById(R.id.listViewSuggest);
         listViewSuggest.setVisibility(View.INVISIBLE);
@@ -92,7 +102,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //startActivity(intent);
         destinacionTextView = findViewById(R.id.textViewFyllIn);
         destinacionTextView.setVisibility(View.INVISIBLE);
-        EditTextFunctions editTextFunctions = new EditTextFunctions(this);
+
+
+        EditTextFunctions editTextFunctions = new EditTextFunctions(this, isSelected);
         editTextFunctions.setText();
 
 
@@ -120,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("allStations"));
+
         //Log.d("Debug2",new MainActivity().editText.getText().toString());
     }
 
@@ -151,20 +164,24 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private void getSharedCarPreferences(SharedPreferences sharedPreferences) {
         sharedCarPreferences = new SharedCarPreferences();
         mCarList = sharedCarPreferences.getSavedCars(sharedPreferences);
+        //todo: setIconImage and setSpinnerDisplay can be done in "Legg til bil" instead of here
         for (Elbil elbil : mCarList) {
             elbil.setIconImage(R.drawable.ic_car_black_24dp);
-            elbil.setSpinnerDisplay(elbil.toString());
+            //todo: fix elbil.toString()
+            String display = elbil.getBrand() + " " + elbil.getModel() + " (" + elbil.getModelYear() + ")";
+            elbil.setSpinnerDisplay(display);
         }
+        initDropDown = true;
         initCarSpinner();
     }
 
 
     private void initCarSpinner() {
-        mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
+        // mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
         mCarList.add(new Elbil(R.drawable.ic_add_box_black_24dp, getString(R.string.add_car)));
         mCarAdapter = new CarAdapter(this, mCarList);
 
-        dropdown = findViewById(R.id.chooseCar);
+        dropdown.setSelection(0, false);
         dropdown.setAdapter(mCarAdapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -172,7 +189,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 Toast.makeText(adapterView.getContext(),
                         "OnItemSelectedListener: \n" + adapterView.getItemAtPosition(position).toString(),
                         Toast.LENGTH_LONG).show();
-                getSelectedCar();
+                if (initDropDown) System.out.println("INIT SPINNER: " + initDropDown);
+                else getSelectedCar(view);
             }
 
             @Override
@@ -180,19 +198,59 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             }
         });
+        initDropDown = false;
     }
 
-    private void getSelectedCar() {
+    private void getSelectedCar(View view) {
         Elbil elbil = (Elbil) dropdown.getSelectedItem();
         String display = elbil.getSpinnerDisplay();
         if (getString(R.string.add_car).equals(display))
             startActivity(new Intent(this, CarSearchActivity.class));
-        else System.out.println("ITEM SELECTED: " + elbil.toString());
+        else showPopup(view, elbil); //todo: remove selected position instead of elbil objekt
+    }
+
+    public void showPopup(View view, final Elbil elbil) {
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.item1:
+                        Toast.makeText(MainActivity.this, "Item 1: Show Car clicked", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.item2:
+                        // mCarList.remove(elbil);
+                        // System.out.println("SELECTED ELBIL BRAND: " + elbil.getBrand());
+                        System.out.println("this mCarList: " + mCarList);
+                        mCarList.remove(elbil);
+                        mCarList.remove(mCarList.size() - 1);
+                        System.out.println("removed mCarList: " + mCarList);
+                        sharedCarPreferences = new SharedCarPreferences();
+                        sharedCarPreferences.updateSavedCars(sharedPreferences, mCarList);
+                        getSharedCarPreferences(sharedPreferences);
+                        Toast.makeText(MainActivity.this, "Item 2: Delete Car clicked", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.item3:
+                        sharedCarPreferences = new SharedCarPreferences();
+                        sharedCarPreferences.clearSharedPreferences(sharedPreferences);
+                        getSharedCarPreferences(sharedPreferences);
+                        Toast.makeText(MainActivity.this, "Item 3: DELETE ALL CARS clicked", Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.inflate(R.menu.popup_car_menu);
+        popup.show();
     }
 
     public void displaySuggestions(String adress) {
         final ArrayList<String> placeIdList = new ArrayList<>();
+
+
         displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
+
             ArrayList<String> list = new ArrayList<>();
 
 
@@ -208,28 +266,58 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         }
                     }
                 }
-                listViewSuggest.setVisibility(View.VISIBLE);
+
+                System.out.println(isSelected);
+                if(!isSelected){
+                    listViewSuggest.setVisibility(View.VISIBLE);
+                } else {
+                    listViewSuggest.setVisibility(View.INVISIBLE);
+                    isSelected=false;
+                }
                 arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
+                if(listViewSuggest.getAdapter().getCount()<=1){
+                    listViewSuggest.setVisibility(View.INVISIBLE);
+                }
+
             }
         });
-
-
-
-        displaySuggestions.execute("");
+        displaySuggestions.execute();
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
+                isSelected=true;
                 setDestinationID(placeIdList.get(position));
                 destionacionValidacion = editText.getText().toString();
-                listViewSuggest.setVisibility(View.INVISIBLE);
                 arrayAdapterSuggestions.clear();
                 closeKeyboard(view);
 
             }
         });
+
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && (i == KeyEvent.KEYCODE_ENTER || i == KeyEvent.KEYCODE_DPAD_CENTER)){
+                    editText.setText(listViewSuggest.getItemAtPosition(0).toString());
+                    destionacionValidacion = editText.getText().toString();
+                    setDestinationID(placeIdList.get(0));
+                    isSelected=true;
+                    closeKeyboard(view);
+                }
+                return false;
+            }
+        });
+
+
+
+
     }
+
+
+
 
     public void setDestinationID(String destinationID){
         this.destinationID = destinationID;
@@ -254,13 +342,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     bundle.putDouble("longditude", gpsTracker.getLongitude());
                     bundle.putDouble("latitude", gpsTracker.getLatitude());
                     bundle.putString("destinationID", destinationID);
-                    bundle.putString("destinatinasjon",editText.getText().toString() );
+                    bundle.putString("destinatinasjon", editText.getText().toString());
                     intent.putExtra("bundle", bundle);
                     startActivity(intent);
                 }
             }
-        }
-        else {
+        } else {
             destinacionTextView.setVisibility(View.VISIBLE);
         }
 
@@ -270,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public ArrayList<ChargerItem> getAllChargingStations() {
         return allChargingStations;
     }
+
 
     public void setAllChargingStations(ArrayList<ChargerItem> allChargingStations) {
         this.allChargingStations = allChargingStations;

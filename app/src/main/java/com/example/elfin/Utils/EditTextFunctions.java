@@ -9,23 +9,28 @@ import android.widget.TextView;
 
 import com.example.elfin.MainActivity;
 
+import java.sql.SQLOutput;
+
 public class EditTextFunctions {
 
     MainActivity mainActivity;
     EditText editText;
     ListView listViewSuggest;
     TextView destinacionTextView;
+    Boolean isSelected;
+    int temp = 0;
 
     /**
      * Class for setting the different functionalities for editText --> focuse changed, textchanged
      *
      */
 
-    public EditTextFunctions(MainActivity mainActivity){
+    public EditTextFunctions(MainActivity mainActivity, boolean isSelected){
         this.mainActivity=mainActivity;
         editText=mainActivity.editText;
         listViewSuggest=mainActivity.listViewSuggest;
         destinacionTextView=mainActivity.destinacionTextView;
+        this.isSelected = isSelected;
     }
 
 
@@ -40,6 +45,8 @@ public class EditTextFunctions {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+
+
                 if(editable.toString().length()>= 1){
                     destinacionTextView.setVisibility(View.INVISIBLE);
                 }
@@ -48,17 +55,16 @@ public class EditTextFunctions {
                     listViewSuggest.setVisibility(View.INVISIBLE);
                 }
 
-                if(editable.toString().length() > 10){
-                    listViewSuggest.setVisibility(View.INVISIBLE);
-                }
 
-                else if(editable.toString().length() >= 3){
+                if(editable.toString().length() >= 3){
                     mainActivity.displaySuggestions(editable.toString());
                     //listViewSuggest.setVisibility(View.INVISIBLE);
                 }
 
+
             }
         });
+
 
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -66,11 +72,14 @@ public class EditTextFunctions {
                 if (!hasFocus) {
                     listViewSuggest.setVisibility(View.INVISIBLE);
                     mainActivity.closeKeyboard(view);
+                } else {
+                    isSelected=false;
                 }
             }
         });
 
+
+
     }
-    //enums fasiliteter
 
 }

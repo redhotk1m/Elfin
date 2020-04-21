@@ -95,12 +95,10 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-         JsonToString jsonToString = new JsonToString();
-         lists = jsonToString.convertJsonToArrayListString(s);
-         asyncResponse.processFinish(lists);
+        JsonToString jsonToString = new JsonToString();
+        lists = jsonToString.convertJsonToArrayListString(s);
+        asyncResponse.processFinish(lists);
     }
 
 
 }
-
-
