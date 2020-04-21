@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         destinacionTextView.setVisibility(View.INVISIBLE);
 
 
-        EditTextFunctions editTextFunctions = new EditTextFunctions(this);
+        EditTextFunctions editTextFunctions = new EditTextFunctions(this, isSelected);
         editTextFunctions.setText();
 
 
@@ -245,7 +245,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void displaySuggestions(String adress) {
         final ArrayList<String> placeIdList = new ArrayList<>();
+
+
         displaySuggestions = new DisplaySuggestions(getBaseContext(), adress, new AsyncResponse() {
+
             ArrayList<String> list = new ArrayList<>();
 
 
@@ -261,29 +264,30 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                     }
                 }
 
-                listViewSuggest.setVisibility(View.VISIBLE);
-                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1, list);
+                System.out.println(isSelected);
+                if(!isSelected){
+                    listViewSuggest.setVisibility(View.VISIBLE);
+                } else {
+                    listViewSuggest.setVisibility(View.INVISIBLE);
+                    isSelected=false;
+                }
+                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
+                if(listViewSuggest.getAdapter().getCount()<=1){
+                    listViewSuggest.setVisibility(View.INVISIBLE);
+                }
 
             }
         });
-
-
-
-
-
-
         displaySuggestions.execute();
-
-
         listViewSuggest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
+                isSelected=true;
                 setDestinationID(placeIdList.get(position));
                 destionacionValidacion = editText.getText().toString();
-                listViewSuggest.setVisibility(View.INVISIBLE);
                 arrayAdapterSuggestions.clear();
                 closeKeyboard(view);
 
@@ -295,12 +299,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && (i == KeyEvent.KEYCODE_ENTER || i == KeyEvent.KEYCODE_DPAD_CENTER)){
                     editText.setText(listViewSuggest.getItemAtPosition(0).toString());
+                    destionacionValidacion = editText.getText().toString();
+                    setDestinationID(placeIdList.get(0));
+                    isSelected=true;
                     closeKeyboard(view);
-
                 }
                 return false;
             }
         });
+
 
 
 

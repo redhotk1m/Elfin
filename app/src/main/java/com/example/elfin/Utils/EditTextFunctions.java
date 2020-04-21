@@ -25,12 +25,12 @@ public class EditTextFunctions {
      *
      */
 
-    public EditTextFunctions(MainActivity mainActivity){
+    public EditTextFunctions(MainActivity mainActivity, boolean isSelected){
         this.mainActivity=mainActivity;
         editText=mainActivity.editText;
         listViewSuggest=mainActivity.listViewSuggest;
         destinacionTextView=mainActivity.destinacionTextView;
-        this.isSelected = false;
+        this.isSelected = isSelected;
     }
 
 
@@ -46,6 +46,7 @@ public class EditTextFunctions {
             @Override
             public void afterTextChanged(Editable editable) {
 
+
                 if(editable.toString().length()>= 1){
                     destinacionTextView.setVisibility(View.INVISIBLE);
                 }
@@ -54,11 +55,8 @@ public class EditTextFunctions {
                     listViewSuggest.setVisibility(View.INVISIBLE);
                 }
 
-                if(editable.toString().length() > 10){
-                    listViewSuggest.setVisibility(View.INVISIBLE);
-                }
 
-                else if(editable.toString().length() >= 3){
+                if(editable.toString().length() >= 3){
                     mainActivity.displaySuggestions(editable.toString());
                     //listViewSuggest.setVisibility(View.INVISIBLE);
                 }
@@ -83,6 +81,5 @@ public class EditTextFunctions {
 
 
     }
-    //enums fasiliteter
 
 }
