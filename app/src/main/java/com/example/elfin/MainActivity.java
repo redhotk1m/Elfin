@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.TimingLogger;
 import android.view.MenuItem;
 import android.view.KeyEvent;
@@ -36,6 +37,7 @@ import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
+import com.example.elfin.Utils.DialogBox;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.Utils.GPSTracker;
 import com.example.elfin.adapter.CarAdapter;
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public TextView destinacionTextView;
     public String destionacionValidacion;
     public Boolean isSelected = false;
+
+    TextView headerText;
 
 
     private ArrayList<Elbil> mCarList;
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // startActivity(new Intent(this, CarSearchActivity.class));
 
         dropdown = findViewById(R.id.chooseCar);
+        headerText= findViewById(R.id.headerText);
         //textView = findViewById(R.id.textViewSuggest);
         listViewSuggest = findViewById(R.id.listViewSuggest);
         listViewSuggest.setVisibility(View.INVISIBLE);
@@ -105,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         EditTextFunctions editTextFunctions = new EditTextFunctions(this, isSelected);
         editTextFunctions.setText();
+
+
+
 
 
         /*
@@ -141,10 +149,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             logger.addSplit("finished");
             logger.dumpToLog();
             String message = intent.getStringExtra("case");
-            if ("error".equals(message))
+            if ("error".equals(message)) {
                 System.out.println("error");
-                //TODO: Error message to user
-            else {
+                DialogBox dialogBox = new DialogBox(context, "Feilmelding", "Fikk ikke hentet fra listen",
+                        "Prøv igjen", "Avslutt", -1);
+                dialogBox.createDialogBox();
+
+                //TODO: Error message to user -even
+            }else {
                 System.out.println("MOTATT I MAIN");
                 allChargingStations = ((App) getApplication()).getChargerItems();
                 LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);

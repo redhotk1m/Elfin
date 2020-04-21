@@ -1,6 +1,7 @@
 package com.example.elfin.Utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+
+import com.example.elfin.MainActivity;
 
 public class GPSTracker extends Service implements LocationListener {
 
@@ -125,30 +128,12 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
-        alertDialog.setTitle("GPS is settings");
+        DialogBox dialogBox = new DialogBox(context, "GPS is settings","Turn on your GPS to find nearby helpers",
+                "Settings", "Cancel",1);
+        dialogBox.createDialogBox();
 
-        alertDialog.setMessage("Turn on your GPS to find nearby helpers");
 
-        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                context.startActivity(intent);
-            }
-        });
-
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        alertDialog.show();
     }
 
     @Override
