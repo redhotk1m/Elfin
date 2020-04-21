@@ -175,7 +175,8 @@ public class CarSearchActivity extends AppCompatActivity {
             startActivity(intent);
         } else if (mElbilList.size() > 1) {
             //todo startActivity CarInfoActivity ==> CarSelectionActivity ==> CarInfoActivity
-            Intent intent = new Intent(this, CarSelectionActivity.class);
+           // Intent intent = new Intent(this, CarSelectionActivity.class);
+            Intent intent = new Intent(this, CarInfoActivity.class);
             intent.putParcelableArrayListExtra("CarList", new ArrayList<>(mElbilList));
             intent.putExtra("Missing", found);
             intent.putExtra("FieldMap", foundHashMap);
