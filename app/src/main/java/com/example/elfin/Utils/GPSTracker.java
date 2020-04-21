@@ -14,6 +14,14 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.example.elfin.Activities.Station.StationMap.PolyPoint;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class GPSTracker extends Service implements LocationListener {
 
     private final Context context;
@@ -21,6 +29,7 @@ public class GPSTracker extends Service implements LocationListener {
     boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
     public boolean canGetLocation = false;
+    private LocalBroadcastManager localBroadcastManager;
 
     Location location;
 
@@ -34,6 +43,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     public GPSTracker(Context context) {
         this.context = context;
+        localBroadcastManager = LocalBroadcastManager.getInstance(context);
     }
 
     @SuppressLint("MissingPermission")
@@ -149,15 +159,60 @@ public class GPSTracker extends Service implements LocationListener {
         });
 
         alertDialog.show();
+
     }
 
+    float[] result = new float[1];
+    float[] resultNext = new float[1];
     @Override
     public void onLocationChanged(Location arg0) {
-        // TODO Auto-generated method stub
-        // TODO: Kanskje legge inn permission sjekk hver gang her, istedenfor
-        System.out.println("loc changed" + arg0.getLatitude() + " " + arg0.getLongitude());
-        Location loc = getLocation();
-        System.out.println("loc changed med getloc" + loc.getLatitude() + " " + loc.getLongitude());
+        if (arg0.distanceTo(location) > 1000) {
+            location = arg0;
+            App app = (App) context.getApplicationContext();
+            ArrayList<PolyPoint> pointz = null;
+            if (app != null)
+                pointz = app.getPolypoints();
+            if (pointz != null) {
+                // TODO Auto-generated method stub
+                // TODO: Kanskje legge inn permission sjekk hver gang her, istedenfor
+                System.out.println("loc changed " + arg0.getLatitude() + " " + arg0.getLongitude());
+                int idx = 0;
+                Location.distanceBetween(pointz.get(0).getLatitude(), pointz.get(0).getLongditude(), arg0.getLatitude(), arg0.getLongitude(), result);
+                System.out.println(result[0] + " er distanse mellom punkt 0 og oss");
+                int counter = 0;
+                for (int i = 1; i < pointz.size(); i++) {
+                    Location.distanceBetween(pointz.get(i).getLatitude(), pointz.get(i).getLongditude(), arg0.getLatitude(), arg0.getLongitude(), resultNext);
+                    System.out.println("resN = " + resultNext[0] + "res = " + result[0]);
+                    if (resultNext[0] < result[0]) {
+                        idx = i;
+                        result[0] = resultNext[0];
+                        System.out.println("Nå har vi kjørt lenger enn før");
+                    }else{
+                        counter ++;
+                        if (counter > 20) {
+                            double currentDrivenKM = pointz.get(idx).getDrivenKM();
+                            System.out.println("Return med ca " + currentDrivenKM);
+                            sendKMDrivenSoFar(currentDrivenKM);
+                            return;
+                        }
+                    }
+                }
+                double currentDrivenKM = pointz.get(idx).getDrivenKM();
+                sendKMDrivenSoFar(currentDrivenKM);
+                System.out.println("Nå er vi kjørt ca: " + currentDrivenKM);
+            }
+        }
+
+    }
+
+    private void sendKMDrivenSoFar(double currentDrivenKM){
+        Intent intent = new Intent("updateKMList");
+        intent.putExtra("case","updateKMList");
+        intent.putExtra("drivenMetersSoFar",currentDrivenKM);
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void initializeDriving(){
 
     }
 
