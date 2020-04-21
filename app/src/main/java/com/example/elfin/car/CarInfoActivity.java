@@ -233,7 +233,6 @@ public class CarInfoActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear(); //clear shared preferences
         editor.apply();
-
     }
 
 }
