@@ -86,10 +86,10 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     //System.out.println("ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ");
                 }
 
-                int imageFast= R.drawable.greenstation;
-                int imageSlow= R.drawable.greenstation;
-                String counterFastString = ""+counterFast +" stk";
-                String counterLightString = "" + counterLightning + " stk";
+                int imageFast= R.drawable.nyladergreen;
+                int imageSlow= R.drawable.nyladergreen;
+                String counterFastString = ""+counterFast;
+                String counterLightString = "" + counterLightning;
 
 
                 if(counterLightning <= 0){

@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         String display = elbil.getSpinnerDisplay();
         if (getString(R.string.add_car).equals(display))
             startActivity(new Intent(this, CarSearchActivity.class));
-        else showPopup(view, elbil); //todo: remove selected position instead of elbil objekt
+       else showPopup(view, elbil); //todo: remove selected position instead of elbil objekt
     }
 
     public void showPopup(View view, final Elbil elbil) {
@@ -264,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
             @Override
             public void processFinish(ArrayList<ArrayList<String>> lists) {
+                //Arraylist av arraylist, en for navn og en for placeid
                 for (int i = 0; i < lists.size(); i++) {
                     for (int j = 0; j < lists.get(i).size(); j++) {
                         if (i == 0) {

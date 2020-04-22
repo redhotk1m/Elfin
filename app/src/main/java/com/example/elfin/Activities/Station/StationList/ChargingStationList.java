@@ -90,6 +90,8 @@ public class ChargingStationList extends Fragment {
         System.out.println("ON PAUSE LIST");
     }
 
+    ArrayList<ChargerItem>  chargeritems = new ArrayList<>();
+
     public void setAllValidStations(ArrayList<ChargerItem> validStations) {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
         if (spinner != null)
@@ -120,15 +122,58 @@ public class ChargingStationList extends Fragment {
         }*/
 
         validStations.sort(new MetersComparator());
+        chargeritems = validStations;
         recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.VISIBLE);
 
 
+
+
+
     }
 
     public void updateListKM(double drivenMetersSoFar) {
+
+        double chargerItemMeters = Double.parseDouble(chargeritems.get(0).getMFromStartLocation());
+        double chargerItemMeters2 = Double.parseDouble(chargeritems.get(1).getMFromStartLocation());
+        double chargerItemMeters3 = Double.parseDouble(chargeritems.get(2).getMFromStartLocation());
+
+        drivenMetersSoFar += 5000;
+
+        if(chargerItemMeters<drivenMetersSoFar){
+            System.out.println(chargeritems.get(0).getMFromStartLocation());
+            chargeritems.remove(0);
+
+            if(chargerItemMeters2<drivenMetersSoFar){
+                System.out.println(chargeritems.get(0).getMFromStartLocation());
+                chargeritems.remove(0);
+            }
+
+
+
+            if(chargerItemMeters3<drivenMetersSoFar){
+                System.out.println(chargeritems.get(0).getMFromStartLocation());
+                chargeritems.remove(0);
+            }
+
+        }
+
+
+        if(!chargeritems.isEmpty()){
+            drivenMetersSoFar -= 5000;
+            for (ChargerItem chargerItem: chargeritems){
+                double meterFromPoint = Double.parseDouble(chargerItem.getMFromStartLocation()) - drivenMetersSoFar;
+                chargerItem.setMFromStartLocation((float) meterFromPoint);
+            }
+        }
+
+
+        setAllValidStations(chargeritems);
+
+
+
         System.out.println("Nå har vi kjørt: " + drivenMetersSoFar + " meter, og dette vises i denne klassen");
     }
 }

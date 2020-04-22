@@ -1,6 +1,7 @@
 package com.example.elfin.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+
+import io.grpc.internal.SharedResourceHolder;
 
 public class AboutCharger extends AppCompatActivity implements OnMapReadyCallback {
     TextView textViewTitel;
@@ -234,14 +237,20 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
 
         if(infoFromList.get(0).toUpperCase().equals("FORTUM")){
             textViewHowToPayText.setText(howToChargeFortum);
+            textViewHowToPayText.setTextColor(Color.BLACK);
+            textViewPayMethod.setTextColor(Color.BLACK);
             textViewPayMethod.setText(paymentMethodFortum);
 
         } else if(infoFromList.get(0).toUpperCase().equals("GRØNN KONTAKT")) {
+            textViewHowToPayText.setTextColor(Color.BLACK);
+            textViewPayMethod.setTextColor(Color.BLACK);
             textViewHowToPayText.setText(howToChargeGreenContact);
             textViewPayMethod.setText(paymentMethodGreenContact);
         }
 
         else if(infoFromList.get(0).toUpperCase().equals("CIRCLE K")){
+            textViewHowToPayText.setTextColor(Color.BLACK);
+            textViewPayMethod.setTextColor(Color.BLACK);
             textViewPayMethod.setText(paymentMethodCirkleK);
             payMethodTitel.setText("Priser for CIrkle K");
             textViewHowToPayText.setText(howtoChargeCirkleK);

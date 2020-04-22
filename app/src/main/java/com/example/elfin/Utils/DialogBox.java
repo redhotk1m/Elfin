@@ -19,7 +19,6 @@ public class DialogBox {
     String yesButton;
     String noButton;
     int option;
-    Activity activity;
 
     public DialogBox(Context context, String title, String message, String yesButton, String noButton, int option){
         this.context=context;
