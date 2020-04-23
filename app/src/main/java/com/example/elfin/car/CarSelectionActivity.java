@@ -57,7 +57,20 @@ public class CarSelectionActivity extends AppCompatActivity {
         findViewsById();
 
 
+
+
         Intent intent = getIntent();
+
+
+        allCarsList = intent.getParcelableArrayListExtra("AllCarsList");
+        System.out.println("#####################################################################");
+        System.out.println("ALL CAR LIST SIZE: " + allCarsList);
+        System.out.println("#####################################################################");
+
+
+
+
+
         fieldMap = (HashMap<String, String>) intent.getSerializableExtra("FieldMap");
         //  System.out.println("INTENT HASH MAP: " + fieldMap);
         //  Toast.makeText(this, "INTENT HASH MAP: " + fieldMap, Toast.LENGTH_LONG).show();

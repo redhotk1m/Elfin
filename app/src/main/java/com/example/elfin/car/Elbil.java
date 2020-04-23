@@ -13,10 +13,10 @@ public class Elbil implements Parcelable {
 
     private int iconImage;
     private String spinnerDisplay;
-    private String  documentId, brand, model, modelYear, battery, fastCharge, effect;
+    private String documentId, brand, model, modelYear, battery, fastCharge, effect;
     private Map<String, Double> specs;
 
-    public Elbil(){
+    public Elbil() {
         //public no-arg constructor needed for firestore database
     }
 
@@ -196,6 +196,19 @@ public class Elbil implements Parcelable {
         //parcel.writeMap(specs);
     }
 
+    @Override
+    public String toString() {
+        return "Elbil{" +
+                "brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", modelYear='" + modelYear + '\'' +
+                ", battery='" + battery + '\'' +
+                ", fastCharge='" + fastCharge + '\'' +
+                ", effect='" + effect + '\'' +
+                '}';
+    }
+
+    /*
     @NonNull
     @Override
     public String toString() {
@@ -204,4 +217,5 @@ public class Elbil implements Parcelable {
         return spinnerDisplay;
         //return super.toString();
     }
+    */
 }

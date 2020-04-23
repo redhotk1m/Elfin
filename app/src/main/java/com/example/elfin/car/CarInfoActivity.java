@@ -34,7 +34,7 @@ public class CarInfoActivity extends AppCompatActivity {
     private final String BATTERY = "battery";
     private final String FASTCHARGE = "fastCharge";
 
-    private ArrayList<Elbil> elbils;
+    private ArrayList<Elbil> elbils, allElbils;
     private boolean[] found;
     private HashMap<String, String> fieldMap;
     private String brand, model, modelYear, battery, fastCharge;
@@ -65,6 +65,15 @@ public class CarInfoActivity extends AppCompatActivity {
         System.out.println("ELBIL FOUND BOOLEAN: " + elbilFound);
 
         Intent intent = getIntent();
+
+        //AllCarsList
+        allElbils = intent.getParcelableArrayListExtra("AllCarsList");
+        System.out.println("#####################################################################");
+        if (allElbils != null) System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: " + allElbils.size());
+        else System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: NULL");
+        System.out.println("#####################################################################");
+
+
         elbil = intent.getParcelableExtra("Elbil");
         if (elbil != null) {
             elbilFound = true;
