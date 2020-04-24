@@ -257,6 +257,7 @@ public class CarSpinnerSelection {
                 break;
             case BATTERY:
                 // filteredList.add(getString(R.string.choose_model_year));
+                //todo: check if equals brand and model too
                 for (Elbil elbil : allElbilList) {
                     if (elbil.getModelYear().equals(spinner.getSelectedItem()))
                         filteredCars.add(elbil);

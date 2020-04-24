@@ -16,7 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:dropDownWidth="340dp"
+        android:dropDownWidth="match_parent"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="@+id/rectangleTo"
         app:layout_constraintHorizontal_bias="0.0"

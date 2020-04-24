@@ -42,6 +42,7 @@ import com.example.elfin.Utils.DialogBox;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.Utils.GPSTracker;
 import com.example.elfin.adapter.CarAdapter;
+import com.example.elfin.car.CarInfoActivity;
 import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
 import com.example.elfin.car.SharedCarPreferences;
@@ -165,8 +166,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboardManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         listViewSuggest.setVisibility(View.INVISIBLE);
-
-
     }
 
     private void getSharedCarPreferences(SharedPreferences sharedPreferences) {
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //todo: setIconImage and setSpinnerDisplay can be done in "Legg til bil" instead of here
         for (Elbil elbil : mCarList) {
             elbil.setIconImage(R.drawable.ic_car_black_24dp);
-            //todo: fix elbil.toString()
+            //todo: fix elbil.toString() or make elbil.display()
             String display = elbil.getBrand() + " " + elbil.getModel() + " (" + elbil.getModelYear() + ")";
             elbil.setSpinnerDisplay(display);
         }
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
 
     private void initCarSpinner() {
-        // mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
+        if (mCarList.size() == 0) mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
         mCarList.add(new Elbil(R.drawable.ic_add_box_black_24dp, getString(R.string.add_car)));
         mCarAdapter = new CarAdapter(this, mCarList);
 
@@ -207,6 +206,17 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         });
         initDropDown = false;
+
+        dropdown.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(MainActivity.this, "SPINNER ON LONG CLICKED: \n"
+                        + dropdown.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                Elbil elbil = (Elbil) dropdown.getSelectedItem();
+                showPopup(view, elbil); //todo: remove selected position instead of elbil objekt
+                return true;
+            }
+        });
     }
 
     private void getSelectedCar(View view) {
@@ -214,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         String display = elbil.getSpinnerDisplay();
         if (getString(R.string.add_car).equals(display))
             startActivity(new Intent(this, CarSearchActivity.class));
-       else showPopup(view, elbil); //todo: remove selected position instead of elbil objekt
     }
 
     public void showPopup(View view, final Elbil elbil) {
@@ -225,6 +234,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 switch (menuItem.getItemId()) {
                     case R.id.item1:
                         Toast.makeText(MainActivity.this, "Item 1: Show Car clicked", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, CarInfoActivity.class);
+                        intent.putExtra("Elbil", elbil);
+                        startActivity(intent);
                         return true;
                     case R.id.item2:
                         // mCarList.remove(elbil);
