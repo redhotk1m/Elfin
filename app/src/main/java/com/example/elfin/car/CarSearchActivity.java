@@ -168,7 +168,7 @@ public class CarSearchActivity extends AppCompatActivity {
     }
 
     public void handleFirestoreQuery(List<Elbil> mElbilList) {
-       // Toast.makeText(this, "FIRESTORE CAR LIST SIZE: " + mElbilList.size(), Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, "FIRESTORE CAR LIST SIZE: " + mElbilList.size(), Toast.LENGTH_LONG).show();
         if (mElbilList.size() == 1) {
             System.out.println("#################################################################");
             System.out.println("EXACT MATCH FOUND: " + mElbilList.get(0).toString()
@@ -243,6 +243,15 @@ public class CarSearchActivity extends AppCompatActivity {
 
                 System.out.println("CURRENT BIT SET LENGTH: [ " + bitSet.length() + " / " + responses.length + " ]");
 
+
+                //todo: check to find model year if elbil model and/or brand has been found
+                if (!found[2] && !modelYear.isEmpty()) {
+                    if (found[0] && found[1]) System.out.println("CHECK ELBIL BRAND AND MODEL");
+                    else if (found[0]) System.out.println("CHECK ELBIL BRAND FOR MODEL YEAR");
+                    else if (found[1]) System.out.println("CHECK ELBIL MODEL FOR MODEL YEAR");
+                } else System.out.println("EXACT (" + MODELYEAR + ") ALREADY FOUND ; " + found[0]);
+
+
                 //check filtered car batteries if battery not found
                 if (!found[3]) {
                     System.out.println("(" + BATTERY + ") CURRENT RESPONSE: " + response + " ; ITERATION [" + count + "]");
@@ -296,6 +305,21 @@ public class CarSearchActivity extends AppCompatActivity {
                         found[2] = true;
                         foundHashMap.put(MODELYEAR, modelYear);
                     }
+
+                    //todo: check model year response with cars in database
+                    /*
+                    String[] modelYearResponses = response.trim().split("-");
+                    if (modelYearResponses.length == 1) {
+                        if (modelYear.equals(modelYearResponses[0])) {
+                            System.out.println(modelYear + " == " + modelYearResponses[0]);
+                            found[2] = true;
+                        } else if (modelYearResponses.length == 2) {
+                            //todo: check if model year is between YEAR0 <--> YEAR1
+                            System.out.println(modelYear + " IN BETWWEN " + modelYearResponses[0] + " - " + modelYearResponses[1]);
+                            found[2] = true;
+                        }
+                    }
+                    */
                 }
                 break;
             case BATTERY:
@@ -309,7 +333,9 @@ public class CarSearchActivity extends AppCompatActivity {
                 break;
             default:
                 if (response != null) {
-                    String[] modelResponses = response.toLowerCase().split("\\W+"); //The \\W+ will match all non-alphabetic characters occurring one or more times.
+                    //todo: does not work with "e-tron" ; do not split with " - " ==> "\\s+"
+                   // String[] modelResponses = response.toLowerCase().split("\\W+"); //The \\W+ will match all non-alphabetic characters occurring one or more times.
+                    String[] modelResponses = response.toLowerCase().split("\\s+");
                     iterateFilteredCars(modelResponses);
                 } else System.out.println("NO SUCH DATA...");
         }
