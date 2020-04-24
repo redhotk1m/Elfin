@@ -23,7 +23,6 @@
         <activity android:name=".car.CarSelectionActivity" />
         <activity android:name=".car.CarInfoActivity" />
         <activity android:name=".car.NewCarActivity" />
-        <activity android:name=".car.AddCarActivity" />
         <activity android:name=".Activities.AboutCharger"/>
         <activity android:name=".testing.FilterTestActivity" />
         <activity android:name=".MainActivity"

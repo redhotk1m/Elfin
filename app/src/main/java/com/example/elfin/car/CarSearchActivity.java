@@ -174,7 +174,7 @@ public class CarSearchActivity extends AppCompatActivity {
             System.out.println("EXACT MATCH FOUND: " + mElbilList.get(0).toString()
                     + "[ " + mElbilList.size() + " / " + allCarsList.size() + " ]");
             System.out.println("#################################################################");
-            Intent intent = new Intent(CarSearchActivity.this, CarInfoActivity.class);
+            Intent intent = new Intent(this, CarInfoActivity.class);
             intent.putExtra("Elbil", mElbilList.get(0));
             startActivity(intent);
         } else if (mElbilList.size() == allCarsList.size() && allCarsList.size() != 0) {
@@ -183,10 +183,16 @@ public class CarSearchActivity extends AppCompatActivity {
             System.out.println("ALL MATCHES FOUND: [ " + mElbilList.size() + " / " + allCarsList.size() + " ]");
             System.out.println("#################################################################");
             Toast.makeText(this, "[POPUP DIALOG]\n\nPRØV IGJEN? eller VELG BIL MANUELT?", Toast.LENGTH_LONG).show();
+            //todo: if dialog "Velg bil manuelt" ;
+            Intent intent = new Intent(this, CarSelectionActivity.class);
+            intent.putParcelableArrayListExtra("AllCarsList", new ArrayList<>(allCarsList));
+            startActivity(intent);
         } else if (mElbilList.size() > 1) {
             //todo startActivity CarInfoActivity ==> CarSelectionActivity ==> CarInfoActivity
             // Intent intent = new Intent(this, CarSelectionActivity.class);
-            System.out.println("#################################################################");
+            System.out.println("##############Intent intent = new Intent(CarSearchActivity.this, CarInfoActivity.class);\n" +
+                    "            intent.putExtra(\"Elbil\", mElbilList.get(0));\n" +
+                    "            startActivity(intent);###################################################");
             System.out.println("MATCHES FOUND: [ " + mElbilList.size() + " / " + allCarsList.size() + " ]");
             System.out.println("#################################################################");
             Intent intent = new Intent(this, CarInfoActivity.class);
@@ -323,6 +329,7 @@ public class CarSearchActivity extends AppCompatActivity {
                 }
                 break;
             case BATTERY:
+                //todo: check if ( elbil.getBrand.eqals(brand) && elbil.getModel.equals(model) )
                 System.out.println("( " + BATTERY + " ) FILTER FIELD: " + elbil.getBattery() + " ; " + response + " ; " + found[3]);
                 String batteryResponse = response.replace("kwh", "");
                 batteryResponse = carFilteredList.filterExactMatch(elbil.getBattery(), batteryResponse);

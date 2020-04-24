@@ -69,7 +69,8 @@ public class CarInfoActivity extends AppCompatActivity {
         //AllCarsList
         allElbils = intent.getParcelableArrayListExtra("AllCarsList");
         System.out.println("#####################################################################");
-        if (allElbils != null) System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: " + allElbils.size());
+        if (allElbils != null)
+            System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: " + allElbils.size());
         else System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: NULL");
         System.out.println("#####################################################################");
 
@@ -146,13 +147,13 @@ public class CarInfoActivity extends AppCompatActivity {
 
 
         initDialog();
-
-
+        /*
         if (elbilFound) {
             dialogBox1.createDialogBox();
         } else {
             dialogBox3.createDialogBox();
         }
+        */
 
 
         saveCarBtn.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +187,7 @@ public class CarInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-              //  Toast.makeText(CarInfoActivity.this, "IKKE LEGG TIL BIL", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(CarInfoActivity.this, "IKKE LEGG TIL BIL", Toast.LENGTH_SHORT).show();
                 finish();
                 /*
                 if (elbilFound) {
@@ -295,8 +296,7 @@ public class CarInfoActivity extends AppCompatActivity {
         Elbil elbil = (Elbil) spinner.getSelectedItem();
 
         if (elbil.getBrand().equals("LEGG TIL BIL"))
-            startActivity(new Intent(this, AddCarActivity.class));
-            //Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
         else getCarAttributes(elbil, elbilFound);
     }
 

@@ -27,18 +27,12 @@ public class FirestoreQuery {
     private final String MODELYEAR = "modelYear";
     private final String BATTERY = "battery";
 
-    private AddCarActivity addCarActivity;
     private CarSearchActivity carSearchActivity;
     private CollectionReference reference;
     private Query query;
 
     private List<Elbil> mElbilList = new ArrayList<>();
     private List<Elbil> allElbilList = new ArrayList<>();
-
-    public FirestoreQuery(AddCarActivity addCarActivity, CollectionReference reference) {
-        this.addCarActivity = addCarActivity;
-        this.reference = reference;
-    }
 
     public FirestoreQuery(CarSearchActivity carSearchActivity, CollectionReference reference) {
         this.carSearchActivity = carSearchActivity;
@@ -60,7 +54,7 @@ public class FirestoreQuery {
                     System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
                     System.out.println("UNABLE TO FETCH INIT FIRESTORE DATA...!");
                     System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
-                    Toast.makeText(addCarActivity, "UNABLE TO FETCH FIRESTORE DATA..!", Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(addCarActivity, "UNABLE TO FETCH FIRESTORE DATA..!", Toast.LENGTH_LONG).show();
                 }
 
             }

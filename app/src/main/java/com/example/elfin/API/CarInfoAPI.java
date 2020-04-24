@@ -2,7 +2,6 @@ package com.example.elfin.API;
 
 import android.os.AsyncTask;
 
-import com.example.elfin.car.AddCarActivity;
 import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
 
@@ -14,13 +13,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
 
     private Elbil elbil;
-    private AddCarActivity addCarActivity;
     private CarSearchActivity carSearchActivity;
 
     @Override
@@ -90,11 +86,6 @@ public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
 
     private boolean isError(String s){
         return s.toLowerCase().equals("error");
-    }
-
-
-    public void setAddCarActivity(AddCarActivity addCarActivity) {
-        this.addCarActivity = addCarActivity;
     }
 
     public void setCarSearchActivity(CarSearchActivity carSearchActivity) {

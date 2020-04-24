@@ -7,11 +7,11 @@ import com.example.elfin.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class CarSpinnerSelection {
 
-    private AddCarActivity addCarActivity;
     private CarSelectionActivity carSelectionActivity;
     private CarFilteredList carFilteredList;
 
@@ -27,18 +27,66 @@ public class CarSpinnerSelection {
     private final String BATTERY = "battery";
     private final String FASTCHARGE = "fastCharge";
 
+
+    private HashMap<String, String> selectedMap;
+    private String selectedBrand, selectedModel, selectedModelYear, selectedBattery, selectedEffect;
+
     private String[] spinnerPrompts = {"Velg bilmerke", "Velg bilmodell", "Velg årsmodell",
             "Velg batterikapasitet", "Velg ladehastighet"};
     private String[] spinnerFields = {"(INGEN VALGT)", "---VET IKKE---"};
 
-    public CarSpinnerSelection(AddCarActivity addCarActivity) {
-        this.addCarActivity = addCarActivity;
-        allElbilList = addCarActivity.getAllCars();
-    }
 
     public CarSpinnerSelection(CarSelectionActivity carSelectionActivity) {
         this.carSelectionActivity = carSelectionActivity;
         allElbilList = carSelectionActivity.getAllCars();
+
+        if (allElbilList == null) {
+            System.out.println("ALL ELBIL LIST IS NULL!");
+            allElbilList = new ArrayList<>();
+        } else {
+            System.out.println("#####################################################################");
+            System.out.println("(CAR SPINNER SELECTION CLASS) SELECTION ELBILS LIST SIZE: " + allElbilList.size());
+            System.out.println("#####################################################################");
+        }
+
+        selectedMap = carSelectionActivity.getFieldMap();
+        System.out.println("SELECTED MAP: " + selectedMap);
+
+        if (selectedMap != null) {
+            selectedBrand = selectedMap.get(BRAND);
+            selectedModel = selectedMap.get(MODEL);
+            //todo: handle in CarSerachActivity to check if selected model year exists in database
+           // selectedModelYear = selectedMap.get(MODELYEAR);
+            selectedModelYear = "";
+            selectedBattery = selectedMap.get(BATTERY);
+            // selectedEffect = selectedMap.get(FASTCHARGE);
+            selectedEffect = "";
+        } else {
+            selectedBrand = "";
+            selectedModel = "";
+            selectedModelYear = "";
+            selectedBattery = "";
+            selectedEffect = "";
+        }
+
+        System.out.println("SELECTED FIELDS: "
+                + "\nSELECTED BRAND: " + selectedBrand
+                + "\nSELECTED MODEL: " + selectedModel
+                + "\nSELECTED MODEL YEAR: " + selectedModelYear
+                + "\nSELECTED BATTERY: " + selectedBattery
+                + "\nSELECTED FAST CHARGE: " + selectedEffect);
+
+        System.out.println("-----------------------------------------------------------------------"
+                + "\nEMPTY FIELD: ");
+        if (selectedBrand.isEmpty()) System.out.println("BRAND FIELD IS EMPTY!");
+        if (selectedModel.isEmpty()) System.out.println("MODEL FIELD IS EMPTY");
+        if (selectedModelYear.isEmpty()) System.out.println("MODEL_YEAR FIELD IS EMPTY");
+        if (selectedBattery.isEmpty()) System.out.println("BATTERY FIELD IS EMPTY!");
+        if (selectedEffect.isEmpty()) System.out.println("EFFECT FIELD IS EMPTY!");
+
+        // selectedBrand = carSelectionActivity.get
+
+
         //Todo: use carFilteredList to get filtered lists
         carFilteredList = new CarFilteredList();
     }
@@ -50,7 +98,7 @@ public class CarSpinnerSelection {
     }
 
     protected void filteredCarsSelection(Spinner spinner, String dataField, List<String> filteredList) {
-       // allElbilList = addCarActivity.getAllCars();
+        // allElbilList = addCarActivity.getAllCars();
         ArrayList<Elbil> filteredCars = new ArrayList<>();
         filteredList.clear();
         switch (dataField) {
@@ -135,44 +183,57 @@ public class CarSpinnerSelection {
         switch (dataField) {
             case BRAND:
                 System.out.println("SpinnerBrands OnItemSelected!");
-                if (manualSelection) {
-                    if (thisSpinner.getSelectedItem().equals(spinnerPrompts[0])
-                            || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
-                        carSelectionActivity.disableSpinner(MODEL);
-                    } else {
-                        getFilteredCars(thisSpinner, MODEL, spinnerList);
-                        setSpinnerSelection(nextSpinenr, spinnerList);
-                        carSelectionActivity.disableSpinner(MODELYEAR);
-                    }
+
+                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[0])
+                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                    carSelectionActivity.disableSpinner(MODEL);
+                } else {
+                    getFilteredCars(thisSpinner, MODEL, spinnerList, manualSelection);
+                    setSpinnerSelection(nextSpinenr, spinnerList);
+                    carSelectionActivity.disableSpinner(MODELYEAR);
                 }
+
                 break;
             case MODEL:
-                if (manualSelection) {
-                    if (thisSpinner.getSelectedItem().equals(spinnerPrompts[1])
-                            || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
-                        carSelectionActivity.disableSpinner(MODELYEAR);
-                    } else {
-                        getFilteredCars(thisSpinner, MODELYEAR, spinnerList);
-                        setSpinnerSelection(nextSpinenr, spinnerList);
-                        carSelectionActivity.disableSpinner(BATTERY);
-                    }
+
+                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[1])
+                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                    carSelectionActivity.disableSpinner(MODELYEAR);
+                } else {
+                    getFilteredCars(thisSpinner, MODELYEAR, spinnerList, manualSelection);
+                    setSpinnerSelection(nextSpinenr, spinnerList);
+                   carSelectionActivity.disableSpinner(BATTERY);
                 }
+
                 break;
             case MODELYEAR:
-                if (manualSelection) {
-                    if (thisSpinner.getSelectedItem().equals(spinnerPrompts[2])
-                            || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
-                        carSelectionActivity.disableSpinner(BATTERY);
-                    } else {
-                        getFilteredCars(thisSpinner, BATTERY, spinnerList);
-                        setSpinnerSelection(nextSpinenr, spinnerList);
-                        carSelectionActivity.disableSpinner(FASTCHARGE);
-                    }
+
+                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[2])
+                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                    carSelectionActivity.disableSpinner(BATTERY);
+                } else {
+                    getFilteredCars(thisSpinner, BATTERY, spinnerList, manualSelection);
+                    setSpinnerSelection(nextSpinenr, spinnerList);
+                    carSelectionActivity.disableSpinner(FASTCHARGE);
                 }
+
                 break;
             case BATTERY:
+                if (thisSpinner.getSelectedItem().equals(spinnerPrompts[3])
+                        || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
+                    carSelectionActivity.disableSpinner(FASTCHARGE);
+                }
+
+                else {
+                    getFilteredCars(thisSpinner, FASTCHARGE, spinnerList, manualSelection);
+                    setSpinnerSelection(nextSpinenr, spinnerList);
+                   // carSelectionActivity.disableSpinner(FASTCHARGE);
+                }
+
+
                 break;
             case FASTCHARGE:
+                System.out.println("(CAR SPINNER SELECTION CLASS) FAST CHARGE SPINNER ON ITEM SELECTED");
                 break;
             default:
                 System.out.println("No SPINNER OnItemSelected");
@@ -218,66 +279,83 @@ public class CarSpinnerSelection {
     */
 
 
-    protected void getFilteredCars(Spinner spinner, String dataField, List<String> filteredList) {
+    protected void getFilteredCars(Spinner spinner, String dataField, List<String> filteredList, boolean manualSelection) {
 //        allElbilList = addCarActivity.getAllCars();
         ArrayList<Elbil> filteredCars = new ArrayList<>();
         filteredList.clear();
         switch (dataField) {
             case BRAND:
-                // filteredList.add(getString(R.string.choose_brand));
-                System.out.println("SPINNER CARS LIST SIZE: " + allElbilList.size());
-                for (Elbil elbil : allElbilList) {
-                    if (!filteredList.contains(elbil.getBrand()))
-                        filteredList.add(elbil.getBrand());
+                if (!selectedBrand.isEmpty()) filteredList.add(selectedBrand);
+                else {
+                    // filteredList.add(getString(R.string.choose_brand));
+                    System.out.println("SPINNER CARS LIST SIZE: " + allElbilList.size());
+                    for (Elbil elbil : allElbilList) {
+                        if (!filteredList.contains(elbil.getBrand()))
+                            filteredList.add(elbil.getBrand());
+                    }
+                    System.out.println("SPINNER FILTERED LIST: " + filteredList.size());
+                    setSpinnerSelection(spinner, filteredList);
                 }
-                System.out.println("SPINNER FILTERED LIST: " + filteredList.size());
-                setSpinnerSelection(spinner, filteredList);
                 break;
             case MODEL:
-                // filteredList.add(getString(R.string.choose_model));
-                for (Elbil elbil : allElbilList) {
-                    if (elbil.getBrand().equals(spinner.getSelectedItem())) filteredCars.add(elbil);
-                }
-                for (Elbil elbil : filteredCars) {
-                    if (!filteredList.contains(elbil.getModel()))
-                        filteredList.add(elbil.getModel());
+                if (!selectedModel.isEmpty()) filteredList.add(selectedModel);
+                else {
+                    // filteredList.add(getString(R.string.choose_model));
+                    for (Elbil elbil : allElbilList) {
+                        if (elbil.getBrand().equals(spinner.getSelectedItem()))
+                            filteredCars.add(elbil);
+                    }
+                    for (Elbil elbil : filteredCars) {
+                        if (!filteredList.contains(elbil.getModel()))
+                            filteredList.add(elbil.getModel());
+                    }
                 }
                 break;
             case MODELYEAR:
-                // filteredList.add(getString(R.string.choose_model_year));
-                for (Elbil elbil : allElbilList) {
-                    if (elbil.getModel().equals(spinner.getSelectedItem())) filteredCars.add(elbil);
-                }
-                for (Elbil elbil : filteredCars) {
-                    if (!filteredList.contains(elbil.getModelYear()))
-                        filteredList.add(elbil.getModelYear());
+                if (!selectedModelYear.isEmpty()) filteredList.add(selectedModelYear);
+                else {
+                    // filteredList.add(getString(R.string.choose_model_year));
+                    for (Elbil elbil : allElbilList) {
+                        if (elbil.getModel().equals(spinner.getSelectedItem()))
+                            filteredCars.add(elbil);
+                    }
+                    for (Elbil elbil : filteredCars) {
+                        if (!filteredList.contains(elbil.getModelYear()))
+                            filteredList.add(elbil.getModelYear());
+                    }
                 }
                 // Collections.sort(filteredList);
                 // filteredList.add(spinnerFields[1]);
                 break;
             case BATTERY:
-                // filteredList.add(getString(R.string.choose_model_year));
-                //todo: check if equals brand and model too
-                for (Elbil elbil : allElbilList) {
-                    if (elbil.getModelYear().equals(spinner.getSelectedItem()))
-                        filteredCars.add(elbil);
-                }
-                for (Elbil elbil : filteredCars) {
-                    if (!filteredList.contains(elbil.getBattery()))
-                        filteredList.add(elbil.getBattery());
+                if (!selectedBattery.isEmpty()) filteredList.add(selectedBattery);
+                else {
+                    // filteredList.add(getString(R.string.choose_model_year));
+                    //todo: check if equals brand and model too
+                    for (Elbil elbil : allElbilList) {
+                        if (elbil.getModelYear().equals(spinner.getSelectedItem()))
+                            filteredCars.add(elbil);
+                    }
+                    for (Elbil elbil : filteredCars) {
+                        if (!filteredList.contains(elbil.getBattery()))
+                            filteredList.add(elbil.getBattery());
+                    }
                 }
                 // Collections.sort(filteredList);
                 // filteredList.add(spinnerFields[1]);
                 break;
             case FASTCHARGE:
-                // filteredList.add(getString(R.string.choose_model_year));
-                for (Elbil elbil : allElbilList) {
-                    if (elbil.getBattery().equals(spinner.getSelectedItem()))
-                        filteredCars.add(elbil);
-                }
-                for (Elbil elbil : filteredCars) {
-                    if (!filteredList.contains(elbil.getEffect()))
-                        filteredList.add(elbil.getFastCharge() + " " + elbil.getEffect());
+                if (!selectedEffect.isEmpty()) filteredList.add(selectedEffect);
+                else {
+                    // filteredList.add(getString(R.string.choose_model_year));
+                    for (Elbil elbil : allElbilList) {
+                        if (elbil.getBattery().equals(spinner.getSelectedItem()))
+                            filteredCars.add(elbil);
+                    }
+                    for (Elbil elbil : filteredCars) {
+                        if (!filteredList.contains(elbil.getEffect()))
+                            filteredList.add(elbil.getFastCharge() + " " + elbil.getEffect());
+                    }
                 }
                 // Collections.sort(filteredList);
                 // filteredList.add(spinnerFields[1]);
@@ -287,6 +365,6 @@ public class CarSpinnerSelection {
                 // filteredList.add(getString(R.string.choose_nothing));
         }
         Collections.sort(filteredList);
-        if (filteredList.size() > 0) filteredList.add(spinnerFields[0]);
+        if (manualSelection && filteredList.size() > 0) filteredList.add(spinnerFields[0]);
     }
 }

@@ -57,18 +57,16 @@ public class CarSelectionActivity extends AppCompatActivity {
         findViewsById();
 
 
-
-
         Intent intent = getIntent();
 
 
         allCarsList = intent.getParcelableArrayListExtra("AllCarsList");
         System.out.println("#####################################################################");
-        System.out.println("ALL CAR LIST SIZE: " + allCarsList);
+        if (allCarsList != null)
+            System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE: " + allCarsList.size());
+        else System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE IS NULL!");
         System.out.println("#####################################################################");
-
-
-
+        // setAllCarsList(allCarsList);
 
 
         fieldMap = (HashMap<String, String>) intent.getSerializableExtra("FieldMap");
@@ -94,34 +92,67 @@ public class CarSelectionActivity extends AppCompatActivity {
          */
 
         found = intent.getBooleanArrayExtra("Missing");
-       // Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
         System.out.println("INTEN MISSING[]: " + Arrays.toString(found));
 
         ArrayList<Elbil> elbils = getIntent().getParcelableArrayListExtra("CarList");
         if (elbils != null) {
             System.out.println("ELBILS RECEIVED: " + elbils.get(0).toString());
             // for (Elbil elbil : elbils) System.out.println(elbil.getModel());
-           // manualSelection = false;
+            // manualSelection = false;
         } else {
             System.out.println("NO ELBILS RECEIVED!");
             manualSelection = true;
         }
 
-        setAllCarsList(elbils);
+
+        //todo: handle this a bit better:
+        System.out.println("#####################################################################");
+        if (elbils != null) {
+            System.out.println("(CAR SELECTION ACTIVITY) ELBILS LIST SIZE: " + elbils.size());
+            ;
+            setAllCarsList(elbils);
+        } else System.out.println("(CAR SELECTION ACTIVITY) ELBILS LIST SIZE IS NULL");
+        System.out.println("#####################################################################");
 
 
-        if (fieldMap.isEmpty()) manualSelection = true;
+        //    if (fieldMap.isEmpty()) manualSelection = true;
+        //todo: fjern etter testing
+        // manualSelection = true;
 
         if (manualSelection) {
             tvSpinnerBrands.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   // manualSelection = true;
+                    // manualSelection = true;
                     enableManualCarSelection();
                 }
             });
         } else {
             // manualSelection = false;
+
+            enableManualCarSelection();
+
+
+            /*
+            spinnerSelection = new CarSpinnerSelection(this);
+            initSpinners();
+
+            spinnerSelection.filteredCarsSelection(spinnerBrands, BRAND, brands);
+            spinnerSelection.setSpinnerSelection(spinnerBrands, brands);
+            adapterBrands.notifyDataSetChanged();
+
+            spinnerSelection.filteredCarsSelection(spinnerModels, MODEL, models);
+            spinnerSelection.setSpinnerSelection(spinnerModels, models);
+            adapterModels.notifyDataSetChanged();
+
+            spinnerSelection.setSpinnerSelection(spinnerModelYears, modelYears);
+            spinnerSelection.setSpinnerSelection(spinnerBatteries, batteries);
+            spinnerSelection.setSpinnerSelection(spinnerCharges, fastCharges);
+            */
+
+
+            /*
 
             //todo: handle else to show all missing selection
 
@@ -172,6 +203,9 @@ public class CarSelectionActivity extends AppCompatActivity {
             adapterFastCharge.notifyDataSetChanged();
             spinnerCharges.setVisibility(View.VISIBLE);
             spinnerCharges.setEnabled(true);
+
+
+             */
         }
 
         searchCarBtn.setOnClickListener(new View.OnClickListener() {
@@ -219,19 +253,19 @@ public class CarSelectionActivity extends AppCompatActivity {
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
             switch (adapterView.getId()) {
                 case R.id.spinner_brands:
-                    if (manualSelection) spinnerOnItemSelection(BRAND, view);
+                    spinnerOnItemSelection(BRAND, view);
                     break;
                 case R.id.spinner_models:
-                    if (manualSelection) spinnerOnItemSelection(MODEL, view);
+                    spinnerOnItemSelection(MODEL, view);
                     break;
                 case R.id.spinner_model_years:
-                    if (manualSelection) spinnerOnItemSelection(MODELYEAR, view);
+                    spinnerOnItemSelection(MODELYEAR, view);
                     break;
                 case R.id.spinner_batteries:
-                    if (manualSelection) spinnerOnItemSelection(BATTERY, view);
+                    spinnerOnItemSelection(BATTERY, view);
                     break;
                 case R.id.spinner_charges:
-                    // spinnerOnItemSelection(FASTCHARGE, view);
+                    spinnerOnItemSelection(FASTCHARGE, view);
                     break;
                 default:
                     Toast.makeText(adapterView.getContext(), "NO SUCH SPINNER LISTENER..", Toast.LENGTH_SHORT).show();
@@ -308,17 +342,22 @@ public class CarSelectionActivity extends AppCompatActivity {
 
     private void enableManualCarSelection() {
         spinnerSelection = new CarSpinnerSelection(this);
-        initSpinner(BRAND, spinnerBrands);
-        initSpinner(MODEL, spinnerModels);
-        initSpinner(MODELYEAR, spinnerModelYears);
-        initSpinner(BATTERY, spinnerBatteries);
-        initSpinner(FASTCHARGE, spinnerCharges);
+        initSpinners();
         spinnerSelection.filteredCarsSelection(spinnerBrands, BRAND, brands);
         spinnerSelection.setSpinnerSelection(spinnerBrands, brands);
         adapterBrands.notifyDataSetChanged();
         // v.setOnClickListener(null); //removes setOnClickListener
         tvSpinnerBrands.setVisibility(View.GONE);
-        spinnerBrands.performClick();
+       // if (manualSelection) //todo: make selectedBrand the selected spinner item automatically
+            spinnerBrands.performClick();
+    }
+
+    private void initSpinners() {
+        initSpinner(BRAND, spinnerBrands);
+        initSpinner(MODEL, spinnerModels);
+        initSpinner(MODELYEAR, spinnerModelYears);
+        initSpinner(BATTERY, spinnerBatteries);
+        initSpinner(FASTCHARGE, spinnerCharges);
     }
 
     private void spinnerOnItemSelection(String dataField, View view) {
@@ -336,7 +375,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 } else {
                     makeSpinnerDisplay(BRAND, selectedBrand, view);
                     // ((TextView) view).setText(spinnerBrandsDisplay);
-                    spinnerModels.performClick();
+                   if (manualSelection) spinnerModels.performClick();
                     adapterModels.notifyDataSetChanged();
                     // disableSpinner(MODELYEAR);
                 }
@@ -347,7 +386,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 String selectedModel = spinnerModels.getSelectedItem().toString();
                 makeSpinnerDisplay(MODEL, selectedModel, view);
                 if (!selectedModel.equals(getString(R.string.choose_none))) {
-                    spinnerModelYears.performClick();
+                   if (manualSelection) spinnerModelYears.performClick();
                     adapterModelYears.notifyDataSetChanged();
                 }
                 break;
@@ -357,18 +396,18 @@ public class CarSelectionActivity extends AppCompatActivity {
                 String selectedModelYear = spinnerModelYears.getSelectedItem().toString();
                 makeSpinnerDisplay(MODELYEAR, selectedModelYear, view);
                 if (!selectedModelYear.equals(getString(R.string.choose_none))) {
-                    spinnerBatteries.performClick();
+                   if (manualSelection) spinnerBatteries.performClick();
                     adapterBattery.notifyDataSetChanged();
                 }
                 break;
             case BATTERY:
                 spinnerSelection.spinnerOnItemSelected(BATTERY, spinnerBatteries, spinnerCharges, fastCharges, manualSelection);
                 // spinnerSelection.spinnerBatteriesOnItemSelected(spinnerBatteries, spinnerCharges, fastCharges);
-               // Toast.makeText(this, "BATTERY SELECTED: " + spinnerBatteries.getSelectedItem(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "BATTERY SELECTED: " + spinnerBatteries.getSelectedItem(), Toast.LENGTH_SHORT).show();
                 String selectedBattery = spinnerBatteries.getSelectedItem().toString();
                 makeSpinnerDisplay(BATTERY, selectedBattery, view);
                 if (!selectedBattery.equals(getString(R.string.choose_none))) {
-                    spinnerCharges.performClick();
+                    if (manualSelection) spinnerCharges.performClick();
                     adapterFastCharge.notifyDataSetChanged();
                 }
                 break;
@@ -378,7 +417,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 String selectedFastCharge = spinnerCharges.getSelectedItem().toString();
                 makeSpinnerDisplay(FASTCHARGE, selectedFastCharge, view);
                 if (!selectedFastCharge.equals(getString(R.string.choose_none))) {
-                    spinnerCharges.performClick();
+                    if (manualSelection) spinnerCharges.performClick();
                     adapterFastCharge.notifyDataSetChanged();
                 }
                 break;
@@ -388,20 +427,22 @@ public class CarSelectionActivity extends AppCompatActivity {
     }
 
     public void disableSpinner(String spinnerName) {
-        switch (spinnerName) {
-            case BRAND:
-                spinnerBrands.setVisibility(View.GONE);
-            case MODEL:
-                spinnerModels.setVisibility(View.GONE);
-            case MODELYEAR:
-                spinnerModelYears.setVisibility(View.GONE);
-            case BATTERY:
-                spinnerBatteries.setVisibility(View.GONE);
-            case FASTCHARGE:
-                spinnerCharges.setVisibility(View.GONE);
-                break;
-            default:
-                Toast.makeText(this, "NO SUCH SPINNER FOUND..", Toast.LENGTH_SHORT).show();
+        if (manualSelection) {
+            switch (spinnerName) {
+                case BRAND:
+                    spinnerBrands.setVisibility(View.GONE);
+                case MODEL:
+                    spinnerModels.setVisibility(View.GONE);
+                case MODELYEAR:
+                    spinnerModelYears.setVisibility(View.GONE);
+                case BATTERY:
+                    spinnerBatteries.setVisibility(View.GONE);
+                case FASTCHARGE:
+                    spinnerCharges.setVisibility(View.GONE);
+                    break;
+                default:
+                    Toast.makeText(this, "NO SUCH SPINNER FOUND..", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -471,4 +512,11 @@ public class CarSelectionActivity extends AppCompatActivity {
         this.allCarsList = allCarsList;
     }
 
+    public HashMap<String, String> getFieldMap() {
+        return fieldMap;
+    }
+
+    public void setFieldMap(HashMap<String, String> fieldMap) {
+        this.fieldMap = fieldMap;
+    }
 }

@@ -33,6 +33,8 @@ public class CarAdapter extends ArrayAdapter {
         return initView(position, convertView, parent);
     }
 
+
+
     private View initView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
