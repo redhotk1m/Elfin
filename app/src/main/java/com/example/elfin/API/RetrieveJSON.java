@@ -10,6 +10,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.elfin.Parsers.TaskParser;
 import com.example.elfin.Utils.App;
+import com.example.elfin.Utils.DialogBox;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,11 +49,15 @@ public class RetrieveJSON extends AsyncTask<String, Void, String>{
                 return result;
         }catch (IOException e){
             //Do something, error message popup
+            DialogBox dialogBox = new DialogBox(applicationContext, "Server feil", "Klarte ikke å hente data",
+                    "OK", "", 2);
+            dialogBox.simpleDialogBox();
             //TODO: Popup som gir bruker beskjed
             result = "error";
             return result;
         }finally {
             urlConnection.disconnect();
+
         }
     }
 

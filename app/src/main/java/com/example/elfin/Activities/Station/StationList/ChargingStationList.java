@@ -62,7 +62,7 @@ public class ChargingStationList extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_charging_station_list, container, false);
         recyclerView3 = rootView.findViewById(R.id.resyclerViewItems);
         recyclerView3.setNestedScrollingEnabled(true);
-        spinner = (ProgressBar)rootView.findViewById(R.id.progressBar1);
+        spinner = (ProgressBar) rootView.findViewById(R.id.progressBar1);
         System.out.println("ON CREATE BLIR KJØRT");
         /*
         chargerItemList = new ArrayList<>();
@@ -81,7 +81,7 @@ public class ChargingStationList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("onResume","Er i onResume Charging Stations LIST");
+        Log.d("onResume", "Er i onResume Charging Stations LIST");
     }
 
     @Override
@@ -90,8 +90,9 @@ public class ChargingStationList extends Fragment {
         System.out.println("ON PAUSE LIST");
     }
 
-    ArrayList<ChargerItem>  chargeritems = new ArrayList<>();
+    ArrayList<ChargerItem> chargeritems = new ArrayList<>();
 
+    ChargerItem chargerItem;
     public void setAllValidStations(ArrayList<ChargerItem> validStations) {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
         if (spinner != null)
@@ -123,57 +124,96 @@ public class ChargingStationList extends Fragment {
 
         validStations.sort(new MetersComparator());
         chargeritems = validStations;
-        recyleViewAdapter = new RecyleViewAdapter(getContext(),validStations);
+        recyleViewAdapter = new RecyleViewAdapter(getContext(), validStations);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.VISIBLE);
 
-
+        chargerItem = chargeritems.get(0);
 
 
 
     }
 
+
+    double drivenMetersFromLast = 0;
+    ArrayList<ChargerItem> drivenPastCHargerItems = new ArrayList<>();
+    double metersFromLastChargerRemove = 0;
+
     public void updateListKM(double drivenMetersSoFar) {
 
-        double chargerItemMeters = Double.parseDouble(chargeritems.get(0).getMFromStartLocation());
-        double chargerItemMeters2 = Double.parseDouble(chargeritems.get(1).getMFromStartLocation());
-        double chargerItemMeters3 = Double.parseDouble(chargeritems.get(2).getMFromStartLocation());
 
-        drivenMetersSoFar += 5000;
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(drivenMetersSoFar);
+        System.out.println(drivenMetersFromLast);
 
-        if(chargerItemMeters<drivenMetersSoFar){
-            System.out.println(chargeritems.get(0).getMFromStartLocation());
-            chargeritems.remove(0);
 
-            if(chargerItemMeters2<drivenMetersSoFar){
-                System.out.println(chargeritems.get(0).getMFromStartLocation());
+
+        if (drivenMetersSoFar > drivenMetersFromLast) {
+
+            double chargerItemMeters = Double.parseDouble(chargeritems.get(0).getMFromStartLocation());
+            double chargerItemMeters2 = Double.parseDouble(chargeritems.get(1).getMFromStartLocation());
+            double chargerItemMeters3 = Double.parseDouble(chargeritems.get(2).getMFromStartLocation());
+
+
+
+            drivenMetersFromLast = drivenMetersSoFar;
+
+
+            if (chargerItemMeters < drivenMetersSoFar) {
+
+                drivenPastCHargerItems.add(chargeritems.get(0));
                 chargeritems.remove(0);
+                metersFromLastChargerRemove=drivenMetersSoFar;
+
+                if (chargerItemMeters2 < drivenMetersSoFar) {
+                    drivenPastCHargerItems.add(chargeritems.get(0));
+                    chargeritems.remove(0);
+                    metersFromLastChargerRemove=drivenMetersSoFar;
+
+                }
+
+                if (chargerItemMeters3 < drivenMetersSoFar) {
+                    drivenPastCHargerItems.add(chargeritems.get(0));
+                    chargeritems.remove(0);
+                    metersFromLastChargerRemove=drivenMetersSoFar;
+                }
+
+            }
+
+            if (!chargeritems.isEmpty()) {
+                for (ChargerItem chargerItems : chargeritems) {
+                    double meterFromPoint = Double.parseDouble(chargerItems.getMFromStartLocation()) - drivenMetersSoFar;
+                    chargerItems.setMFromStartLocation((float) meterFromPoint);
+                }
+            }
+
+            drivenMetersFromLast=drivenMetersSoFar;
+
+
+        } else {
+            System.out.println("Size  -->  " + chargeritems.size());
+            double drivingBack = drivenMetersFromLast-drivenMetersSoFar;
+
+            for (ChargerItem chargerItems : chargeritems) {
+                double meterFromPoint = Double.parseDouble(chargerItems.getMFromStartLocation()) + drivingBack;
+                chargerItems.setMFromStartLocation((float) meterFromPoint);
             }
 
 
 
-            if(chargerItemMeters3<drivenMetersSoFar){
-                System.out.println(chargeritems.get(0).getMFromStartLocation());
-                chargeritems.remove(0);
+            if(!drivenPastCHargerItems.isEmpty()){
+                if(drivenMetersSoFar < metersFromLastChargerRemove){
+                    int lastElement =drivenPastCHargerItems.size() -1;
+                    chargeritems.add(drivenPastCHargerItems.get(lastElement ));
+                    drivenPastCHargerItems.remove(lastElement);
+                }
             }
+
 
         }
-
-
-        if(!chargeritems.isEmpty()){
-            drivenMetersSoFar -= 5000;
-            for (ChargerItem chargerItem: chargeritems){
-                double meterFromPoint = Double.parseDouble(chargerItem.getMFromStartLocation()) - drivenMetersSoFar;
-                chargerItem.setMFromStartLocation((float) meterFromPoint);
-            }
-        }
-
 
         setAllValidStations(chargeritems);
 
-
-
-        System.out.println("Nå har vi kjørt: " + drivenMetersSoFar + " meter, og dette vises i denne klassen");
     }
 }

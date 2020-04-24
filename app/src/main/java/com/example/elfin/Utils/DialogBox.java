@@ -11,6 +11,9 @@ import android.webkit.PermissionRequest;
 
 import androidx.core.app.ActivityCompat;
 
+import com.example.elfin.Activities.Station.ChargingStations;
+import com.example.elfin.MainActivity;
+
 public class DialogBox {
 
     Context context;
@@ -19,6 +22,7 @@ public class DialogBox {
     String yesButton;
     String noButton;
     int option;
+    AlertDialog.Builder alertDialog;
 
     public DialogBox(Context context, String title, String message, String yesButton, String noButton, int option){
         this.context=context;
@@ -27,14 +31,31 @@ public class DialogBox {
         this.yesButton=yesButton;
         this.noButton=noButton;
         this.option=option;
+        alertDialog=defaultDialog();
+
+    }
+
+    public void simpleDialogBox(){
+        alertDialog.setPositiveButton(yesButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+
+            }
+        });
+
+    }
+
+    public AlertDialog.Builder defaultDialog(){
+        alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        return alertDialog;
     }
 
 
     public void createDialogBox(){
         //AlertDialog.Builder alertDialog= new AlertDialog().Builder(context);
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(message);
+
         alertDialog.setPositiveButton(yesButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
