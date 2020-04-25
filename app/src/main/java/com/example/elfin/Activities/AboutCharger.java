@@ -192,46 +192,49 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
                 "(ved hjelp av samme app/ladebrikke og evt. stopp-knapp) og sette tilbake ladepluggen. ";
 
 
-
+        System.out.println(infoFromList.get(5));
 
         textViewTitel.setText(infoFromList.get(0));
         textViewAdress.setText(infoFromList.get(1));
         textViewChargerType.setText(infoFromList.get(2) + "\n" +  fastCharger);
-        textViewChargerType2.setText(ccs);
-        textViewChargerType3.setText(infoFromList.get(3) + "\n" + lightCharger);
-        textViewAvaiable.setText(infoFromList.get(4) + " stk" );
-        textViewAvaiable2.setText(infoFromList.get(4)+ " stk");
-        textViewAvaiable3.setText(infoFromList.get(5) + " stk");
-        textViewInfoText.setText(infoFromList.get(6));
-        textViewDescriptionText.setText(infoFromList.get(7));
+        textViewAvaiable.setText(infoFromList.get(3) + " stk" );
+        textViewChargerType2.setText(infoFromList.get(4) + "\n" +  fastCharger);
+        textViewAvaiable2.setText(infoFromList.get(5)+ " stk");
+        textViewChargerType3.setText(infoFromList.get(6) + "\n" + lightCharger);
+        textViewAvaiable3.setText(infoFromList.get(7) + " stk");
+        textViewInfoText.setText(infoFromList.get(8));
+        textViewDescriptionText.setText(infoFromList.get(9));
 
 
         //Dette er beskrivelse delen
-        if(infoFromList.get(6).equals("")){
+        if(infoFromList.get(8).equals("")){
             textViewHelp.setVisibility(View.GONE);
             textViewInfoText.setVisibility(View.GONE);
             lineInfo.setVisibility(View.GONE);
 
         }
         //Dette er info delen
-        if(infoFromList.get(7).equals("")){
+        if(infoFromList.get(9).equals("")){
             textViewDescription.setVisibility(View.GONE);
             textViewDescriptionText.setVisibility(View.GONE);
             lineDescription.setVisibility(View.GONE);
         }
 
+        if(infoFromList.get(3).equals("")){
+            textViewAvaiable.setVisibility(View.GONE);
+            textViewChargerType.setVisibility(View.GONE);
+        }
+
 
 
         // Lyn lading
-        if(infoFromList.get(5).equals("")){
+        if(infoFromList.get(7).equals("")){
             textViewAvaiable3.setVisibility(View.GONE);
             textViewChargerType3.setVisibility(View.GONE);
         }
         //hurtig lading
-        if(infoFromList.get(4).equals("")){
-            textViewAvaiable.setVisibility(View.GONE);
+        if(infoFromList.get(5).equals("")){
             textViewAvaiable2.setVisibility(View.GONE);
-            textViewChargerType.setVisibility(View.GONE);
             textViewChargerType2.setVisibility(View.GONE);
         }
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Activities.Station.StationMap.PolyPoint;
+import com.example.elfin.car.Elbil;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
@@ -17,11 +18,13 @@ public class App extends Application {
     private PolylineOptions polylineOptions;
     private ArrayList<ChargerItem> allValidChargingStations;
     private ArrayList<PolyPoint> polypoints;
+    private Elbil elbil;
 
     public ArrayList<ChargerItem> getChargerItems() {
         if (chargerItems != null)
         return new ArrayList<>(chargerItems);
         else return null;
+
     }
 
     public void setChargerItems(ArrayList<ChargerItem> chargerItems) {
@@ -56,4 +59,11 @@ public class App extends Application {
     }
 
 
+    public Elbil getElbil() {
+        return elbil;
+    }
+
+    public void setElbil(Elbil elbil) {
+        this.elbil = elbil;
+    }
 }

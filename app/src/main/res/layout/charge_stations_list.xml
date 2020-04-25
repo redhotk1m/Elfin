@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <TextView
-        android:id="@+id/charge_time_slow"
+        android:id="@+id/charge_time_lightning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -83,10 +83,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageViewSlow"
-        app:layout_constraintTop_toBottomOf="@+id/available_slow" />
+        app:layout_constraintTop_toBottomOf="@+id/available_lightning" />
 
     <TextView
-        android:id="@+id/available_slow"
+        android:id="@+id/available_lightning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -159,8 +159,8 @@
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/charge_time_slow"
-        app:layout_constraintTop_toBottomOf="@+id/charge_time_slow"
+        app:layout_constraintStart_toStartOf="@+id/charge_time_lightning"
+        app:layout_constraintTop_toBottomOf="@+id/charge_time_lightning"
         app:layout_constraintVertical_bias="0.041" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,17 +28,22 @@ public class ChargerItem implements Parcelable {
     private String stationStatus;
     private String chademo;
     private String numberOfChademo;
+    private String chademoTime;
     private String ccs;
     private String numberOfCcs;
-    private String fast;
+    private String ccsTime;
     private String ligtning;
     private String lightningTime;
-    private String fastTime;
     private String[] latLng;
     private int imageFast;
     private int imageSlow;
     private double[] pointLatLng;
     private String MFromStartLocation;
+    private String lightningCCS;
+    private String numberOflightningCCS;
+    private String fastText;
+    private String lightningText;
+    private String everyCharger;
 
 
 
@@ -48,9 +53,9 @@ public class ChargerItem implements Parcelable {
                        String ownedBy, String numberChargingPoints, String image,
                        String availableChargingPoints, String userComment, String contactInfo,
                        String created, String updated, String stationStatus, String[] latlng,
-                       String chademo, String numberOfChademo, String ccs, String numberOfCcs,
-                       int imageFast, int imageSlow, String fast, String ligtning,String lightningTime,
-                       String fastTime) {
+                       String chademo, String numberOfChademo, String chademoTime, String ccs, String numberOfCcs,
+                       String ccsTime, int imageFast, int imageSlow, String lightningCCS,
+                       String numberOflightningCCS, String lightningTime, String fastText, String lightningText, String everyCharger) {
 
         this.street = street;
         this.houseNumber = houseNumber;
@@ -71,15 +76,20 @@ public class ChargerItem implements Parcelable {
         this.latLng = latlng;
         this.chademo = chademo;
         this.numberOfChademo = numberOfChademo;
+        this.chademoTime = chademoTime;
         this.ccs = ccs;
-        this.numberOfCcs= numberOfCcs;
+        this.numberOfCcs = numberOfCcs;
+        this.ccsTime = ccsTime;
         this.imageFast = imageFast;
         this.imageSlow = imageSlow;
-        this.fast = fast;
         this.ligtning = ligtning;
         this.lightningTime = lightningTime;
-        this.fastTime = fastTime;
-
+        this.lightningCCS = lightningCCS;
+        this.numberOflightningCCS = numberOflightningCCS;
+        this.lightningTime = lightningTime;
+        this.fastText=fastText;
+        this.lightningText = lightningText;
+        this.everyCharger=everyCharger;
     }
 
 
@@ -96,6 +106,62 @@ public class ChargerItem implements Parcelable {
     };
 
 
+    public String getEveryCharger() {
+        return everyCharger;
+    }
+
+    public void setEveryCharger(String everyCharger) {
+        this.everyCharger = everyCharger;
+    }
+
+    public String getFastText() {
+        return fastText;
+    }
+
+    public void setFastText(String fastText) {
+        this.fastText = fastText;
+    }
+
+    public String getLightningText() {
+        return lightningText;
+    }
+
+    public void setLightningText(String lightningText) {
+        this.lightningText = lightningText;
+    }
+
+    public String getChademoTime() {
+        return chademoTime;
+    }
+
+    public void setChademoTime(String chademoTime) {
+        this.chademoTime = chademoTime;
+    }
+
+    public String getCcsTime() {
+        return ccsTime;
+    }
+
+    public void setCcsTime(String ccsTime) {
+        this.ccsTime = ccsTime;
+    }
+
+    public String getLightningCCS() {
+        return lightningCCS;
+    }
+
+    public void setLightningCCS(String lightningCCS) {
+        this.lightningCCS = lightningCCS;
+    }
+
+    public String getNumberOflightningCCS() {
+        return numberOflightningCCS;
+    }
+
+    public void setNumberOflightningCCS(String numberOflightningCCS) {
+        this.numberOflightningCCS = numberOflightningCCS;
+    }
+
     public String getLightningTime() {
         return lightningTime;
     }
@@ -104,21 +170,7 @@ public class ChargerItem implements Parcelable {
         this.lightningTime = lightningTime;
     }
 
-    public String getFastTime() {
-        return fastTime;
-    }
 
-    public void setFastTime(String fastTime) {
-        this.fastTime = fastTime;
-    }
-
-    public String getFast() {
-        return fast;
-    }
-
-    public void setFast(String fast) {
-        this.fast = fast;
-    }
 
     public String getLigtning() {
         return ligtning;
@@ -341,14 +393,18 @@ public class ChargerItem implements Parcelable {
         parcel.writeDouble(Double.valueOf(latLng[1]));
         parcel.writeString(chademo);
         parcel.writeString(numberOfChademo);
+        parcel.writeString(chademoTime);
         parcel.writeString(ccs);
         parcel.writeString(numberOfCcs);
+        parcel.writeString(ccsTime);
         parcel.writeInt(imageFast);
         parcel.writeInt(imageSlow);
-        parcel.writeString(fast);
         parcel.writeString(ligtning);
+        parcel.writeString(numberOflightningCCS);
         parcel.writeString(lightningTime);
-        parcel.writeString(fastTime);
+        parcel.writeString(fastText);
+        parcel.writeString(lightningText);
+        parcel.writeString(everyCharger);
     }
 
     ChargerItem(Parcel in){
@@ -372,14 +428,18 @@ public class ChargerItem implements Parcelable {
         this.latLng[1] = Double.toString(in.readDouble());
         this.chademo = in.readString();
         this.numberOfChademo = in.readString();
+        this.chademoTime = in.readString();
         this.ccs = in.readString();
         this.numberOfCcs = in.readString();
+        this.ccsTime = in.readString();
         this.imageFast = in.readInt();
         this.imageSlow = in.readInt();
-        this.fast = in.readString();
         this.ligtning = in.readString();
+        this.numberOflightningCCS = in.readString();
         this.lightningTime = in.readString();
-        this.fastTime = in.readString();
+        this.fastText = in.readString();
+        this.lightningText = in.readString();
+        this.everyCharger = in.readString();
     }
 
     public void setPointLatLng(double[] pointLatLng) {

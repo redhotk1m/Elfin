@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,12 +55,16 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
                  */
 
                 ArrayList<String> infoFromList = new ArrayList<>();
+
+
                 infoFromList.add(chargerItem.getOwnedBy());
                 infoFromList.add(chargerItem.getStreet() + " " + chargerItem.getHouseNumber());
                 infoFromList.add(chargerItem.getChademo());
-                infoFromList.add(chargerItem.getCcs());
                 infoFromList.add(chargerItem.getNumberOfChademo());
+                infoFromList.add(chargerItem.getCcs());
                 infoFromList.add(chargerItem.getNumberOfCcs());
+                infoFromList.add(chargerItem.getLightningCCS());
+                infoFromList.add(chargerItem.getNumberOflightningCCS());
                 infoFromList.add(chargerItem.getDescriptionOfLocation());
                 infoFromList.add(chargerItem.getContactInfo());
 
@@ -87,14 +90,28 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         //holder.stationName.setText(chargerItems.get(position).getStreet() + " " + chargerItems.get(position).getHouseNumber());
         holder.description.setText(chargerItems.get(position).getStreet() + " " + chargerItems.get(position).getHouseNumber()
                 + " " +chargerItems.get(position).getCity());
-        holder.chargeTimeFast.setText(chargerItems.get(position).getFastTime());
-        holder.avaiableFast.setText(chargerItems.get(position).getNumberOfChademo());
-        holder.chargeTimeSlow.setText(chargerItems.get(position).getLightningTime());
-        holder.avaiableSlow.setText(chargerItems.get(position).getNumberOfCcs());
         holder.imageViewFast.setImageResource(chargerItems.get(position).getImageFast());
         holder.imageViewSlow.setImageResource(chargerItems.get(position).getImageSlow());
-        holder.textViewFast.setText(chargerItems.get(position).getFast());
-        holder.textViewLigtning.setText(chargerItems.get(position).getLigtning());
+        //holder.chargeTimeFast.setText(chargerItems.get(position).getFastTime());
+
+
+        holder.avaiableFast.setText(chargerItems.get(position).getNumberOfChademo());
+        holder.chargeTimeFast.setText(chargerItems.get(position).getChademoTime());
+        holder.chargeTimeLightning.setText(chargerItems.get(position).getLightningTime());
+        holder.avaiableLightning.setText(chargerItems.get(position).getNumberOflightningCCS());
+        holder.textViewFast.setText(chargerItems.get(position).getFastText());
+        holder.textViewLigtning.setText(chargerItems.get(position).getLightningText());
+
+        if("CCS/Combo".equals(chargerItems.get(position).getCcs())){
+            holder.avaiableFast.setText(chargerItems.get(position).getNumberOfCcs());
+            holder.chargeTimeFast.setText(chargerItems.get(position).getCcsTime());
+            holder.chargeTimeLightning.setText(chargerItems.get(position).getLightningTime());
+            holder.avaiableLightning.setText(chargerItems.get(position).getNumberOflightningCCS());
+            holder.textViewFast.setText(chargerItems.get(position).getFastText());
+            holder.textViewLigtning.setText(chargerItems.get(position).getLightningText());
+        }
+
+
         //TODO: Vise med decimaltall, dersom vi har mindre enn 100KM i lengde, bare teksthåndtering
         long KM = Math.round(Double.parseDouble(chargerItems.get(position).getMFromStartLocation()) / 1000);
         holder.distanceKm.setText(String.valueOf(KM) + " KM");
@@ -137,9 +154,9 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         private TextView description;
         private TextView chargeTimeFast;
         private TextView avaiableFast;
-        private TextView chargeTimeSlow;
+        private TextView chargeTimeLightning;
         private TextView chargeTimeSlow2;
-        private TextView avaiableSlow;
+        private TextView avaiableLightning;
         private TextView avaiableSlow2;
         private TextView distanceKm;
         private TextView textViewFast;
@@ -163,8 +180,8 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
             description = itemView.findViewById(R.id.description);
             chargeTimeFast = itemView.findViewById(R.id.charge_time_fast);
             avaiableFast = itemView.findViewById(R.id.available_fast);
-            chargeTimeSlow = itemView.findViewById(R.id.charge_time_slow);
-            avaiableSlow = itemView.findViewById(R.id.available_slow);
+            chargeTimeLightning = itemView.findViewById(R.id.charge_time_lightning);
+            avaiableLightning = itemView.findViewById(R.id.available_lightning);
             imageViewFast = itemView.findViewById(R.id.imageViewFast);
             imageViewSlow = itemView.findViewById(R.id.imageViewSlow);
             textViewFast = itemView.findViewById(R.id.textViewFast);

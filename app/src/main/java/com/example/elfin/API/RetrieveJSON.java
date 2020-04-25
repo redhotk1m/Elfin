@@ -8,9 +8,11 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.elfin.MainActivity;
 import com.example.elfin.Parsers.TaskParser;
 import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.DialogBox;
+import com.example.elfin.car.Elbil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,6 +73,7 @@ public class RetrieveJSON extends AsyncTask<String, Void, String>{
             //localBroadcastManager.sendBroadcast(intent);
         }
         if (className == TaskRequestDirections.class){
+
             TaskParser taskParser = new TaskParser(localBroadcastManager,applicationContext);
             taskParser.execute(jsonString);
             //TaskRequestDirections a = new TaskRequestDirections(localBroadcastManager,applicationContext);
