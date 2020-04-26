@@ -1,10 +1,5 @@
 package com.example.elfin;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -14,13 +9,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
+import android.os.Handler;
 import android.util.TimingLogger;
-import android.view.MenuItem;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,13 +26,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.example.elfin.API.NobilAPIHandler;
 import com.example.elfin.API.RetrieveJSON;
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
-import com.example.elfin.Utils.DialogBox;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.Utils.GPSTracker;
 import com.example.elfin.adapter.CarAdapter;
@@ -46,7 +45,9 @@ import com.example.elfin.car.CarInfoActivity;
 import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
 import com.example.elfin.car.SharedCarPreferences;
+import com.example.elfin.listener.SpinnerInteractionListener;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -65,19 +66,20 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     TextView headerText;
 
-
-    private ArrayList<Elbil> mCarList;
-    private ArrayAdapter adapter;
-    private Spinner dropdown;
     TimingLogger logger;
     public ImageButton imageButton;
     GPSTracker gpsTracker;
 
+    private Elbil mSelectedCar;
+    private ArrayList<Elbil> mCarList;
     private CarAdapter mCarAdapter;
+    private Spinner dropdown;
+    private SpinnerInteractionListener interactionListener;
     private SharedPreferences sharedPreferences;
     private SharedCarPreferences sharedCarPreferences;
-    private boolean initDropDown;
+    private boolean initDropDown, onLongClicked, currentSpinnerItem;
 
+    Handler mHandler;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // startActivity(new Intent(this, CarSearchActivity.class));
 
         dropdown = findViewById(R.id.chooseCar);
-        headerText= findViewById(R.id.headerText);
+        headerText = findViewById(R.id.headerText);
         //textView = findViewById(R.id.textViewSuggest);
         listViewSuggest = findViewById(R.id.listViewSuggest);
         listViewSuggest.setVisibility(View.INVISIBLE);
@@ -112,10 +114,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         EditTextFunctions editTextFunctions = new EditTextFunctions(this, isSelected);
         editTextFunctions.setText();
-
-
-
-
 
         /*
         //Hvis den skal funke
@@ -145,6 +143,24 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //Log.d("Debug2",new MainActivity().editText.getText().toString());
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        System.out.println("<ON POST CREATE>");
+        Elbil elbil = (Elbil) dropdown.getSelectedItem();
+
+        if (elbil.getFastCharge() == null) elbil.setFastCharge("CHAdeMO");
+        if (elbil.getBattery() == null) elbil.setBattery("50");
+        if (elbil.getEffect() == null) elbil.setEffect("50 kW DC");
+
+        ((App) getApplication()).setElbil(elbil);
+
+        System.out.println(elbil.getFastCharge());
+        System.out.println(elbil.getBattery());
+        System.out.println(elbil.getEffect());
+    }
+
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -171,69 +187,116 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private void getSharedCarPreferences(SharedPreferences sharedPreferences) {
         sharedCarPreferences = new SharedCarPreferences();
         mCarList = sharedCarPreferences.getSavedCars(sharedPreferences);
-        //todo: setIconImage and setSpinnerDisplay can be done in "Legg til bil" instead of here
-        for (Elbil elbil : mCarList) {
-            elbil.setIconImage(R.drawable.ic_car_black_24dp);
-            //todo: fix elbil.toString() or make elbil.display()
-            String display = elbil.getBrand() + " " + elbil.getModel() + " (" + elbil.getModelYear() + ")";
-            elbil.setSpinnerDisplay(display);
-        }
-        initDropDown = true;
-        initCarSpinner();
+        if (initDropDown) initCarSpinner();
+        else System.out.println("INITIALIZING CAR SPINNER ; " + initDropDown);
     }
 
 
     private void initCarSpinner() {
-        if (mCarList.size() == 0) mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
-        mCarList.add(new Elbil(R.drawable.ic_add_box_black_24dp, getString(R.string.add_car)));
+        // if (mCarList.size() == 0) mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
+        // mCarList.add(new Elbil(R.drawable.ic_add_box_black_24dp, getString(R.string.add_car)));
         mCarAdapter = new CarAdapter(this, mCarList);
 
         dropdown.setSelection(0, false);
         dropdown.setAdapter(mCarAdapter);
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                Toast.makeText(adapterView.getContext(),
-                        "OnItemSelectedListener: \n" + adapterView.getItemAtPosition(position).toString(),
-                        Toast.LENGTH_LONG).show();
-                if (initDropDown) System.out.println("INIT SPINNER: " + initDropDown);
-                else getSelectedCar(view);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+        interactionListener = new SpinnerInteractionListener(this);
+        dropdown.setOnTouchListener(interactionListener);
+        dropdown.setOnItemSelectedListener(interactionListener);
 
-            }
-        });
-        initDropDown = false;
+        mSelectedCar = (Elbil) dropdown.getSelectedItem();
+        System.out.println("(ON CREATE) SELECTED ELBIL: " + mSelectedCar.toString());
 
-        dropdown.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText(MainActivity.this, "SPINNER ON LONG CLICKED: \n"
-                        + dropdown.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                Elbil elbil = (Elbil) dropdown.getSelectedItem();
-                showPopup(view, elbil); //todo: remove selected position instead of elbil objekt
-                return true;
-            }
-        });
+        initDropDown = true;
     }
 
+    public void performSpinnerClick(final Elbil clickedElbil, int click) {
+        if (mCarList.size() == 1) {
+            String display = mSelectedCar.getSpinnerDisplay();
+            checkAddCarDisplay(display);
+        } else if (click == 0) {
+            System.out.println("(MAIN ACTIVITY) PERFORMING CLICK ON DROP DOWN");
+            mHandler = new Handler();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dropdown.performClick();
+                }
+            }, 500);
+        } else if (click == 1) {
+            System.out.println("(MAIN ACTIVITY) SELECT SPINNER CLICKED ELBIL: " + clickedElbil.toString());
+            selectSpinnerItemByValue(dropdown, clickedElbil);
+            if (currentSpinnerItem) getSelectedCar(dropdown);
+            // registerForContextMenu(dropdown);
+        }
+    }
 
+    private void selectSpinnerItemByValue(Spinner spinner, Elbil selectedElbil) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).equals(selectedElbil)) {
+                if (dropdown.getSelectedItemPosition() == spinner.getItemIdAtPosition(i)) {
+                    System.out.println("SELECTED ITEM [@ CURRENT] POSITION: " + dropdown.getSelectedItemPosition() + " == " + spinner.getItemIdAtPosition(i));
+                    currentSpinnerItem = true;
+                } else {
+                    System.out.println("SELECTED ITEM [@ DIFFERENT] POSITION: " + dropdown.getSelectedItemPosition() + " != " + spinner.getItemIdAtPosition(i));
+                    currentSpinnerItem = false;
+                }
+                spinner.setSelection(i);
+                interactionListener.setSelection(true);
+                hideSpinnerDropDown(spinner);
+                break;
+            }
+        }
+    }
 
+    private void hideSpinnerDropDown(Spinner spinner) {
+        try {
+            Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
+            method.setAccessible(true);
+            method.invoke(spinner);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    private void getSelectedCar(View view) {
-        Elbil elbil = (Elbil) dropdown.getSelectedItem();
-        ((App) getApplication()).setElbil(elbil);
-        System.out.println(elbil.getFastCharge());
-        System.out.println(elbil.getBattery());
-        System.out.println(elbil.getEffect());
-        String display = elbil.getSpinnerDisplay();
+    public void getSelectedCar(View view) {
+        System.out.println("(MAIN ACTIVITY) GET SELECTED CAR ; ON_LONG_CLICKED == " + onLongClicked);
+        mSelectedCar = (Elbil) dropdown.getSelectedItem();
+        ((App) getApplication()).setElbil(mSelectedCar);
+        System.out.println(mSelectedCar.getFastCharge());
+        System.out.println(mSelectedCar.getBattery());
+        System.out.println(mSelectedCar.getEffect());
+
+        String display = mSelectedCar.getSpinnerDisplay();
+        checkAddCarDisplay(display);
+
+        if (onLongClicked && !getString(R.string.add_car).equals(display)) {
+            System.out.println("ON ITEM LONG CLICKED ; " + onLongClicked);
+            showPopup(view, mSelectedCar);
+            onLongClicked = false;
+        } else {
+            System.out.println("ON ITEM LONG CLICKED ; " + onLongClicked);
+            onLongClicked = false;
+            System.out.println("ON ITEM LONG CLICKED ; " + onLongClicked);
+        }
+    }
+
+    private void checkAddCarDisplay(String display) {
         if (getString(R.string.add_car).equals(display))
             startActivity(new Intent(this, CarSearchActivity.class));
     }
 
-    public void showPopup(View view, final Elbil elbil) {
+    public void setOnLongClicked(Elbil clickedElbil) {
+        onLongClicked = true;
+        selectSpinnerItemByValue(dropdown, clickedElbil);
+        if (currentSpinnerItem) {
+            System.out.println("CURRENT SPINNER ITEM ; " + currentSpinnerItem);
+            getSelectedCar(dropdown);
+        } else System.out.println("CURRENT SPINNER ITEM ; " + currentSpinnerItem);
+    }
+
+    private void showPopup(View view, final Elbil elbil) {
+        System.out.println("(MAIN ACTIVITY) SHOWING & INFLATING POPUP CAR MENU");
         PopupMenu popup = new PopupMenu(this, view);
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -295,15 +358,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 }
 
                 System.out.println(isSelected);
-                if(!isSelected){
+                if (!isSelected) {
                     listViewSuggest.setVisibility(View.VISIBLE);
                 } else {
                     listViewSuggest.setVisibility(View.INVISIBLE);
-                    isSelected=false;
+                    isSelected = false;
                 }
-                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1,list);
+                arrayAdapterSuggestions = new ArrayAdapter<>(getApplication().getBaseContext(), android.R.layout.simple_list_item_1, list);
                 listViewSuggest.setAdapter(arrayAdapterSuggestions);
-                if(listViewSuggest.getAdapter().getCount()<=1){
+                if (listViewSuggest.getAdapter().getCount() <= 1) {
                     listViewSuggest.setVisibility(View.INVISIBLE);
                 }
 
@@ -315,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 editText.setText(listViewSuggest.getItemAtPosition(position).toString());
-                isSelected=true;
+                isSelected = true;
                 setDestinationID(placeIdList.get(position));
                 destionacionValidacion = editText.getText().toString();
                 arrayAdapterSuggestions.clear();
@@ -327,11 +390,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && (i == KeyEvent.KEYCODE_ENTER || i == KeyEvent.KEYCODE_DPAD_CENTER)){
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && (i == KeyEvent.KEYCODE_ENTER || i == KeyEvent.KEYCODE_DPAD_CENTER)) {
                     editText.setText(listViewSuggest.getItemAtPosition(0).toString());
                     destionacionValidacion = editText.getText().toString();
                     setDestinationID(placeIdList.get(0));
-                    isSelected=true;
+                    isSelected = true;
                     closeKeyboard(view);
                 }
                 return false;
@@ -339,20 +402,20 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         });
 
 
+    }
 
-
+    public void setAdapterOnClickState(int state) {
+        mCarAdapter.setOnClick(state);
     }
 
 
-
-
-    public void setDestinationID(String destinationID){
+    public void setDestinationID(String destinationID) {
         this.destinationID = destinationID;
     }
 
 
     public void nextActivity(View view) {
-        if(editText.getText().toString().equals(destionacionValidacion)){
+        if (editText.getText().toString().equals(destionacionValidacion)) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(
                         this
@@ -407,6 +470,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onResume() {
         super.onResume();
-        getSharedCarPreferences(sharedPreferences);
+        int savedCarsSize = sharedCarPreferences.getSavedCars(sharedPreferences).size();
+        if (mCarList.size() == savedCarsSize) {
+            System.out.println("(ON RESUME MAIN ACTIVITY) NO NEW CHANGES TO SHARED CAR PREFERENCES: "
+                    + mCarList.size() + " == " + savedCarsSize);
+        } else {
+            System.out.println("(ON RESUME MAIN ACTIVITY) CHANGES MADE TO SHARED CAR PREFERENCES: "
+                    + mCarList.size() + " == " + savedCarsSize);
+            getSharedCarPreferences(sharedPreferences);
+        }
+        System.out.println("(ON RESUME) CURRENT SELECTED CAR: " + mSelectedCar.toString() + " ; " +
+                "\nSIZE [ " + savedCarsSize + " ]");
     }
 }
