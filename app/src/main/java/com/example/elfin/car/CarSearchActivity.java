@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Range;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +42,7 @@ public class CarSearchActivity extends AppCompatActivity {
     private String brand, model, modelYear, battery;
     private HashMap<String, String> foundHashMap;
 
-    private Elbil elbil;
+    private Elbil mElbil;
     private List<Elbil> allCarsList = new ArrayList<>();
     private List<Elbil> mCarList = new ArrayList<>();
 
@@ -251,7 +252,8 @@ public class CarSearchActivity extends AppCompatActivity {
 
 
                 //todo: check to find model year if elbil model and/or brand has been found
-                if (!found[2] && !modelYear.isEmpty()) {
+                if (!found[2] && (found[0] || found[1])) {
+                    // checkModelYear();
                     if (found[0] && found[1]) System.out.println("CHECK ELBIL BRAND AND MODEL");
                     else if (found[0]) System.out.println("CHECK ELBIL BRAND FOR MODEL YEAR");
                     else if (found[1]) System.out.println("CHECK ELBIL MODEL FOR MODEL YEAR");
@@ -259,7 +261,7 @@ public class CarSearchActivity extends AppCompatActivity {
 
 
                 //check filtered car batteries if battery not found
-                if (!found[3]) {
+                if (!found[3] && (found[0] || found[1])) {
                     System.out.println("(" + BATTERY + ") CURRENT RESPONSE: " + response + " ; ITERATION [" + count + "]");
                     checkFilteredCars(BATTERY, elbil, response);
                     if (found[3]) continue;
@@ -301,6 +303,8 @@ public class CarSearchActivity extends AppCompatActivity {
                         setExactResponseFound(BRAND, elbil.getBrand(), found[1]);
                         System.out.println("EXACT BRAND MUST EQUAL " + brand + " ; " + found[0]);
                     }
+
+                    checkModelYear();
                 } else
                     System.out.println("(" + MODEL + ") FILTERED EXACT FIELD ; " + found[1] + " ; BREAK");
                 break;
@@ -308,6 +312,7 @@ public class CarSearchActivity extends AppCompatActivity {
                 if (response != null) {
                     modelYear = response;
                     if (!modelYear.isEmpty()) {
+                        //todo: remove found[2] ==> checkModelYear()
                         found[2] = true;
                         foundHashMap.put(MODELYEAR, modelYear);
                     }
@@ -340,8 +345,6 @@ public class CarSearchActivity extends AppCompatActivity {
                 break;
             default:
                 if (response != null) {
-                    //todo: does not work with "e-tron" ; do not split with " - " ==> "\\s+"
-                   // String[] modelResponses = response.toLowerCase().split("\\W+"); //The \\W+ will match all non-alphabetic characters occurring one or more times.
                     String[] modelResponses = response.toLowerCase().split("\\s+");
                     iterateFilteredCars(modelResponses);
                 } else System.out.println("NO SUCH DATA...");
@@ -377,6 +380,7 @@ public class CarSearchActivity extends AppCompatActivity {
     private void determineFoundFields(boolean[] found) {
         System.out.println("<FROM DETERMINE MISSING>");
         //todo: check found[2] ==> foundModelYear
+        // if (found[2]) query = query.whereEqualTo(MODELYEAR, modelYear);
         if (found[0] && found[1] && found[3]) {
             System.out.println("(FOUND_BRAND && FOUND_MODEL && FOUND_BATTERY) == TRUE ; "
                     + brand + " && " + model + " && " + battery + " [" + modelYear + "]");
@@ -411,6 +415,49 @@ public class CarSearchActivity extends AppCompatActivity {
             System.out.println("ALL_MISSING == TRUE");
             handleFirestoreQuery(allCarsList);
             // firestoreQuery.executeCompoundQuery(elbilReference);
+        }
+    }
+
+    private void checkModelYear() {
+        // mCarList = new ArrayList<>();
+        // String[] modelYearResponse;
+
+        System.out.println("( " + MODELYEAR + " ) " + modelYear + " ; " + found[2]);
+
+        int count = 0;
+        for (Elbil elbil : allCarsList) {
+            System.out.println("\n ITERATION: [ " + ++count + " / " + allCarsList.size() + " ]");
+            if (model.equals(elbil.getModel()) && brand.equals(elbil.getBrand())) {
+                System.out.println("(CHECK MODEL YEAR) ELBIL: " + elbil.toString());
+                checkModelYearRange(elbil);
+                System.out.println(modelYear + " ; " + elbil.getModelYear() + " ; " + found[2]);
+            }
+            if (found[2]) {
+                System.out.println("RETURNING @ ITERATION: [ " + count + " / " + allCarsList.size() + " ]");
+                return;
+            }
+        }
+
+    }
+
+    private void checkModelYearRange(Elbil elbil) {
+        String[] modelYearResponse = elbil.getModelYear().split("-");
+        int value = Integer.parseInt(modelYear);
+        if (modelYearResponse.length == 1) {
+            int min = Integer.parseInt(modelYearResponse[0]);
+            if (value == min) {
+                System.out.println(value + " == " + min);
+                modelYear = elbil.getModelYear();
+                found[2] = true;
+            }
+        } else if (modelYearResponse.length == 2) {
+            int min = Integer.parseInt(modelYearResponse[0]);
+            int max = Integer.parseInt(modelYearResponse[1]);
+            if (min <= value && value <= max) {
+                System.out.println(value + " in in between: " + min + " - " + max);
+                modelYear = elbil.getModelYear();
+                found[2] = true;
+            }
         }
     }
 
