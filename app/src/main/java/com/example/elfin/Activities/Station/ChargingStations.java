@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Activities.Station.StationList.ChargingStationList;
 import com.example.elfin.R;
 import com.example.elfin.Utils.App;
+import com.example.elfin.Utils.GPSTracker;
 import com.example.elfin.adapter.PageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
@@ -40,6 +42,7 @@ public class ChargingStations extends AppCompatActivity {
             validStationsFound = false;
 
     private Activity activity;
+    private double longditude, latitude;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -49,6 +52,8 @@ public class ChargingStations extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.viewPager);
         toTextView = findViewById(R.id.tilTextView);
         bundle = getIntent().getBundleExtra("bundle");
+        longditude = bundle.getDouble("longditude");
+        latitude = bundle.getDouble("latitude");
         toText = bundle.getString("destinatinasjon");
         applicationContext = (App)getApplication();
         setAllChargingItems();
@@ -94,7 +99,7 @@ public class ChargingStations extends AppCompatActivity {
         registerBroadcastReceivers();
 
         if (allChargingStations != null && allChargingStations.size() > 0)
-            startRequestDirections();
+            startRequestDirections(latitude,longditude);
     }
 
     private void registerBroadcastReceivers(){
@@ -107,7 +112,7 @@ public class ChargingStations extends AppCompatActivity {
                         receiver,new IntentFilter("allValidStations"));
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(
-                        receiver,new IntentFilter("updateKMList"));
+                        receiver,new IntentFilter("gpsTracker"));
     }
 
     private void setAllChargingItems(){
@@ -140,6 +145,9 @@ public class ChargingStations extends AppCompatActivity {
                 case "updateKMList":
                     handleUpdateKMList(intent.getDoubleExtra("drivenMetersSoFar",0));
                     break;
+                case "drivenTooFarOffRoute":
+                    handleDrivenTooFarOffRoute();
+                    break;
                 default:
                         System.out.println("error i ChargingStations default switch case");
                         handleError();
@@ -148,13 +156,19 @@ public class ChargingStations extends AppCompatActivity {
         }
     };
 
+    private void handleDrivenTooFarOffRoute() {
+        System.out.println("Handling driven too far!");
+        Location lastKnownLocation = GPSTracker.getLastKnownLocation();
+        startRequestDirections(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
+    }
+
     public void handleUpdateKMList(double drivenMetersSoFar){
         pagerAdapter.getChargingStationList().updateListKM(drivenMetersSoFar);
     }
 
     private void handleAllStations(){
         setAllChargingItems();
-        startRequestDirections();
+        startRequestDirections(latitude,longditude);
     }
 
     private void handleError(){
@@ -177,14 +191,9 @@ public class ChargingStations extends AppCompatActivity {
         Log.d("onResume","Er i onResume Charging Stations");
     }
 
-    public void startRequestDirections(){
+    public void startRequestDirections(double latitude, double longditude){
         String ID = bundle.getString("destinationID");
-
-
-
         String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
-        String longditude = String.valueOf(bundle.getDouble("longditude"));
-        String latitude = String.valueOf(bundle.getDouble("latitude"));
         String origin = latitude + "," + longditude;
         String destination = ID;
         String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
