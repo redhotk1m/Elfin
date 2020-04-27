@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // if (mCarList.size() == 0) mCarList.add(new Elbil(R.drawable.ic_car_black_24dp, getString(R.string.choosenCar)));
         // mCarList.add(new Elbil(R.drawable.ic_add_box_black_24dp, getString(R.string.add_car)));
         mCarAdapter = new CarAdapter(this, mCarList);
+      //  mCarAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         dropdown.setSelection(0, false);
         dropdown.setAdapter(mCarAdapter);
