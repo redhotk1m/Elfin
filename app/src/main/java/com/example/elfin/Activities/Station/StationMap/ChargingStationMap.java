@@ -124,7 +124,6 @@ public class ChargingStationMap extends Fragment {
             {
                 App applicationContext = (App)getActivity().getApplication();
                 setPolyLineOptions(applicationContext.getPolylineOptions());
-                LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
             }
         }
     };

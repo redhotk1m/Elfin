@@ -32,7 +32,7 @@ public class GPSTracker extends Service implements LocationListener {
     public boolean canGetLocation = false;
     private LocalBroadcastManager localBroadcastManager;
 
-    Location location;
+    static Location location;
 
     static double latitude;
     static double longitude;
@@ -191,7 +191,7 @@ public class GPSTracker extends Service implements LocationListener {
                 Location closestPolyPoint = new Location("this");
                 closestPolyPoint.setLongitude(pointz.get(idx).getLongditude());
                 closestPolyPoint.setLatitude(pointz.get(idx).getLatitude());
-                if (arg0.distanceTo(closestPolyPoint) > 2000)
+                if (arg0.distanceTo(closestPolyPoint) > 4000)
                     sendDrivenTooFarOffRoute();
             }
         }
@@ -242,9 +242,6 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public static Location getLastKnownLocation(){
-        Location lastKnownLocation = new Location("this");
-        lastKnownLocation.setLatitude(latitude);
-        lastKnownLocation.setLongitude(longitude);
-        return lastKnownLocation;
+        return location;
     }
 }
