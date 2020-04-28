@@ -51,7 +51,7 @@ public class CarInfoActivity extends AppCompatActivity {
 
     private SharedCarPreferences sharedCarPreferences;
 
-    private DialogBox dialogBox1, dialogBox2, dialogBox3, dialogBox4;
+    private DialogBox dialogBox, dialogBox1, dialogBox2, dialogBox3, dialogBox4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,8 +177,11 @@ public class CarInfoActivity extends AppCompatActivity {
                     intent.putParcelableArrayListExtra("CarList", new ArrayList<>(elbils));
                     intent.putExtra("Missing", found);
                     intent.putExtra("FieldMap", fieldMap);
-                    startActivity(intent);
-                    finish();
+
+                    startActivityDialogBox(1, intent);
+
+                    // startActivity(intent);
+                   // finish();
                 }
             }
         });
@@ -396,6 +399,39 @@ public class CarInfoActivity extends AppCompatActivity {
         dialogBox4 = new DialogBox(this, "ER DETTE IKKE DIN BIL?",
                 "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT?",
                 "VELG MANUELT", "SØK IGJEN", 2);
+    }
+
+    private void startActivityDialogBox(int identifier, Intent intent) {
+        String title, msg, yesBtn, noBtn;
+
+        switch (identifier) {
+            case 0:
+                title = "Er dette din bil?";
+                msg = "Vil du legge til denne bilen i appen?";
+                yesBtn = "Legg til bil";
+                noBtn = "Ikke min bil";
+                dialogBox = new DialogBox(this, title, msg, yesBtn, noBtn, 3);
+                break;
+            case 1:
+                title = "Er dette din bil?";
+                msg = "Vi mangler noen opplysninger om bilen din, vennligst velg blant de opplysningen som passer din bil best";
+                yesBtn = "Velg manulet";
+                noBtn = "Søk igjen";
+                dialogBox = new DialogBox(this, title, msg, yesBtn, noBtn, 3);
+                break;
+            case 2:
+                title = "Er dette din bil?";
+                msg = "Vil du prøve med et annet reg nr, eller velge bilen din manuelt?";
+                yesBtn = "Velg bil manuelt";
+                noBtn = "Søk igjen";
+                dialogBox = new DialogBox(this, title, msg, yesBtn, noBtn, 99);
+                break;
+        }
+
+        System.out.println("<SHOWING DIALOG BOX>");
+        dialogBox.setIntent(intent);
+        // dialogBox.simpleDialogBox();
+        dialogBox.createDialogBox();
     }
 
     /*

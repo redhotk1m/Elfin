@@ -2,6 +2,7 @@ package com.example.elfin.car;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.elfin.API.CarInfoAPI;
 import com.example.elfin.R;
+import com.example.elfin.Utils.DialogBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,6 +59,8 @@ public class CarSearchActivity extends AppCompatActivity {
     private Button searchCarBtn;
 
     private CarFilteredList carFilteredList;
+
+    private DialogBox dialogBox;
 
 
     @Override
@@ -104,6 +108,7 @@ public class CarSearchActivity extends AppCompatActivity {
                     else handleFirestoreQuery(allCarsList);
                     break;
                 case R.id.button_add_car:
+                    // startActivityDialogBox(1, null);
                     startActivity(new Intent(CarSearchActivity.this, NewCarActivity.class));
                     break;
                 default:
@@ -177,23 +182,24 @@ public class CarSearchActivity extends AppCompatActivity {
             System.out.println("#################################################################");
             Intent intent = new Intent(this, CarInfoActivity.class);
             intent.putExtra("Elbil", mElbilList.get(0));
-            startActivity(intent);
+
+
+            // dialogBox = new DialogBox(this, "title", "message", "yes", "no", 3);
+            // dialogBox.setIntent(intent);
+            // dialogBox.createDialogBox();
+
+            // startActivity(intent);
         } else if (mElbilList.size() == allCarsList.size() && allCarsList.size() != 0) {
             //todo: popup dialog: if "manual selection" ; else "try different regNr"
             System.out.println("#################################################################");
             System.out.println("ALL MATCHES FOUND: [ " + mElbilList.size() + " / " + allCarsList.size() + " ]");
             System.out.println("#################################################################");
-            Toast.makeText(this, "[POPUP DIALOG]\n\nPRØV IGJEN? eller VELG BIL MANUELT?", Toast.LENGTH_LONG).show();
-            //todo: if dialog "Velg bil manuelt" ;
             Intent intent = new Intent(this, CarSelectionActivity.class);
             intent.putParcelableArrayListExtra("AllCarsList", new ArrayList<>(allCarsList));
-            startActivity(intent);
+            // startActivity(intent);
+            startActivityDialogBox(0, intent);
         } else if (mElbilList.size() > 1) {
-            //todo startActivity CarInfoActivity ==> CarSelectionActivity ==> CarInfoActivity
-            // Intent intent = new Intent(this, CarSelectionActivity.class);
-            System.out.println("##############Intent intent = new Intent(CarSearchActivity.this, CarInfoActivity.class);\n" +
-                    "            intent.putExtra(\"Elbil\", mElbilList.get(0));\n" +
-                    "            startActivity(intent);###################################################");
+            System.out.println("#################################################################");
             System.out.println("MATCHES FOUND: [ " + mElbilList.size() + " / " + allCarsList.size() + " ]");
             System.out.println("#################################################################");
             Intent intent = new Intent(this, CarInfoActivity.class);
@@ -202,7 +208,6 @@ public class CarSearchActivity extends AppCompatActivity {
             intent.putExtra("Missing", found);
             intent.putExtra("FieldMap", foundHashMap);
             // intent.putExtra("FoundFieldsMap", foundFieldsMap);
-            //todo: get HashMap data in next activity by using getSearializedExtra like this
             startActivity(intent);
         } else {
             //todo: make sure all firestore cars have been fetched successfully beforehand
@@ -214,7 +219,6 @@ public class CarSearchActivity extends AppCompatActivity {
             System.out.println("FETCHING FIRESTORE CARS: " + allCarsList.size());
         }
     }
-
 
     private void iterateFilteredCars(String[] responses) {
         System.out.println("API MODEL RESPONSE: " + Arrays.toString(responses) + " ; LENGTH: " + responses.length
@@ -438,6 +442,34 @@ public class CarSearchActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void startActivityDialogBox(int identifier, Intent intent) {
+        String title, msg, yesBtn, noBtn;
+
+        switch (identifier) {
+            case 0:
+                title = "Ingen treff";
+                msg = "Vi fant desverre ikke bilen i vårt register basert på registrerings nummert";
+                yesBtn = "Velg bil manulet";
+                noBtn = "Søk igjen";
+                dialogBox = new DialogBox(this, title, msg, yesBtn, noBtn, 3);
+                break;
+            case 1:
+                title = "NOE GIKK GALT, PRØV IGJEN!";
+                msg = "Vi fant ikke bilen i vårt register basert registrerings nummert";
+                yesBtn = "Velg manulet";
+                noBtn = "Søk igjen";
+                dialogBox = new DialogBox(this, title, msg, yesBtn, noBtn, 99);
+                dialogBox.defaultDialog();
+                return;
+            // break;
+        }
+
+        System.out.println("<SHOWING DIALOG BOX>");
+        dialogBox.setIntent(intent);
+        // dialogBox.simpleDialogBox();
+        dialogBox.createDialogBox();
     }
 
     private void checkModelYearRange(Elbil elbil) {

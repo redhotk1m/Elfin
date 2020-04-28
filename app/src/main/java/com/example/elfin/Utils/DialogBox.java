@@ -13,6 +13,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.MainActivity;
+import com.example.elfin.car.CarInfoActivity;
+import com.example.elfin.car.CarSelectionActivity;
 
 public class DialogBox {
 
@@ -23,6 +25,8 @@ public class DialogBox {
     String noButton;
     int option;
     AlertDialog.Builder alertDialog;
+
+    private Intent intent;
 
     public DialogBox(Context context, String title, String message, String yesButton, String noButton, int option){
         this.context=context;
@@ -66,6 +70,10 @@ public class DialogBox {
                         context.startActivity(intent);
                     case 2:
                         //ActivityCompat.requestPermissions();
+                    case 3:
+                        intent = getIntent();
+                        context.startActivity(intent);
+                        if (context instanceof CarInfoActivity) ((CarInfoActivity) context).finish();
                     default:
                         dialog.cancel();
                 }
@@ -84,5 +92,11 @@ public class DialogBox {
         alertDialog.show();
     }
 
+    public Intent getIntent() {
+        return intent;
+    }
 
+    public void setIntent(Intent intent) {
+        this.intent = intent;
+    }
 }
