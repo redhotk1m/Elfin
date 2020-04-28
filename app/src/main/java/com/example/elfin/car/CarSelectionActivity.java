@@ -348,8 +348,8 @@ public class CarSelectionActivity extends AppCompatActivity {
         adapterBrands.notifyDataSetChanged();
         // v.setOnClickListener(null); //removes setOnClickListener
         tvSpinnerBrands.setVisibility(View.GONE);
-       // if (manualSelection) //todo: make selectedBrand the selected spinner item automatically
-            spinnerBrands.performClick();
+       // if (manualSelection) spinnerBrands.performClick();
+       // else spinnerBrands.setSelection(0);
     }
 
     private void initSpinners() {
@@ -372,10 +372,13 @@ public class CarSelectionActivity extends AppCompatActivity {
                     makeSpinnerDisplay(BRAND, selectedBrand, view);
                     // disableSpinner(MODEL);
                     // spinnerModels.setVisibility(View.GONE);
+                    if (manualSelection) spinnerBrands.performClick();
+                    else clickableSelection(spinnerBrands, found[0]);
                 } else {
                     makeSpinnerDisplay(BRAND, selectedBrand, view);
                     // ((TextView) view).setText(spinnerBrandsDisplay);
-                   if (manualSelection) spinnerModels.performClick();
+                    if (manualSelection) spinnerModels.performClick();
+                    else clickableSelection(spinnerModels, found[1]);
                     adapterModels.notifyDataSetChanged();
                     // disableSpinner(MODELYEAR);
                 }
@@ -386,7 +389,8 @@ public class CarSelectionActivity extends AppCompatActivity {
                 String selectedModel = spinnerModels.getSelectedItem().toString();
                 makeSpinnerDisplay(MODEL, selectedModel, view);
                 if (!selectedModel.equals(getString(R.string.choose_none))) {
-                   if (manualSelection) spinnerModelYears.performClick();
+                    if (manualSelection) spinnerModelYears.performClick();
+                    else clickableSelection(spinnerModelYears, found[2]);
                     adapterModelYears.notifyDataSetChanged();
                 }
                 break;
@@ -396,7 +400,8 @@ public class CarSelectionActivity extends AppCompatActivity {
                 String selectedModelYear = spinnerModelYears.getSelectedItem().toString();
                 makeSpinnerDisplay(MODELYEAR, selectedModelYear, view);
                 if (!selectedModelYear.equals(getString(R.string.choose_none))) {
-                   if (manualSelection) spinnerBatteries.performClick();
+                    if (manualSelection) spinnerBatteries.performClick();
+                    else clickableSelection(spinnerBatteries, found[3]);
                     adapterBattery.notifyDataSetChanged();
                 }
                 break;
@@ -417,7 +422,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 String selectedFastCharge = spinnerCharges.getSelectedItem().toString();
                 makeSpinnerDisplay(FASTCHARGE, selectedFastCharge, view);
                 if (!selectedFastCharge.equals(getString(R.string.choose_none))) {
-                    if (manualSelection) spinnerCharges.performClick();
+                    // if (manualSelection) spinnerCharges.performClick();
                     adapterFastCharge.notifyDataSetChanged();
                 }
                 break;
@@ -443,6 +448,13 @@ public class CarSelectionActivity extends AppCompatActivity {
                 default:
                     Toast.makeText(this, "NO SUCH SPINNER FOUND..", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void clickableSelection(Spinner spinner, boolean foundField) {
+        if (foundField){
+            spinner.setSelection(0);
+            spinner.setClickable(false);
         }
     }
 

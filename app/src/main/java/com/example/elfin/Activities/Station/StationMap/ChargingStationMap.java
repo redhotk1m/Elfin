@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -113,8 +114,6 @@ public class ChargingStationMap extends Fragment {
         return null;
     }
 
-    
-
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -125,7 +124,6 @@ public class ChargingStationMap extends Fragment {
             {
                 App applicationContext = (App)getActivity().getApplication();
                 setPolyLineOptions(applicationContext.getPolylineOptions());
-                LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
             }
         }
     };
@@ -133,12 +131,14 @@ public class ChargingStationMap extends Fragment {
     private PolylineOptions polylineOptions;
     public void setPolyLineOptions(PolylineOptions polyLineOptions){
         this.polylineOptions = polyLineOptions;
+        //TODO: Kanskje sette til false etterpå?
         chargingStations.routeCreated = true;
         drawRoute();
     }
 
     private void drawRoute(){
         if (chargingStations.mapCreated && chargingStations.routeCreated){
+            gMap.clear();
             gMap.addPolyline(polylineOptions);
         }
     }

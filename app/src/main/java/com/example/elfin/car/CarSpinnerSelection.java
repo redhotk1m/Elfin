@@ -56,7 +56,7 @@ public class CarSpinnerSelection {
             selectedBrand = selectedMap.get(BRAND);
             selectedModel = selectedMap.get(MODEL);
             //todo: handle in CarSerachActivity to check if selected model year exists in database
-           // selectedModelYear = selectedMap.get(MODELYEAR);
+            // selectedModelYear = selectedMap.get(MODELYEAR);
             selectedModelYear = "";
             selectedBattery = selectedMap.get(BATTERY);
             // selectedEffect = selectedMap.get(FASTCHARGE);
@@ -202,7 +202,7 @@ public class CarSpinnerSelection {
                 } else {
                     getFilteredCars(thisSpinner, MODELYEAR, spinnerList, manualSelection);
                     setSpinnerSelection(nextSpinenr, spinnerList);
-                   carSelectionActivity.disableSpinner(BATTERY);
+                    carSelectionActivity.disableSpinner(BATTERY);
                 }
 
                 break;
@@ -222,9 +222,7 @@ public class CarSpinnerSelection {
                 if (thisSpinner.getSelectedItem().equals(spinnerPrompts[3])
                         || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
                     carSelectionActivity.disableSpinner(FASTCHARGE);
-                }
-
-                else {
+                } else {
                     getFilteredCars(thisSpinner, FASTCHARGE, spinnerList, manualSelection);
                     setSpinnerSelection(nextSpinenr, spinnerList);
                    // carSelectionActivity.disableSpinner(FASTCHARGE);
@@ -365,6 +363,7 @@ public class CarSpinnerSelection {
                 // filteredList.add(getString(R.string.choose_nothing));
         }
         Collections.sort(filteredList);
-        if (manualSelection && filteredList.size() > 0) filteredList.add(spinnerFields[0]);
+        // if (manualSelection && filteredList.size() > 0) filteredList.add(spinnerFields[0]);
+        if (filteredList.size() > 0) filteredList.add(spinnerFields[0]);
     }
 }

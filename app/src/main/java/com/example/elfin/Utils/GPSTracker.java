@@ -32,10 +32,10 @@ public class GPSTracker extends Service implements LocationListener {
     public boolean canGetLocation = false;
     private LocalBroadcastManager localBroadcastManager;
 
-    Location location;
+    static Location location;
 
-    double latitude;
-    double longitude;
+    static double latitude;
+    static double longitude;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 1;
@@ -148,49 +148,68 @@ public class GPSTracker extends Service implements LocationListener {
     float[] resultNext = new float[1];
     @Override
     public void onLocationChanged(Location arg0) {
-        if (arg0.distanceTo(location) > 1000) {
+        if (arg0.distanceTo(location) > 200) {
             location = arg0;
             App app = (App) context.getApplicationContext();
             ArrayList<PolyPoint> pointz = null;
-            if (app != null)
-                pointz = app.getPolypoints();
+            if (app != null) pointz = app.getPolypoints();
             if (pointz != null) {
-                // TODO Auto-generated method stub
                 // TODO: Kanskje legge inn permission sjekk hver gang her, istedenfor
-                System.out.println("loc changed " + arg0.getLatitude() + " " + arg0.getLongitude());
                 int idx = 0;
-                Location.distanceBetween(pointz.get(0).getLatitude(), pointz.get(0).getLongditude(), arg0.getLatitude(), arg0.getLongitude(), result);
-                System.out.println(result[0] + " er distanse mellom punkt 0 og oss");
+                Location.distanceBetween(pointz.get(0).getLatitude(),
+                        pointz.get(0).getLongditude(),
+                        arg0.getLatitude(),
+                        arg0.getLongitude(),
+                        result);
                 int counter = 0;
                 for (int i = 1; i < pointz.size(); i++) {
-                    Location.distanceBetween(pointz.get(i).getLatitude(), pointz.get(i).getLongditude(), arg0.getLatitude(), arg0.getLongitude(), resultNext);
-                    System.out.println("resN = " + resultNext[0] + "res = " + result[0]);
+                    Location.distanceBetween(pointz.get(i).getLatitude(),
+                            pointz.get(i).getLongditude(),
+                            arg0.getLatitude(),
+                            arg0.getLongitude(),
+                            resultNext);
                     if (resultNext[0] < result[0]) {
                         idx = i;
                         result[0] = resultNext[0];
-                        System.out.println("Nå har vi kjørt lenger enn før");
                     }else{
                         counter ++;
                         if (counter > 20) {
                             double currentDrivenKM = pointz.get(idx).getDrivenKM();
                             System.out.println("Return med ca " + currentDrivenKM);
                             sendKMDrivenSoFar(currentDrivenKM);
+                            Location closestPolyPoint = new Location("this");
+                            closestPolyPoint.setLongitude(pointz.get(idx).getLongditude());
+                            closestPolyPoint.setLatitude(pointz.get(idx).getLatitude());
+                            if (arg0.distanceTo(closestPolyPoint) > 2000)
+                                sendDrivenTooFarOffRoute();
                             return;
                         }
                     }
                 }
                 double currentDrivenKM = pointz.get(idx).getDrivenKM();
                 sendKMDrivenSoFar(currentDrivenKM);
-                System.out.println("Nå er vi kjørt ca: " + currentDrivenKM);
+                Location closestPolyPoint = new Location("this");
+                closestPolyPoint.setLongitude(pointz.get(idx).getLongditude());
+                closestPolyPoint.setLatitude(pointz.get(idx).getLatitude());
+                if (arg0.distanceTo(closestPolyPoint) > 4000)
+                    sendDrivenTooFarOffRoute();
             }
         }
 
     }
 
+
     private void sendKMDrivenSoFar(double currentDrivenKM){
-        Intent intent = new Intent("updateKMList");
+        Intent intent = new Intent("gpsTracker");
         intent.putExtra("case","updateKMList");
         intent.putExtra("drivenMetersSoFar",currentDrivenKM);
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void sendDrivenTooFarOffRoute(){
+        System.out.println("Sender intent med kjør for langt");
+        Intent intent = new Intent("gpsTracker");
+        intent.putExtra("case","drivenTooFarOffRoute");
         localBroadcastManager.sendBroadcast(intent);
     }
 
@@ -220,5 +239,9 @@ public class GPSTracker extends Service implements LocationListener {
     public IBinder onBind(Intent intent) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    public static Location getLastKnownLocation(){
+        return location;
     }
 }
