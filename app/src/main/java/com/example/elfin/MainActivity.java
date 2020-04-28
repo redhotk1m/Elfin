@@ -46,6 +46,7 @@ import com.example.elfin.car.CarSearchActivity;
 import com.example.elfin.car.Elbil;
 import com.example.elfin.car.SharedCarPreferences;
 import com.example.elfin.listener.SpinnerInteractionListener;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public TextView destinacionTextView;
     public String destionacionValidacion;
     public Boolean isSelected = false;
+    public ArrayList<ChargerItem> updatedCharginingStations;
+    public ArrayList<ChargerItem> chargersForCar;
 
     TextView headerText;
 
@@ -143,23 +146,71 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //Log.d("Debug2",new MainActivity().editText.getText().toString());
     }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    public ArrayList<ChargerItem> setChargerForCar(){
+        chargersForCar = new ArrayList<>();
+        System.out.println(mSelectedCar.getFastCharge());
 
-        System.out.println("<ON POST CREATE>");
-        Elbil elbil = (Elbil) dropdown.getSelectedItem();
+        ArrayList<ChargerItem> chargerItemsTemp = new ArrayList<>(allChargingStations);
+        System.out.println(chargerItemsTemp.size());
+        double chargeTime = 0;
+        if(mSelectedCar.getFastCharge() != null){
+            chargeTime = Math.round(Double.parseDouble(mSelectedCar.getBattery())/50*60);
+        }
+        int chargeTimeMin = (int) chargeTime;
+        String fastTime = "ca "  + chargeTimeMin + " min";
+        double chargeTimeLight = 0;
+        if(mSelectedCar.getFastCharge() != null){
+            chargeTimeLight = Math.round(Double.parseDouble(mSelectedCar.getBattery())/150*60);
+        }
+        int chargeTimeMinLight = (int) chargeTimeLight;
+        String fastTimeLight = "ca "  + chargeTimeMinLight + " min";
 
-        if (elbil.getFastCharge() == null) elbil.setFastCharge("CHAdeMO");
-        if (elbil.getBattery() == null) elbil.setBattery("50");
-        if (elbil.getEffect() == null) elbil.setEffect("50 kW DC");
+        for (ChargerItem chargerItem: chargerItemsTemp){
+            LatLng latLng = chargerItem.getLatLng();
+            String [] latlngArray = {""+latLng.latitude, ""+latLng.longitude};
 
-        ((App) getApplication()).setElbil(elbil);
 
-        System.out.println(elbil.getFastCharge());
-        System.out.println(elbil.getBattery());
-        System.out.println(elbil.getEffect());
+            if("CHAdeMO".equals(mSelectedCar.getFastCharge())){
+                if(chargerItem.getChademo().equals("CHAdeMO")){
+                    ChargerItem chargerItem1 = new ChargerItem(chargerItem.getStreet(), chargerItem.getHouseNumber(),
+                            chargerItem.getCity(), chargerItem.getDescriptionOfLocation(),
+                            chargerItem.getOwnedBy(),
+                            chargerItem.getUserComment(), chargerItem.getContactInfo(), latlngArray,
+                            chargerItem.getChademo(), chargerItem.getNumberOfChademo(), fastTime, "",
+                            "","", chargerItem.getImageFast(), 0, "", "", "", chargerItem.getFastText(), "");
+                    chargersForCar.add(chargerItem1);
+                }
+            }else if("CCS/Combo".equals(mSelectedCar.getFastCharge())){
+                if(chargerItem.getCcs().equals("CCS/Combo")){
+                    if(chargerItem.getLightningCCS().equals("")){
+                        fastTimeLight = "";
+                    } else {
+                        fastTimeLight = "ca "  + chargeTimeMinLight + " min";
+                    }
+                    ChargerItem chargerItem1 = new ChargerItem(chargerItem.getStreet(), chargerItem.getHouseNumber(), chargerItem.getCity(),
+                            chargerItem.getDescriptionOfLocation(), chargerItem.getOwnedBy(),
+                            chargerItem.getUserComment(), chargerItem.getContactInfo(),latlngArray, "", "", "", chargerItem.getCcs(),
+                            chargerItem.getNumberOfCcs(), fastTime, chargerItem.getImageFast(), chargerItem.getImageSlow(), chargerItem.getLightningCCS(),
+                            chargerItem.getNumberOflightningCCS(), fastTimeLight, chargerItem.getFastText(),chargerItem.getLightningText());
+                    chargersForCar.add(chargerItem1);
+                }
+            }
+            else {
+                ChargerItem chargerItem1 = new ChargerItem(chargerItem.getStreet(), chargerItem.getHouseNumber(), chargerItem.getCity(),
+                        chargerItem.getDescriptionOfLocation(), chargerItem.getOwnedBy(),
+                        chargerItem.getUserComment(), chargerItem.getContactInfo(), latlngArray, chargerItem.getChademo(), chargerItem.getNumberOfChademo(), chargerItem.getChademoTime(), chargerItem.getCcs(),
+                        chargerItem.getNumberOfCcs(), chargerItem.getCcsTime(), chargerItem.getImageFast(), chargerItem.getImageSlow(), chargerItem.getLightningCCS(),
+                        chargerItem.getNumberOflightningCCS(), chargerItem.getLightningTime(), chargerItem.getFastText(),chargerItem.getLightningText());
+                chargersForCar.add(chargerItem1);
+            }
+
+        }
+        return chargersForCar;
     }
+
+
+
+
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -177,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         }
     };
+
 
     public void closeKeyboard(View view) {
         InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -205,7 +257,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         dropdown.setOnItemSelectedListener(interactionListener);
 
         mSelectedCar = (Elbil) dropdown.getSelectedItem();
+
+
         System.out.println("(ON CREATE) SELECTED ELBIL: " + mSelectedCar.toString());
+
+        //((App) getApplication()).setElbil(mSelectedCar);
+
+
 
         initDropDown = true;
     }
@@ -261,14 +319,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void getSelectedCar(View view) {
         System.out.println("(MAIN ACTIVITY) GET SELECTED CAR ; ON_LONG_CLICKED == " + onLongClicked);
+        System.out.println("------------------------------------------------------------------------");
         mSelectedCar = (Elbil) dropdown.getSelectedItem();
-        ((App) getApplication()).setElbil(mSelectedCar);
+        //((App) getApplication()).setElbil(mSelectedCar);
         System.out.println(mSelectedCar.getFastCharge());
         System.out.println(mSelectedCar.getBattery());
         System.out.println(mSelectedCar.getEffect());
 
         String display = mSelectedCar.getSpinnerDisplay();
         checkAddCarDisplay(display);
+
 
         if (onLongClicked && !getString(R.string.add_car).equals(display)) {
             System.out.println("ON ITEM LONG CLICKED ; " + onLongClicked);
@@ -427,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 gpsTracker = new GPSTracker(this);
                 gpsTracker.getLocation();
                 if (gpsTracker.canGetLocation()) {
-                    ((App) getApplication()).setChargerItems(allChargingStations);
+                    ((App) getApplication()).setChargerItems(setChargerForCar());
                     LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
                     bundle.putDouble("longditude", gpsTracker.getLongitude());
                     bundle.putDouble("latitude", gpsTracker.getLatitude());
@@ -439,6 +499,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             }
         } else {
             destinacionTextView.setVisibility(View.VISIBLE);
+            if(editText.getText().toString().length()>0){
+                destinacionTextView.setText("Velg en gyldig adresse");
+            }
         }
 
     }
