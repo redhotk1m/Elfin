@@ -188,7 +188,7 @@ public class CarSearchActivity extends AppCompatActivity {
             // dialogBox.setIntent(intent);
             // dialogBox.createDialogBox();
 
-            // startActivity(intent);
+             startActivity(intent);
         } else if (mElbilList.size() == allCarsList.size() && allCarsList.size() != 0) {
             //todo: popup dialog: if "manual selection" ; else "try different regNr"
             System.out.println("#################################################################");

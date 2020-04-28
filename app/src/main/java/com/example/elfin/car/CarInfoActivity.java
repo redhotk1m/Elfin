@@ -415,8 +415,8 @@ public class CarInfoActivity extends AppCompatActivity {
             case 1:
                 title = "Er dette din bil?";
                 msg = "Vi mangler noen opplysninger om bilen din, vennligst velg blant de opplysningen som passer din bil best";
-                yesBtn = "Velg manulet";
-                noBtn = "Søk igjen";
+                yesBtn = "Fyll mangler";
+                noBtn = "Nei";
                 dialogBox = new DialogBox(this, title, msg, yesBtn, noBtn, 3);
                 break;
             case 2:
