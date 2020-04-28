@@ -3,6 +3,7 @@ package com.example.elfin.Activities.Station.StationMap;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -114,6 +115,7 @@ public class ChargingStationMap extends Fragment {
         return null;
     }
 
+
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -122,7 +124,7 @@ public class ChargingStationMap extends Fragment {
             //    System.out.println("error");
                 //TODO: Error message to user
             {
-                App applicationContext = (App)getActivity().getApplication();
+                App applicationContext = (App)chargingStations.getContext().getApplication();
                 setPolyLineOptions(applicationContext.getPolylineOptions());
             }
         }

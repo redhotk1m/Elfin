@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("allStations"));
 
         //Log.d("Debug2",new MainActivity().editText.getText().toString());
+        gpsTracker = new GPSTracker(this);
     }
 
     public ArrayList<ChargerItem> setChargerForCar(){
@@ -487,7 +488,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             } else {
                 Intent intent = new Intent(this, ChargingStations.class);
                 Bundle bundle = new Bundle();
-                gpsTracker = new GPSTracker(this);
                 gpsTracker.getLocation();
                 if (gpsTracker.canGetLocation()) {
                     ((App) getApplication()).setChargerItems(setChargerForCar());

@@ -54,6 +54,7 @@
         android:layout_height="50dp"
         android:text="@string/to"
         android:textSize="24sp"
+        android:src="@drawable/rsz_1no_reg_plate"
         app:layout_constraintBottom_toBottomOf="@+id/rectangle_search_regNr"
         app:layout_constraintStart_toStartOf="@+id/rectangle_search_regNr"
         app:layout_constraintTop_toTopOf="@+id/rectangle_search_regNr"

@@ -25,7 +25,7 @@
         <com.example.elfin.car.CustomCarSpinner
             android:id="@+id/chooseCar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:dropDownWidth="match_parent"
             android:spinnerMode="dropdown" />
         <!--
