@@ -114,8 +114,8 @@
 
     <ImageView
         android:id="@+id/imageViewFast"
-        android:layout_width="32dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
@@ -123,20 +123,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/description"
         app:layout_constraintTop_toBottomOf="@+id/description"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.128" />
 
     <ImageView
         android:id="@+id/imageViewSlow"
-        android:layout_width="32dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="160dp"
         android:scaleType="centerCrop"
         android:src="@drawable/baseline_battery_charging_full_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewFast"
-        app:layout_constraintTop_toBottomOf="@+id/description"
+        app:layout_constraintTop_toTopOf="@+id/imageViewFast"
         app:layout_constraintVertical_bias="0.148" />
 
     <TextView

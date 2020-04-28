@@ -48,31 +48,21 @@ public class ChargerItem implements Parcelable {
 
 
 
-    public ChargerItem(String street, String houseNumber, String zipCode, String city,
-                       String municipality, String county, String descriptionOfLocation,
-                       String ownedBy, String numberChargingPoints, String image,
-                       String availableChargingPoints, String userComment, String contactInfo,
-                       String created, String updated, String stationStatus, String[] latlng,
+    public ChargerItem(String street, String houseNumber, String city,
+                       String descriptionOfLocation,
+                       String ownedBy, String userComment, String contactInfo,
+                       String[] latlng,
                        String chademo, String numberOfChademo, String chademoTime, String ccs, String numberOfCcs,
                        String ccsTime, int imageFast, int imageSlow, String lightningCCS,
-                       String numberOflightningCCS, String lightningTime, String fastText, String lightningText, String everyCharger) {
+                       String numberOflightningCCS, String lightningTime, String fastText, String lightningText) {
 
         this.street = street;
         this.houseNumber = houseNumber;
-        this.zipCode = zipCode;
-        this.city = city;
-        this.municipality = municipality;
-        this.county = county;
         this.descriptionOfLocation = descriptionOfLocation;
+        this.city=city;
         this.ownedBy = ownedBy;
-        this.numberChargingPoints = numberChargingPoints;
-        this.image = image;
-        this.availableChargingPoints = availableChargingPoints;
         this.userComment = userComment;
         this.contactInfo = contactInfo;
-        this.created = created;
-        this.updated = updated;
-        this.stationStatus = stationStatus;
         this.latLng = latlng;
         this.chademo = chademo;
         this.numberOfChademo = numberOfChademo;
@@ -89,7 +79,6 @@ public class ChargerItem implements Parcelable {
         this.lightningTime = lightningTime;
         this.fastText=fastText;
         this.lightningText = lightningText;
-        this.everyCharger=everyCharger;
     }
 
 
@@ -104,6 +93,10 @@ public class ChargerItem implements Parcelable {
             return new ChargerItem[size];
         }
     };
+
+    public void setLatLng(String[] latLng) {
+        this.latLng = latLng;
+    }
 
 
     public String getEveryCharger() {
@@ -374,21 +367,11 @@ public class ChargerItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(street);
-        parcel.writeString(houseNumber);
-        parcel.writeString(zipCode);
-        parcel.writeString(city);
-        parcel.writeString(municipality);
-        parcel.writeString(county);
         parcel.writeString(descriptionOfLocation);
         parcel.writeString(ownedBy);
-        parcel.writeString(numberChargingPoints);
-        parcel.writeString(image);
-        parcel.writeString(availableChargingPoints);
+        parcel.writeString(city);
         parcel.writeString(userComment);
         parcel.writeString(contactInfo);
-        parcel.writeString(created);
-        parcel.writeString(updated);
-        parcel.writeString(stationStatus);
         parcel.writeDouble(Double.valueOf(latLng[0]));
         parcel.writeDouble(Double.valueOf(latLng[1]));
         parcel.writeString(chademo);
@@ -404,26 +387,16 @@ public class ChargerItem implements Parcelable {
         parcel.writeString(lightningTime);
         parcel.writeString(fastText);
         parcel.writeString(lightningText);
-        parcel.writeString(everyCharger);
     }
 
     ChargerItem(Parcel in){
         this.street = in.readString();
         this.houseNumber = in.readString();
-        this.zipCode = in.readString();
         this.city = in.readString();
-        this.municipality = in.readString();
-        this.county = in.readString();
         this.descriptionOfLocation = in.readString();
         this.ownedBy = in.readString();
-        this.numberChargingPoints = in.readString();
-        this.image = in.readString();
-        this.availableChargingPoints = in.readString();
         this.userComment = in.readString();
         this.contactInfo = in.readString();
-        this.created = in.readString();
-        this.updated = in.readString();
-        this.stationStatus = in.readString();
         this.latLng[0] = Double.toString(in.readDouble());
         this.latLng[1] = Double.toString(in.readDouble());
         this.chademo = in.readString();

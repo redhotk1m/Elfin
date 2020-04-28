@@ -18,7 +18,7 @@ public class App extends Application {
     private PolylineOptions polylineOptions;
     private ArrayList<ChargerItem> allValidChargingStations;
     private ArrayList<PolyPoint> polypoints;
-    private Elbil elbil;
+    private static Elbil elbil;
 
     public ArrayList<ChargerItem> getChargerItems() {
         if (chargerItems != null)

@@ -197,11 +197,11 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         textViewTitel.setText(infoFromList.get(0));
         textViewAdress.setText(infoFromList.get(1));
         textViewChargerType.setText(infoFromList.get(2) + "\n" +  fastCharger);
-        textViewAvaiable.setText(infoFromList.get(3) + " stk" );
+        textViewAvaiable.setText(infoFromList.get(3));
         textViewChargerType2.setText(infoFromList.get(4) + "\n" +  fastCharger);
-        textViewAvaiable2.setText(infoFromList.get(5)+ " stk");
+        textViewAvaiable2.setText(infoFromList.get(5));
         textViewChargerType3.setText(infoFromList.get(6) + "\n" + lightCharger);
-        textViewAvaiable3.setText(infoFromList.get(7) + " stk");
+        textViewAvaiable3.setText(infoFromList.get(7));
         textViewInfoText.setText(infoFromList.get(8));
         textViewDescriptionText.setText(infoFromList.get(9));
 

@@ -73,7 +73,6 @@ public class RetrieveJSON extends AsyncTask<String, Void, String>{
             //localBroadcastManager.sendBroadcast(intent);
         }
         if (className == TaskRequestDirections.class){
-
             TaskParser taskParser = new TaskParser(localBroadcastManager,applicationContext);
             taskParser.execute(jsonString);
             //TaskRequestDirections a = new TaskRequestDirections(localBroadcastManager,applicationContext);
