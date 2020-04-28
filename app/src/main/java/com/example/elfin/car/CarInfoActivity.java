@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,11 +39,13 @@ public class CarInfoActivity extends AppCompatActivity {
     private boolean[] found;
     private HashMap<String, String> fieldMap;
     private String brand, model, modelYear, battery, fastCharge;
+    private String brand2, model2, modelYear2, battery2, fastCharge2;
 
     private ArrayList<Elbil> mCarList, mCarListAll;
-    private Button saveCarBtn, loadCarBtn;
+    private ImageButton saveCarBtn, loadCarBtn;
     // private EditText editTextFastCharge, editTextBattery;
     private TextView editTextBrand, editTextModel, editTextModelYear, editTextFastCharge, editTextBattery;
+    private TextView editTextBrand2, editTextModel2, editTextModelYear2, editTextFastCharge2, editTextBattery2;
     private Spinner spinner;
     private ArrayAdapter adapter;
     private Elbil elbil;
@@ -269,6 +272,14 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextModelYear = findViewById(R.id.text_view_model_year);
         editTextFastCharge = findViewById(R.id.text_view_fast_charge);
         editTextBattery = findViewById(R.id.text_view_battery);
+        editTextBrand2 = findViewById(R.id.text_view_brand2);
+        editTextModel2 = findViewById(R.id.text_view_model2);
+        editTextModelYear2 = findViewById(R.id.text_view_model_year2);
+        editTextFastCharge2 = findViewById(R.id.text_view_fast_charge2);
+        editTextBattery2 = findViewById(R.id.text_view_battery2);
+
+
+
 
         spinner = findViewById(R.id.spinner_all_cars);
 
@@ -308,44 +319,48 @@ public class CarInfoActivity extends AppCompatActivity {
 
         if (elbilFound) {
 //            String documentId = elbil.getDocumentId();
-            brand += elbil.getBrand();
-            model += elbil.getModel();
-            modelYear += elbil.getModelYear();
-            battery += elbil.getBattery();
-            fastCharge += elbil.getFastCharge();
+            brand2 = elbil.getBrand();
+            model2 = elbil.getModel();
+            modelYear2 = elbil.getModelYear();
+            battery2 = elbil.getBattery();
+            fastCharge2 = elbil.getFastCharge();
 
             //todo: lag popup dialog ==> "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT? "
-            loadCarBtn.setText("IKKE MIN BIL");
+           // loadCarBtn.setText("IKKE MIN BIL");
         } else if (fieldMap != null) {
 
-            if (found[0]) brand += fieldMap.get(BRAND);
-            else brand += "[IKKE FUNNET]";
+            if (found[0]) brand2 = fieldMap.get(BRAND);
+            else brand2 = "[IKKE FUNNET]";
 
-            if (found[1]) model += fieldMap.get(MODEL);
-            else model += "[IKKE FUNNET]";
+            if (found[1]) model2 = fieldMap.get(MODEL);
+            else model2 = "[IKKE FUNNET]";
 
-            if (found[2]) modelYear += fieldMap.get(MODELYEAR);
-            else modelYear += "[IKKE FUNNET]";
+            if (found[2]) modelYear2 = fieldMap.get(MODELYEAR);
+            else modelYear2 = "[IKKE FUNNET]";
 
-            if (found[3]) battery += fieldMap.get(BATTERY);
-            else battery += "[IKKE FUNNET]";
+            if (found[3]) battery2 = fieldMap.get(BATTERY);
+            else{
+                battery2 = "UKJENT";
+                fastCharge2 = "UKJENT";
+            }
 
 
             // fastCharge += fieldMap.get(FASTCHARGE);
-            fastCharge += "[IKKE FUNNET]";
+            fastCharge = "[IKKE FUNNET]";
 
 
             //todo: lag popup dialog ==> "Vi mangler noen opplysninger om bilen din, vennligst velg blant de opplysningen som passer din bil.." ==> "OK?"
-            saveCarBtn.setText("FYLL INN MANGLER");
+            //saveCarBtn.setText("FYLL INN MANGLER");
             //todo: lag popup dialog ==> "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT? "
-            loadCarBtn.setText("IKKE MIN BIL");
+            //loadCarBtn.setText("IKKE MIN BIL");
         }
 
-        editTextBrand.setText(brand);
-        editTextModel.setText(model);
-        editTextModelYear.setText(modelYear);
-        editTextFastCharge.setText(fastCharge);
-        editTextBattery.setText(battery);
+
+        editTextBrand2.setText(brand2);
+        editTextModel2.setText(model2);
+        editTextModelYear2.setText(modelYear2);
+        editTextFastCharge2.setText(fastCharge2);
+        editTextBattery2.setText(battery2);
     }
 
 
@@ -381,6 +396,7 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextModel.setText(model);
         editTextModelYear.setText(modelYear);
         editTextFastCharge.setText(fastCharge);
+        editTextBattery.setText(battery);
     }
 
     private void initDialog() {

@@ -452,11 +452,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && (i == KeyEvent.KEYCODE_ENTER || i == KeyEvent.KEYCODE_DPAD_CENTER)) {
+                    System.out.println("trykker");
                     editText.setText(listViewSuggest.getItemAtPosition(0).toString());
                     destionacionValidacion = editText.getText().toString();
                     setDestinationID(placeIdList.get(0));
                     isSelected = true;
                     closeKeyboard(view);
+
                 }
                 return false;
             }

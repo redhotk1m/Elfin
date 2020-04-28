@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backGroundColor"
     tools:context=".car.CarInfoActivity">
 
     <Spinner
@@ -14,6 +15,102 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/lineTourCar"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_add_car" />
+
+    <View
+        android:id="@+id/lineTourCar2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_brand" />
+
+    <View
+        android:id="@+id/lineTourCar3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_model" />
+
+    <View
+        android:id="@+id/lineTourCar4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_model_year" />
+
+    <View
+        android:id="@+id/lineTourCar5"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_fast_charge" />
+
+    <View
+        android:id="@+id/lineTourCar6"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.2"
+        android:background="@color/blackColor"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_battery" />
+
     <TextView
         android:id="@+id/text_view_add_car"
         android:layout_width="wrap_content"
@@ -23,112 +120,248 @@
         android:layout_marginEnd="8dp"
         android:text="Er dette din bil?"
         android:textSize="24sp"
+        android:textColor="@color/blackColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_all_cars" />
-    />
 
     <TextView
         android:id="@+id/text_view_brand"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="200dp"
         android:ems="10"
         android:hint="Merke"
         android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_add_car" />
 
     <TextView
-        android:id="@+id/text_view_model"
-        android:layout_width="match_parent"
+        android:id="@+id/text_view_brand2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="Merke"
+        android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_brand"
+        app:layout_constraintTop_toTopOf="@+id/text_view_brand" />
+
+    <TextView
+        android:id="@+id/text_view_model"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="200dp"
         android:ems="10"
         android:hint="Modell"
         android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_brand" />
 
     <TextView
-        android:id="@+id/text_view_model_year"
-        android:layout_width="match_parent"
+        android:id="@+id/text_view_model2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="Modell"
+        android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_model"
+        app:layout_constraintTop_toTopOf="@+id/text_view_model" />
+
+    <TextView
+        android:id="@+id/text_view_model_year"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="200dp"
         android:ems="10"
         android:hint="Modell Year"
         android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_model" />
 
 
     <TextView
-        android:id="@+id/text_view_fast_charge"
-        android:layout_width="match_parent"
+        android:id="@+id/text_view_model_year2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="Modell Year"
+        android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_model_year"
+        app:layout_constraintTop_toBottomOf="@+id/lineTourCar3" />
+
+    <TextView
+        android:id="@+id/text_view_fast_charge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="200dp"
         android:ems="10"
         android:hint="Ladetype"
         android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_model_year" />
 
     <TextView
-        android:id="@+id/text_view_battery"
-        android:layout_width="match_parent"
+        android:id="@+id/text_view_fast_charge2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="Ladetype"
+        android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_fast_charge"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_model_year" />
+
+    <TextView
+        android:id="@+id/text_view_battery"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="200dp"
+        android:textColor="@color/blackColor"
         android:ems="10"
         android:hint="Battery"
         android:inputType="textPersonName"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_fast_charge" />
 
 
-    <Button
-        android:id="@+id/btnSaveCar"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/text_view_battery2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="Battery"
+        android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_battery"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_fast_charge" />
+
+    <ImageButton
+        android:id="@+id/btnSaveCar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/blackColor"
         android:text="Legg til Bil"
+        android:textColor="@color/whiteColor"
+        app:layout_constraintBottom_toTopOf="@+id/btnLoadCar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <ImageButton
+        android:id="@+id/btnLoadCar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/blackColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnLoadCar"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_battery"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/btnLoadCar"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="100dp"
-        android:text="Load"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnSaveCar"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_battery"
-        app:layout_constraintVertical_bias="0.25" />
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSaveCar"
+        app:layout_constraintStart_toStartOf="@+id/btnSaveCar"
+        app:layout_constraintTop_toTopOf="@+id/btnSaveCar"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="LEGG TIL BIL"
+        android:textColor="@color/whiteColor"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="IKKE MIN BIL"
+        android:textColor="@color/whiteColor"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnLoadCar"
+        app:layout_constraintStart_toStartOf="@+id/btnLoadCar"
+        app:layout_constraintTop_toTopOf="@+id/btnLoadCar"
+        app:srcCompat="@drawable/ic_cancel_24dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
