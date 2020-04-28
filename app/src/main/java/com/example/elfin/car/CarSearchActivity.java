@@ -139,7 +139,7 @@ public class CarSearchActivity extends AppCompatActivity {
         carInfoAPI.setCarSearchActivity(CarSearchActivity.this);
         //todo: validate regNr input from user
         String regNr = editTextSearchRegNr.getText().toString();
-        carInfoAPI.execute(regNr.toLowerCase().trim());
+        carInfoAPI.execute(regNr.replaceAll("\\s","").toLowerCase());
     }
 
     public void loadApiInfo(Elbil elbil) {
