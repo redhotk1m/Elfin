@@ -68,8 +68,10 @@ public class DialogBox {
                     case 1:
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         context.startActivity(intent);
+                        break;
                     case 2:
                         //ActivityCompat.requestPermissions();
+                        break;
                     case 3:
                         intent = getIntent();
                         context.startActivity(intent);

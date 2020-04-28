@@ -148,7 +148,7 @@ public class GPSTracker extends Service implements LocationListener {
     float[] resultNext = new float[1];
     @Override
     public void onLocationChanged(Location arg0) {
-        if (arg0.distanceTo(location) > 200) {
+        if (location != null && arg0.distanceTo(location) > 200) {
             location = arg0;
             App app = (App) context.getApplicationContext();
             ArrayList<PolyPoint> pointz = null;
