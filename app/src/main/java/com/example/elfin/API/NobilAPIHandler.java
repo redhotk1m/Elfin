@@ -148,7 +148,6 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                         fast = "Hurtig ladning";
                         imageFast = R.drawable.ic_charger;
                         fastTime = "ca 75 min";
-
                     }
 
 
