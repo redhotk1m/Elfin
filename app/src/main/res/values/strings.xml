@@ -15,10 +15,18 @@
     <string name="google_map_api_key">AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU</string>
 
     <string name="add_car">Legg til bil</string>
-    <string name="manual_selection">eller velg bil manuelt</string>
+   <!-- <string name="manual_selection">eller velg bil manuelt</string> -->
     <string name="car_menu_show">Vis bil</string>
     <string name="car_menu_delete">Slett bil</string>
     <string name="car_menu_delete_all">Slett alle biler</string>
+    <!-- Select Car Field -->
+    <string name="missing_selection">Fyll inn mangler</string>
+    <string name="manual_selection">Velg bil manuelt</string>
+    <string name="brand_selection">Velg bilmerke</string>
+    <string name="model_selection">Velg bilmodell</string>
+    <string name="model_year_selection">Velg årsmodell</string>
+    <string name="battery_selection">Velg batterikapasitet</string>
+    <string name="fast_charge_selection">Valg ladehastighet</string>
     <!-- Choose Car Field -->
     <string name="choose_none">(INGEN VALGT)</string>
     <string name="choose_nothing">---VET IKKE---</string>

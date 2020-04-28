@@ -42,7 +42,8 @@ public class CarSelectionActivity extends AppCompatActivity {
     private Spinner spinnerBrands, spinnerModels, spinnerModelYears, spinnerBatteries, spinnerCharges;
     private ArrayAdapter<String> adapterBrands, adapterModels, adapterModelYears, adapterBattery, adapterFastCharge;
 
-    private TextView tvSpinnerBrands;
+    private TextView tvAddCar, tvSpinnerBrands,
+            tvBrandSelection, tvModelSelection, tvModelYearSelection, tvBatterySelection, tvFastChargeSelection;
     private Button searchCarBtn;
 
     private DialogBox dialogBox;
@@ -121,6 +122,7 @@ public class CarSelectionActivity extends AppCompatActivity {
         // manualSelection = true;
 
         if (manualSelection) {
+            tvAddCar.setText(getString(R.string.manual_selection));
             tvSpinnerBrands.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -130,7 +132,7 @@ public class CarSelectionActivity extends AppCompatActivity {
             });
         } else {
             // manualSelection = false;
-
+            tvAddCar.setText(R.string.missing_selection);
             enableManualCarSelection();
 
 
@@ -240,6 +242,13 @@ public class CarSelectionActivity extends AppCompatActivity {
 
     private void findViewsById() {
         searchCarBtn = findViewById(R.id.button_search_car);
+        tvAddCar = findViewById(R.id.text_view_add_car);
+        tvBrandSelection = findViewById(R.id.text_view_select_brand);
+        tvModelSelection = findViewById(R.id.text_view_select_model);
+        tvModelYearSelection = findViewById(R.id.text_view_select_model_year);
+        tvBatterySelection = findViewById(R.id.text_view_select_battery);
+        tvFastChargeSelection = findViewById(R.id.text_view_select_fast_charge);
+
         tvSpinnerBrands = findViewById(R.id.text_view_spinner_brands);
         spinnerBrands = findViewById(R.id.spinner_brands);
         spinnerModels = findViewById(R.id.spinner_models);
@@ -348,8 +357,8 @@ public class CarSelectionActivity extends AppCompatActivity {
         adapterBrands.notifyDataSetChanged();
         // v.setOnClickListener(null); //removes setOnClickListener
         tvSpinnerBrands.setVisibility(View.GONE);
-       // if (manualSelection) spinnerBrands.performClick();
-       // else spinnerBrands.setSelection(0);
+        // if (manualSelection) spinnerBrands.performClick();
+        // else spinnerBrands.setSelection(0);
     }
 
     private void initSpinners() {
@@ -435,14 +444,19 @@ public class CarSelectionActivity extends AppCompatActivity {
         if (manualSelection) {
             switch (spinnerName) {
                 case BRAND:
+                    tvBrandSelection.setVisibility(View.GONE);
                     spinnerBrands.setVisibility(View.GONE);
                 case MODEL:
+                    tvModelSelection.setVisibility(View.GONE);
                     spinnerModels.setVisibility(View.GONE);
                 case MODELYEAR:
+                    tvModelYearSelection.setVisibility(View.GONE);
                     spinnerModelYears.setVisibility(View.GONE);
                 case BATTERY:
+                    tvBatterySelection.setVisibility(View.GONE);
                     spinnerBatteries.setVisibility(View.GONE);
                 case FASTCHARGE:
+                    tvFastChargeSelection.setVisibility(View.GONE);
                     spinnerCharges.setVisibility(View.GONE);
                     break;
                 default:
@@ -452,7 +466,7 @@ public class CarSelectionActivity extends AppCompatActivity {
     }
 
     private void clickableSelection(Spinner spinner, boolean foundField) {
-        if (foundField){
+        if (foundField) {
             spinner.setSelection(0);
             spinner.setClickable(false);
         }
