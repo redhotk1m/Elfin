@@ -9,12 +9,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -36,6 +40,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -158,7 +164,13 @@ public class ChargingStationMap extends Fragment {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (Object chargerItem : validStations) {
                 amountOfChargingStations++;
-                builder.include(drawChargingStations(((ChargerItem) chargerItem)).getPosition());
+                ChargerItem currentChargerItem = (ChargerItem) chargerItem;
+                Marker currentMarker = drawChargingStations(currentChargerItem);
+                if (currentChargerItem.getLightningText().equals("Lyn Ladning"))
+                    currentMarker.setIcon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.ic_lightning)));
+                else
+                    currentMarker.setIcon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.ic_charger)));
+                builder.include(currentMarker.getPosition());
             }
             if (amountOfChargingStations <= 1)
                 return;
@@ -167,6 +179,17 @@ public class ChargingStationMap extends Fragment {
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,padding);
             gMap.animateCamera(cu);
         }
+    }
+
+    private Bitmap getBitmap(int drawableRes) {
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(),drawableRes,null);
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
     private Marker drawChargingStations(ChargerItem chargerItem){
