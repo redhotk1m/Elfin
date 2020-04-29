@@ -38,6 +38,7 @@ import com.example.elfin.Activities.Station.ChargingStations;
 import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Utils.App;
 import com.example.elfin.Utils.AsyncResponse;
+import com.example.elfin.Utils.ChargersForRoute;
 import com.example.elfin.Utils.EditTextFunctions;
 import com.example.elfin.Utils.GPSTracker;
 import com.example.elfin.adapter.CarAdapter;
@@ -146,71 +147,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //Log.d("Debug2",new MainActivity().editText.getText().toString());
         gpsTracker = new GPSTracker(this);
     }
-
-    public ArrayList<ChargerItem> setChargerForCar(){
-        chargersForCar = new ArrayList<>();
-        System.out.println(mSelectedCar.getFastCharge());
-
-        ArrayList<ChargerItem> chargerItemsTemp = new ArrayList<>(allChargingStations);
-        double chargeTime = 0;
-        if(mSelectedCar.getFastCharge() != null){
-            chargeTime = Math.round(Double.parseDouble(mSelectedCar.getBattery())/50*60);
-        }
-        int chargeTimeMin = (int) chargeTime;
-        String fastTime = "ca "  + chargeTimeMin + " min";
-        double chargeTimeLight = 0;
-        if(mSelectedCar.getFastCharge() != null){
-            chargeTimeLight = Math.round(Double.parseDouble(mSelectedCar.getBattery())/150*60);
-        }
-        int chargeTimeMinLight = (int) chargeTimeLight;
-        String fastTimeLight = "ca "  + chargeTimeMinLight + " min";
-
-        for (ChargerItem chargerItem: chargerItemsTemp){
-            LatLng latLng = chargerItem.getLatLng();
-            String [] latlngArray = {""+latLng.latitude, ""+latLng.longitude};
-
-
-            if("CHAdeMO".equals(mSelectedCar.getFastCharge())){
-                if(chargerItem.getChademo().equals("CHAdeMO")){
-                    ChargerItem chargerItem1 = new ChargerItem(chargerItem.getStreet(), chargerItem.getHouseNumber(),
-                            chargerItem.getCity(), chargerItem.getDescriptionOfLocation(),
-                            chargerItem.getOwnedBy(),
-                            chargerItem.getUserComment(), chargerItem.getContactInfo(), latlngArray,
-                            chargerItem.getChademo(), chargerItem.getNumberOfChademo(), fastTime, "",
-                            "","", chargerItem.getImageFast(), 0, "", "", "", chargerItem.getFastText(), "");
-                    chargersForCar.add(chargerItem1);
-                }
-            }else if("CCS/Combo".equals(mSelectedCar.getFastCharge())){
-                if(chargerItem.getCcs().equals("CCS/Combo")){
-                    if(chargerItem.getLightningCCS().equals("")){
-                        fastTimeLight = "";
-                    } else {
-                        fastTimeLight = "ca "  + chargeTimeMinLight + " min";
-                    }
-                    ChargerItem chargerItem1 = new ChargerItem(chargerItem.getStreet(), chargerItem.getHouseNumber(), chargerItem.getCity(),
-                            chargerItem.getDescriptionOfLocation(), chargerItem.getOwnedBy(),
-                            chargerItem.getUserComment(), chargerItem.getContactInfo(),latlngArray, "", "", "", chargerItem.getCcs(),
-                            chargerItem.getNumberOfCcs(), fastTime, chargerItem.getImageFast(), chargerItem.getImageSlow(), chargerItem.getLightningCCS(),
-                            chargerItem.getNumberOflightningCCS(), fastTimeLight, chargerItem.getFastText(),chargerItem.getLightningText());
-                    chargersForCar.add(chargerItem1);
-                }
-            }
-            else {
-                ChargerItem chargerItem1 = new ChargerItem(chargerItem.getStreet(), chargerItem.getHouseNumber(), chargerItem.getCity(),
-                        chargerItem.getDescriptionOfLocation(), chargerItem.getOwnedBy(),
-                        chargerItem.getUserComment(), chargerItem.getContactInfo(), latlngArray, chargerItem.getChademo(), chargerItem.getNumberOfChademo(), chargerItem.getChademoTime(), chargerItem.getCcs(),
-                        chargerItem.getNumberOfCcs(), chargerItem.getCcsTime(), chargerItem.getImageFast(), chargerItem.getImageSlow(), chargerItem.getLightningCCS(),
-                        chargerItem.getNumberOflightningCCS(), chargerItem.getLightningTime(), chargerItem.getFastText(),chargerItem.getLightningText());
-                chargersForCar.add(chargerItem1);
-            }
-
-        }
-        return chargersForCar;
-    }
-
-
-
-
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -490,7 +426,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 Bundle bundle = new Bundle();
                 gpsTracker.getLocation();
                 if (gpsTracker.canGetLocation()) {
-                    ((App) getApplication()).setChargerItems(setChargerForCar());
+                    ChargersForRoute chargersForRoute = new ChargersForRoute();
+                    System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+                    ((App) getApplication()).setChargerItems(chargersForRoute.setChargerForCar(allChargingStations, mSelectedCar));
                     LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
                     bundle.putDouble("longditude", gpsTracker.getLongitude());
                     bundle.putDouble("latitude", gpsTracker.getLatitude());
