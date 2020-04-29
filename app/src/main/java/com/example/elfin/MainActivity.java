@@ -152,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         System.out.println(mSelectedCar.getFastCharge());
 
         ArrayList<ChargerItem> chargerItemsTemp = new ArrayList<>(allChargingStations);
-        System.out.println(chargerItemsTemp.size());
         double chargeTime = 0;
         if(mSelectedCar.getFastCharge() != null){
             chargeTime = Math.round(Double.parseDouble(mSelectedCar.getBattery())/50*60);
