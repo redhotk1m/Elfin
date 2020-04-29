@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,14 +44,16 @@ public class CarInfoActivity extends AppCompatActivity {
 
     private ArrayList<Elbil> mCarList, mCarListAll;
     private ImageButton saveCarBtn, loadCarBtn;
+    private ImageView imageView, imageView2;
     // private EditText editTextFastCharge, editTextBattery;
+    private TextView textView, textView2;
     private TextView editTextBrand, editTextModel, editTextModelYear, editTextFastCharge, editTextBattery;
     private TextView editTextBrand2, editTextModel2, editTextModelYear2, editTextFastCharge2, editTextBattery2;
     private Spinner spinner;
     private ArrayAdapter adapter;
     private Elbil elbil;
 
-    private boolean elbilFound;
+    private boolean elbilFound, carInfo;
 
     private SharedCarPreferences sharedCarPreferences;
 
@@ -131,6 +134,17 @@ public class CarInfoActivity extends AppCompatActivity {
         sharedCarPreferences = new SharedCarPreferences();
 
 
+        carInfo = intent.getBooleanExtra("CarInfo", false);
+        if (carInfo) {
+            saveCarBtn.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
+            textView2.setText("Tilbake");
+        }
+       // carInfo = getIntent().getExtras().getBoolean("CarInfo");
+       // Toast.makeText(this, "CAR INFO ; " + carInfo, Toast.LENGTH_SHORT).show();
+
+
         // clearSharedPrefferences();
 
         // loadCar();
@@ -163,7 +177,7 @@ public class CarInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(CarInfoActivity.this, "LEGG TIL BIL!", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(CarInfoActivity.this, "LEGG TIL BIL!", Toast.LENGTH_SHORT).show();
 
                 if (elbilFound) {
                     mCarList.add(elbil);
@@ -249,7 +263,7 @@ public class CarInfoActivity extends AppCompatActivity {
         editor.putString("car list", json);
         editor.apply();
 
-        Toast.makeText(this, "CAR SAVED!", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "CAR SAVED!", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, MainActivity.class));
     }
 
@@ -279,7 +293,10 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextBattery2 = findViewById(R.id.text_view_battery2);
 
 
-
+        textView = findViewById(R.id.textView);
+        textView2 = findViewById(R.id.textView2);
+        imageView = findViewById(R.id.imageView);
+        imageView2 = findViewById(R.id.imageView2);
 
         spinner = findViewById(R.id.spinner_all_cars);
 

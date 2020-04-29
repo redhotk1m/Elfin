@@ -364,9 +364,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.item1:
-                        Toast.makeText(MainActivity.this, "Item 1: Show Car clicked", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(MainActivity.this, "Item 1: Show Car clicked", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, CarInfoActivity.class);
                         intent.putExtra("Elbil", elbil);
+                        intent.putExtra("CarInfo", true);
                         startActivity(intent);
                         return true;
                     case R.id.item2:
@@ -379,13 +380,13 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         sharedCarPreferences = new SharedCarPreferences();
                         sharedCarPreferences.updateSavedCars(sharedPreferences, mCarList);
                         getSharedCarPreferences(sharedPreferences);
-                        Toast.makeText(MainActivity.this, "Item 2: Delete Car clicked", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(MainActivity.this, "Item 2: Delete Car clicked", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item3:
                         sharedCarPreferences = new SharedCarPreferences();
                         sharedCarPreferences.clearSharedPreferences(sharedPreferences);
                         getSharedCarPreferences(sharedPreferences);
-                        Toast.makeText(MainActivity.this, "Item 3: DELETE ALL CARS clicked", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(MainActivity.this, "Item 3: DELETE ALL CARS clicked", Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         return false;
