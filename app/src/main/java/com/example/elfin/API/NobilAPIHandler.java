@@ -81,8 +81,8 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     CCSLighning = "CCS/Combo";
                     ligtning = "Lyn Ladning";
                     fast = "Hurtig ladning";
-                    ligtningTime = "ca 30 min";
-                    fastTime = "ca 75 min";
+                    ligtningTime = "Ladetid ukjent";
+                    fastTime = "Ladetid ukjent";
 
                     try {
                         for (int j = 1; j < 20; j++) {
@@ -147,7 +147,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     if(counterChademo >= 1 || counterCCS >=1){
                         fast = "Hurtig ladning";
                         imageFast = R.drawable.ic_charger;
-                        fastTime = "ca 75 min";
+                        fastTime = "Ladetid ukjent";
                     }
 
 
