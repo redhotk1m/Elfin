@@ -97,10 +97,7 @@ public class ChargingStationList extends Fragment {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
         if (spinner != null)
             spinner.setVisibility(View.GONE);
-        for (ChargerItem chargerItem: validStations){
-            System.out.println(chargerItem.getChademo());
-            System.out.println(chargerItem.getCcs());
-        }
+
 
         /*Location selected_location=new Location("locationA");
         selected_location.setLatitude(59.9139);
