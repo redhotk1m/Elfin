@@ -194,6 +194,7 @@ public class CarSearchActivity extends AppCompatActivity {
             regNr2 = regNr2.toUpperCase();
             intent.putExtra("regNr", regNr2);
             intent.putExtra("Elbil", mElbilList.get(0));
+            intent.putParcelableArrayListExtra("AllCarsList", new ArrayList<>(allCarsList));
 
 
             // dialogBox = new DialogBox(this, "title", "message", "yes", "no", 3);
@@ -231,8 +232,13 @@ public class CarSearchActivity extends AppCompatActivity {
             System.out.println("NO FIRESTORE CARS FOUND: [ " + mElbilList.size() + " / " + allCarsList.size() + " ]");
             System.out.println("#################################################################");
             Toast.makeText(this, "[POPUP DIALOG]\n\nNOE GIKK GALT, PRØV IGJEN!", Toast.LENGTH_LONG).show();
-            if (allCarsList.size() == 0) firestoreQuery.getInitFirestoreData();
-            System.out.println("FETCHING FIRESTORE CARS: " + allCarsList.size());
+            if (allCarsList.size() == 0) {
+                firestoreQuery.getInitFirestoreData();
+                System.out.println("FETCHING FIRESTORE CARS: " + allCarsList.size());
+            } else {
+                System.out.println("FIRESTORE CARS ALREADY FETCHED!");
+                //todo: Handle if something goes wrong
+            }
         }
     }
 
