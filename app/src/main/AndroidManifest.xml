@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.elfin">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,6 +12,7 @@
         android:required="true" />
 
     <application
+        tools:ignore="LockedOrientationActivity"
         android:name=".Utils.App"
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -19,13 +21,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".car.CarSearchActivity"/>
-        <activity android:name=".car.CarSelectionActivity" />
-        <activity android:name=".car.CarInfoActivity" />
-        <activity android:name=".car.NewCarActivity" />
-        <activity android:name=".Activities.AboutCharger"/>
-        <activity android:name=".testing.FilterTestActivity" />
+        <activity android:name=".car.CarSearchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".car.CarSelectionActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".car.CarInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".car.NewCarActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.AboutCharger"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".testing.FilterTestActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask">    <!-- CLOSES ALL ACTIVITIES ON TOP OF THIS ONE BY USING startActivity THE STANDARD WAY-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +43,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.Station.ChargingStations" />
+        <activity android:name=".Activities.Station.ChargingStations"
+            android:screenOrientation="portrait"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
