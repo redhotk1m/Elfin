@@ -202,46 +202,43 @@
                 android:id="@+id/textViewChargersAvaiable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
                 android:text="6 ledig"
                 android:textColor="@color/blackColor"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textViewChargerType"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.51"
-                app:layout_constraintStart_toEndOf="@+id/textViewChargerType"
-                app:layout_constraintTop_toBottomOf="@+id/textViewChargers" />
+                app:layout_constraintStart_toEndOf="@+id/textViewChargerType" />
 
             <TextView
                 android:id="@+id/textViewChargersAvaiable2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:text="6 ledig"
                 android:textColor="@color/blackColor"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textViewChargerType2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.51"
-                app:layout_constraintStart_toEndOf="@+id/textViewChargerType2"
-                app:layout_constraintTop_toBottomOf="@+id/textViewChargerType" />
+                app:layout_constraintStart_toEndOf="@+id/textViewChargerType2" />
 
             <TextView
                 android:id="@+id/textViewChargersAvaiable3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:text="6 ledig"
                 android:textColor="@color/blackColor"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textViewChargerType3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.51"
-                app:layout_constraintStart_toEndOf="@+id/textViewChargerType2"
-                app:layout_constraintTop_toBottomOf="@+id/textViewChargerType2" />
+                app:layout_constraintStart_toEndOf="@+id/textViewChargerType2" />
 
             <View
                 android:id="@+id/line_about"
@@ -332,7 +329,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="TextView"
-                android:textColor="@color/blackColor"
+                android:textColor="@color/allBlack"
                 app:layout_constraintStart_toStartOf="@+id/textViewChargerType2"
                 app:layout_constraintTop_toBottomOf="@+id/textViewChargerType2" />
 

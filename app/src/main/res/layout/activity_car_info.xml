@@ -22,7 +22,7 @@
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="32dp"
         android:alpha="0.2"
         android:background="@color/blackColor"
@@ -112,29 +112,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/text_view_battery" />
 
+
+    <!-- CAR INFO: BRAND SELECTION -->
+
     <TextView
         android:id="@+id/text_view_add_car"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
         android:text="Er dette din bil?"
         android:textColor="@color/blackColor"
-        android:textSize="24sp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.087"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_all_cars" />
-
-
-    <!-- CAR INFO: BRAND SELECTION -->
 
     <TextView
         android:id="@+id/text_view_brand"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="200dp"
         android:ems="10"
         android:hint="Merke"
@@ -392,7 +394,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
-        android:background="#D3D3D3"
+        android:background="@color/grey3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -406,7 +408,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/btnSaveCar"
         app:layout_constraintStart_toStartOf="@+id/btnSaveCar"
         app:layout_constraintTop_toTopOf="@+id/btnSaveCar"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
+        app:srcCompat="@drawable/ic_check__24dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -425,7 +427,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:text="AvBRYT"
+        android:text="AVBRYT"
         android:textColor="@color/allBlack"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
@@ -440,7 +442,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/btnLoadCar"
         app:layout_constraintStart_toStartOf="@+id/btnLoadCar"
         app:layout_constraintTop_toTopOf="@+id/btnLoadCar"
-        app:srcCompat="@drawable/ic_cancel_24dp" />
+        app:srcCompat="@drawable/ic_cancel_black_24dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

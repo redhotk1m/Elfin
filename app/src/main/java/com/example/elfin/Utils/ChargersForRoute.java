@@ -25,7 +25,6 @@ public class ChargersForRoute {
         ArrayList<ChargerItem> chargerItemsTemp = new ArrayList<>(allChargingStations);
         double chargeTime = 0;
         int carEffect = 150;
-        System.out.println(mSelectedCar.getEffect());
 
         if(mSelectedCar.getFastCharge() != null){
             chargeTime = Math.round(Double.parseDouble(mSelectedCar.getBattery())/50*60);

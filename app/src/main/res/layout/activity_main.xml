@@ -82,7 +82,7 @@
         android:layout_marginStart="8dp"
         android:text="@string/to"
         android:textColor="@color/blackColor"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/rectangleTo"
         app:layout_constraintStart_toEndOf="@+id/imageViewSearch"
         app:layout_constraintTop_toTopOf="@+id/rectangleTo" />
@@ -97,14 +97,13 @@
         android:hint="@string/trondheim"
         android:importantForAutofill="no"
         android:inputType="text"
+        android:textColor="@color/allBlack"
 
-        android:textColor="@color/blackColor"
-        app:layout_constraintBottom_toBottomOf="@+id/rectangleTo"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textTo"
         app:layout_constraintEnd_toEndOf="@+id/rectangleTo"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textTo"
-        app:layout_constraintTop_toTopOf="@+id/rectangleTo"
-        app:layout_constraintVertical_bias="0.52" />
+        app:layout_constraintStart_toEndOf="@+id/textTo" />
 
     <ImageView
         android:id="@+id/imageViewSearch"
