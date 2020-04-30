@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem>> {
     private ArrayList<ChargerItem> chargingStationCoordinates = new ArrayList<>();
@@ -51,9 +52,13 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
 
 
         String CCS = "";
+        String CCSName = "CCS/Combo";
+
         String CCSLighning = "";
 
         String chademo = "";
+        String chademoName = "CHAdeMO";
+
         String lightCharger = "150 kW DC";
         String fastCharger = "50 kW - 500VDC max 100A";
 
@@ -67,6 +72,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
         String ligtningTime = "";
         String fastTime = "";
         String everyone = "everyone";
+        double CCSChargerEffect = 0;
 
 
         if (true) {
@@ -76,10 +82,9 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 for (int i = 0; i < latlngJSONArray.length(); i++) {
                     JSONObject object = latlngJSONArray.getJSONObject(i).getJSONObject("csmd");
                     JSONObject objectConnectors = latlngJSONArray.getJSONObject(i).getJSONObject("attr").getJSONObject("conn");
-                    chademo = "CHAdeMO";
-                    CCS = "CCS/Combo";
-                    CCSLighning = "CCS/Combo";
                     ligtning = "Lyn Ladning";
+                    chademoName = "CHAdeMO";
+                    CCSName = "CCS/Combo";
                     fast = "Hurtig ladning";
                     ligtningTime = "Ladetid ukjent";
                     fastTime = "Ladetid ukjent";
@@ -87,25 +92,72 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     try {
                         for (int j = 1; j < 20; j++) {
                             if (objectConnectors.getJSONObject("" + j).getJSONObject("4").
-                                    getString("trans").equals(chademo) && objectConnectors.getJSONObject("" + j).getJSONObject("5").
+                                    getString("trans").equals(chademoName) && objectConnectors.getJSONObject("" + j).getJSONObject("5").
                                     getString("trans").equals(fastCharger)) {
+                                chademo = "CHAdeMO\n" + fastCharger;
                                 counterChademo++;
                             }
 
 
 
                             if (objectConnectors.getJSONObject("" + j).getJSONObject("4").
-                                    getString("trans").equals(CCS) && objectConnectors.getJSONObject("" + j).getJSONObject("5").
+                                    getString("trans").equals(CCSName)) {
+                                String str = objectConnectors.getJSONObject("" + j).getJSONObject("5").
+                                        getString("trans");
+                                String sub = str.substring(0, 3);
+                                ;
+                                sub = sub.replaceAll("\\s", "");
+                                sub = sub.replaceAll(",", ".");
+                                CCSChargerEffect = Double.parseDouble(sub);
+
+                                if (CCSChargerEffect >= 50 && CCSChargerEffect < 150) {
+                                    CCS = "CCS/Combo\n" + fastCharger;
+                                    counterCCS++;
+                                }
+                                if (CCSChargerEffect == 150) {
+                                    CCSLighning = "CCS/Combo\n" + lightCharger;
+                                    counterLightning++;
+                                }
+                                if (CCSChargerEffect == 350) {
+                                    CCSLighning = "CCS/Combo\n" + "350 kW DC";
+                                    counterLightning++;
+                                }
+
+                                if (CCSChargerEffect > 150 && CCSChargerEffect < 350) {
+                                    CCSLighning = "CCS/Combo\n" + "+150 kW DC";
+                                    counterLightning++;
+
+                                }
+
+
+                            }
+
+
+
+
+
+
+
+
+                            /*
+                            if (objectConnectors.getJSONObject("" + j).getJSONObject("4").
+                                    getString("trans").equals(CCSName) && objectConnectors.getJSONObject("" + j).getJSONObject("5").
                                     getString("trans").equals(fastCharger)) {
+                                CCS = "CCS/Combo\n" + fastCharger;
                                 counterCCS++;
                             }
 
+
+
                             if (objectConnectors.getJSONObject("" + j).getJSONObject("4").
-                                    getString("trans").equals(CCS) &&
+                                    getString("trans").equals(CCSName) &&
                                     objectConnectors.getJSONObject("" + j).getJSONObject("5").
                                             getString("trans").equals(lightCharger)) {
+                                CCSLighning = "CCS/Combo\n" + lightCharger;
                                 counterLightning++;
                             }
+
+                             */
 
 
 
@@ -131,20 +183,26 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     }
 
                     if (counterCCS <= 0) {
-                        CCS = "";
+                        CCS="";
+                        CCSName = "";
                         counterFastCSS = "";
                         imageFast = 0;
                         fast = "";
                         fastTime = "";
                     }
                     if (counterChademo <= 0) {
-                        chademo = "";
+                        chademo="";
+                        chademoName = "";
                         counterCHademoString = "";
                         imageFast = 0;
                         fast = "";
                         fastTime = "";
                     }
                     if(counterChademo >= 1 || counterCCS >=1){
+                        if(counterCCS == 1){
+                            counterCHademoString = "1 ladepunkt";
+                        }
+
                         fast = "Hurtig ladning";
                         imageFast = R.drawable.ic_charger;
                         fastTime = "Ladetid ukjent";
@@ -163,7 +221,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                                         object.getString("Position")
                                                 .replace("(", "")
                                                 .replace(")", "")
-                                                .split(","), chademo, counterCHademoString, fastTime, CCS, counterFastCSS,
+                                                .split(","), chademoName, counterCHademoString, fastTime, CCSName, counterFastCSS,
                                         fastTime, imageFast, imageLightning, CCSLighning, counterLightString, ligtningTime, fast, ligtning
                                 )
                         );
@@ -184,6 +242,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
         chargingStationCoordinates.sort(new LatitudeComparator());
         return chargingStationCoordinates;
     }
+
 
     @Override
     protected void onPostExecute(ArrayList<ChargerItem> chargerItems) {

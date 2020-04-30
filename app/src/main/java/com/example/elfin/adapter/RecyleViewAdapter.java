@@ -112,6 +112,7 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         }
 
 
+
         //TODO: Vise med decimaltall, dersom vi har mindre enn 100KM i lengde, bare teksthåndtering
         long KM = Math.round(Double.parseDouble(chargerItems.get(position).getMFromStartLocation()) / 1000);
         holder.distanceKm.setText(String.valueOf(KM) + " KM");
