@@ -96,7 +96,14 @@ public class CarInfoActivity extends AppCompatActivity {
         initCarSpinnerSelection(spinnerFastCharge, FASTCHARGE);
 
         //todo: midlertidig; må håndteres riktig
-        if (!carInfo) {
+
+        if (elbilFound) {
+            setSpinnerSelection(spinnerBrand, BRAND, elbilFound);
+            setSpinnerSelection(spinnerModel, MODEL, elbilFound);
+            setSpinnerSelection(spinnerModelYear, MODELYEAR, elbilFound);
+            setSpinnerSelection(spinnerBattery, BATTERY, elbilFound);
+            setSpinnerSelection(spinnerFastCharge, FASTCHARGE, elbilFound);
+        } else if (!carInfo) {
             setSpinnerSelection(spinnerBrand, BRAND, found[0]);
             setSpinnerSelection(spinnerModel, MODEL, found[1]);
             setSpinnerSelection(spinnerModelYear, MODELYEAR, found[2]);
@@ -292,7 +299,7 @@ public class CarInfoActivity extends AppCompatActivity {
                     break;
                 case R.id.spinner_fast_charge:
                     selectedFastCharge = spinnerFastCharge.getSelectedItem().toString();
-                    System.out.println("SELECTED EFFECT: " + selectedFastCharge);
+                    System.out.println("SELECTED FAST CHARGE: " + selectedFastCharge);
                     // filteredSelection(spinnerBattery);
                     break;
                 case R.id.spinner_battery:
@@ -336,18 +343,18 @@ public class CarInfoActivity extends AppCompatActivity {
                 // if (found) {
                 // modelYears.add(fieldMap.get(MODELYEAR));
                 break;
-            case BATTERY:
-                batteries = new ArrayList<>();
-                adapterBattery = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, batteries);
-                adapterBattery.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapterBattery);
-                break;
             case FASTCHARGE:
                 fastCharges = new ArrayList<>();
                 // spinnerSelection.initSpinnerList(spinnerCharges, fastCharges, FASTCHARGE);
                 adapterFastCharge = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fastCharges);
                 adapterFastCharge.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapterFastCharge);
+                break;
+            case BATTERY:
+                batteries = new ArrayList<>();
+                adapterBattery = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, batteries);
+                adapterBattery.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapterBattery);
                 break;
             default:
                 System.out.println("NO SUCH SPINNER..");
@@ -360,40 +367,37 @@ public class CarInfoActivity extends AppCompatActivity {
     private void setSpinnerSelection(Spinner spinner, String dataField, boolean foundField) {
         switch (dataField) {
             case BRAND:
-                if (foundField) {
-                    brands.add(fieldMap.get(BRAND));
-                    //  clickableSelection(spinnerBrand, true);
-                    adapterBrand.notifyDataSetChanged();
-                }
+                if (elbilFound) brands.add(elbil.getBrand());
+                else if (foundField) brands.add(fieldMap.get(BRAND));
+                // clickableSelection(spinnerBrand, true);
+                adapterBrand.notifyDataSetChanged();
                 break;
             case MODEL:
-                if (foundField) {
-                    models.add(fieldMap.get(MODEL));
-                    // clickableSelection(spinnerModel, true);
-                    adapterModel.notifyDataSetChanged();
-                }
+                if (elbilFound) models.add(elbil.getModel());
+                else if (foundField) models.add(fieldMap.get(MODEL));
+                // clickableSelection(spinnerModel, true);
+                adapterModel.notifyDataSetChanged();
                 break;
             case MODELYEAR:
-                if (!exactModelYear.isEmpty()) {
+                if (elbilFound) modelYears.add(elbil.getModelYear());
+                else if (!exactModelYear.isEmpty()) {
                     modelYears.add(fieldMap.get("exactModelYear"));
                     // clickableSelection(spinnerModelYear, true);
                     foundField = true;
-                    adapterModelYear.notifyDataSetChanged();
                 }
+                adapterModelYear.notifyDataSetChanged();
                 break;
             case FASTCHARGE:
-                if (foundField) {
-                    fastCharges.add(fieldMap.get(BATTERY));
-                    // clickableSelection(spinnerFastCharge, true);
-                    adapterBattery.notifyDataSetChanged();
-                }
+                if (elbilFound) fastCharges.add(elbil.getFastCharge());
+                else if (foundField) fastCharges.add(fieldMap.get(FASTCHARGE));
+                // clickableSelection(spinnerFastCharge, true);
+                adapterFastCharge.notifyDataSetChanged();
                 break;
             case BATTERY:
-                if (foundField) {
-                    batteries.add(fieldMap.get(BATTERY));
-                    // clickableSelection(spinnerBattery, true);
-                    adapterBattery.notifyDataSetChanged();
-                }
+                if (elbilFound) batteries.add(elbil.getBattery());
+                else if (foundField) batteries.add(fieldMap.get(BATTERY));
+                // clickableSelection(spinnerBattery, true);
+                adapterBattery.notifyDataSetChanged();
                 break;
         }
 
