@@ -51,6 +51,8 @@ public class CarSelectionActivity extends AppCompatActivity {
 
     private boolean manualSelection;
 
+    private FirestoreQuery firestoreQuery;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,10 @@ public class CarSelectionActivity extends AppCompatActivity {
         System.out.println("#####################################################################");
         if (allCarsList != null)
             System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE: " + allCarsList.size());
-        else System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE IS NULL!");
+        else {
+            System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE IS NULL!");
+            allCarsList = new ArrayList<>();
+        }
         System.out.println("#####################################################################");
         // setAllCarsList(allCarsList);
 
@@ -123,6 +128,8 @@ public class CarSelectionActivity extends AppCompatActivity {
         //    if (fieldMap.isEmpty()) manualSelection = true;
         //todo: fjern etter testing
         // manualSelection = true;
+
+
 
         if (manualSelection) {
             tvAddCar.setText(getString(R.string.manual_selection));

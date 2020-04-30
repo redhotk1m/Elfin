@@ -86,6 +86,7 @@ public class DialogBox {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (context instanceof CarInfoActivity) ((CarInfoActivity) context).finish();
                 dialog.cancel();
             }
         });

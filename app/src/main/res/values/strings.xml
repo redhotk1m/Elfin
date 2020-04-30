@@ -26,8 +26,10 @@
     <string name="model_selection">Velg bilmodell</string>
     <string name="model_year_selection">Velg årsmodell</string>
     <string name="battery_selection">Velg batterikapasitet</string>
-    <string name="fast_charge_selection">Valg ladehastighet</string>
+    <string name="fast_charge_selection">Valg ladetype</string>
+    <string name="effect_selection">Valg ladehastighet</string>
     <!-- Choose Car Field -->
+    <string name="unknown">UKJENT</string>
     <string name="choose_none">(INGEN VALGT)</string>
     <string name="choose_nothing">---VET IKKE---</string>
     <string name="choose_brand">Velg bilmerke</string>

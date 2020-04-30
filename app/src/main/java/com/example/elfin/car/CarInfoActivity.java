@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -208,6 +209,7 @@ public class CarInfoActivity extends AppCompatActivity {
             textView.setVisibility(View.GONE);
             imageView.setVisibility(View.GONE);
             textView2.setText("Tilbake");
+            imageView2.setImageResource(R.drawable.ic_arrow_back_black_24dp);
         }
     }
 
@@ -245,33 +247,33 @@ public class CarInfoActivity extends AppCompatActivity {
                         System.out.println("SEARCHED CAR LIST SIZE: " + mCarList.size());
                         if (mCarList.size() == 1) saveCar();
 
+                        if (selectedFastCharge.equals(getString(R.string.unknown))) {
+                            editTextFastCharge.setTextColor(Color.RED);
 
-                        /*
-                        Intent intent = new Intent(CarInfoActivity.this, CarSelectionActivity.class);
-                        intent.putParcelableArrayListExtra("CarList", new ArrayList<>(elbils));
-                        intent.putExtra("Missing", found);
-                        intent.putExtra("FieldMap", fieldMap);
+                            ((TextView) spinnerFastCharge.getChildAt(0)).setError("Message");
+                            ((TextView) spinnerFastCharge.getChildAt(0)).setText("");
+                            // ContextCompat.getColor(CarInfoActivity.this, R.color.backGroundColor); //make orange error color
+                        }
 
-                        startActivityDialogBox(1, intent);
+                        if (selectedBattery.equals(getString(R.string.unknown))) {
+                            editTextBattery.setTextColor(Color.RED);
 
-                         */
+                            ((TextView) spinnerBattery.getChildAt(0)).setError("Message");
+                            ((TextView) spinnerBattery.getChildAt(0)).setText("");
+                            // ContextCompat.getColor(CarInfoActivity.this, R.color.backGroundColor); //make orange error color
+                        }
 
-
-                        // startActivity(intent);
-                        // finish();
+                        //errorText.setError("anything here, just to add the icon");
+                        //  errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                        //  errorText.setText("my actual error text");//changes the selected item text to this
                     }
                     break;
                 case R.id.btnLoadCar:
-                    finish();
-                    /*
-                    if (elbilFound) {
-                        dialogBox2.createDialogBox();
-                        finish();
-                    } else {
-                        dialogBox4.createDialogBox();
-                        finish();
-                    }
-                    */
+                    if (!carInfo) {
+                        Intent intent = new Intent(CarInfoActivity.this, CarSelectionActivity.class);
+                        intent.putParcelableArrayListExtra("AllCarsList", new ArrayList<>(allElbils));
+                        startActivityDialogBox(0, intent);
+                    } else finish();
                     break;
                 default:
                     Toast.makeText(CarInfoActivity.this, "CLICKABLE ID NOT FOUND..", Toast.LENGTH_SHORT).show();
@@ -288,30 +290,61 @@ public class CarInfoActivity extends AppCompatActivity {
                     selectedBrand = spinnerBrand.getSelectedItem().toString();
                     System.out.println("SELECTED BRAND: " + selectedBrand);
                     // clickableSelection(spinnerBrand, found[0]);
+                    if (!selectedBrand.equals(getString(R.string.unknown)))
+                        editTextBrand.setTextColor(Color.BLACK);
                     break;
                 case R.id.spinner_model:
                     selectedModel = spinnerModel.getSelectedItem().toString();
                     System.out.println("SELECTED MODEL: " + selectedModel);
+                    if (!selectedModel.equals(getString(R.string.unknown)))
+                        editTextModel.setTextColor(Color.BLACK);
                     break;
                 case R.id.spinner_model_year:
                     selectedModelYear = spinnerModelYear.getSelectedItem().toString();
                     System.out.println("SELECTED MODEL YEAR: " + selectedModelYear);
+                    if (!selectedModelYear.equals(getString(R.string.unknown)))
+                        editTextModelYear.setTextColor(Color.BLACK);
                     break;
                 case R.id.spinner_fast_charge:
                     selectedFastCharge = spinnerFastCharge.getSelectedItem().toString();
                     System.out.println("SELECTED FAST CHARGE: " + selectedFastCharge);
+                    if (!selectedFastCharge.equals(getString(R.string.unknown)))
+                        editTextFastCharge.setTextColor(Color.BLACK);
+
+                    /*
+                    if (selectedFastCharge.equals("UKJENT")) {
+                        ((TextView) adapterView.getChildAt(0)).setError("ERROR MESSAGE...");
+                        ((TextView) adapterView.getChildAt(0)).setTextColor(Color.RED);
+                      //  ((TextView) adapterView.getChildAt(0)).setText("VELG LADE TYPE!");
+                      //  errorText.setError("anything here, just to add the icon");
+                      //  errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                      //  errorText.setText("my actual error text");//changes the selected item text to this
+                    }
+                    */
+
                     // filteredSelection(spinnerBattery);
                     break;
                 case R.id.spinner_battery:
                     selectedBattery = spinnerBattery.getSelectedItem().toString();
                     System.out.println("SELECTED BATTERY: " + selectedBattery);
+                    if (!selectedBattery.equals(getString(R.string.unknown)))
+                        editTextBattery.setTextColor(Color.BLACK);
+                    /*
+                    if (selectedBattery.equals("UKJENT")) {
+                        ((TextView) adapterView.getChildAt(0)).setError("ERROR MESSAGE...");
+                        ((TextView) adapterView.getChildAt(0)).setTextColor(Color.RED);
+                        ((TextView) adapterView.getChildAt(0)).setText("");
+                    }
+                     */
                     break;
                 default:
                     Toast.makeText(adapterView.getContext(), "NO SUCH SPINNER LISTENER..", Toast.LENGTH_SHORT).show();
             }
+
             ((TextView) adapterView.getChildAt(0)).setTypeface(null, Typeface.BOLD);
             ((TextView) adapterView.getChildAt(0)).setTextSize(18);
             ((TextView) adapterView.getChildAt(0)).setEms(10);
+            // ((TextView) adapterView.getChildAt(0)).
         }
 
         @Override
@@ -649,10 +682,10 @@ public class CarInfoActivity extends AppCompatActivity {
 
         switch (identifier) {
             case 0:
-                title = "Er dette din bil?";
-                msg = "Vil du legge til denne bilen i appen?";
-                yesBtn = "Legg til bil";
-                noBtn = "Ikke min bil";
+                title = "Ikke din bil?";
+                msg = "Vil du søke etter et annet registreringsnummer, eller velge bilen din manuelt?";
+                yesBtn = "Velg manulet";
+                noBtn = "Søk igjen";
                 dialogBox = new DialogBox(this, title, msg, yesBtn, noBtn, 3);
                 break;
             case 1:
