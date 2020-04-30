@@ -16,6 +16,10 @@ import com.example.elfin.MainActivity;
 import com.example.elfin.car.CarInfoActivity;
 import com.example.elfin.car.CarSelectionActivity;
 
+/**
+ * CLass for making our different dialogBoxes. Depending on the option parameter it decides what to do.
+ */
+
 public class DialogBox {
 
     Context context;

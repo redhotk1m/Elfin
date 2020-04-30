@@ -55,8 +55,6 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
                  */
 
                 ArrayList<String> infoFromList = new ArrayList<>();
-
-
                 infoFromList.add(chargerItem.getOwnedBy());
                 infoFromList.add(chargerItem.getStreet() + " " + chargerItem.getHouseNumber());
                 infoFromList.add(chargerItem.getChademo());
@@ -117,29 +115,6 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         long KM = Math.round(Double.parseDouble(chargerItems.get(position).getMFromStartLocation()) / 1000);
         holder.distanceKm.setText(String.valueOf(KM) + " KM");
 
-
-/*
-        if(chargerItems.get(position).getChademo().equals("")){
-            holder.imageViewFast.setVisibility(View.GONE);
-        }
-        if(chargerItems.get(position).getCcs().equals("")){
-            holder.imageViewSlow.setVisibility(View.GONE);
-        }
-
- */
-
-
-
-
-        /*
-        holder.chargeTimeFast.setText(chargerItems.get(position).getChargeTimeFast());
-        holder.avaiableFast.setText(chargerItems.get(position).getAvailableFast());
-        holder.chargeTimeSlow.setText(chargerItems.get(position).getChargeTimeSlow());
-        holder.avaiableSlow.setText(chargerItems.get(position).getAvailableSlow());
-        holder.distanceKm.setText(chargerItems.get(position).getDistanceKm());
-        holder.imageViewFast.setImageResource(chargerItems.get(position).getImageFast());
-        holder.imageViewSlow.setImageResource(chargerItems.get(position).getImageSlow());
-         */
     }
 
 
@@ -188,23 +163,6 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
             textViewFast = itemView.findViewById(R.id.textViewFast);
             textViewLigtning = itemView.findViewById(R.id.textViewLigtning);
             distanceKm = itemView.findViewById(R.id.distance_km);
-
-
-
-
-
-
-            /*
-            chargeTimeFast = itemView.findViewById(R.id.charge_time_fast);
-            avaiableFast = itemView.findViewById(R.id.available_fast);
-            chargeTimeSlow = itemView.findViewById(R.id.charge_time_slow);
-            avaiableSlow = itemView.findViewById(R.id.available_slow);
-            distanceKm = itemView.findViewById(R.id.distance_km);
-            imageViewFast = itemView.findViewById(R.id.imageViewFast);
-            imageViewSlow = itemView.findViewById(R.id.imageViewSlow);
-
-
-             */
 
         }
     }

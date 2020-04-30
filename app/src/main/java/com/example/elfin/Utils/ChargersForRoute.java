@@ -6,6 +6,17 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+/**
+ * Klassen er laget for å håndtere hvilken ladere som visses for din bil.
+ * I tilegg beregner klassen ladetid for din elbil.
+ * Den tar inn bil som er valgt og alle ladestjoner og lager en ny liste med de aktuelle ladestasjonene for reisen til din bil.
+ * Eks hvis bilen har 150 kW skal de få inn ladere som er lik eller mindre enn 150.
+ * Det er mange ifer som sjekkes, hvis den har chademo lader og CSS hurtig  hvis den har CCS og hurtig osv.
+ * Man ser at det å lages et chargeritem som går igjen nesten hver gang med en litt annen vri her går det å generalisere det mer.
+ * Lager et chargeritem som er tilpasset din bil og det er mange unntak.
+ *
+ */
+
 public class ChargersForRoute {
 
     public ArrayList<ChargerItem> setChargerForCar(ArrayList<ChargerItem> allChargingStations, Elbil mSelectedCar){

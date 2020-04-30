@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
 
     public void closeKeyboard(View view) {
+        //Brukes ofr å luke keyboardet
         InputMethodManager keyboardManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboardManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         listViewSuggest.setVisibility(View.INVISIBLE);
@@ -354,8 +355,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         }
                     }
                 }
-
-                System.out.println(isSelected);
                 if (!isSelected) {
                     listViewSuggest.setVisibility(View.VISIBLE);
                 } else {
@@ -386,10 +385,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         });
 
         editText.setOnKeyListener(new View.OnKeyListener() {
+            //Hvis man trykker enter lages det øverste valget i displaySuggestion listen.
+            //Og viewene lukkes.
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && (i == KeyEvent.KEYCODE_ENTER || i == KeyEvent.KEYCODE_DPAD_CENTER)) {
-                    System.out.println("trykker");
                     editText.setText(listViewSuggest.getItemAtPosition(0).toString());
                     destionacionValidacion = editText.getText().toString();
                     setDestinationID(placeIdList.get(0));

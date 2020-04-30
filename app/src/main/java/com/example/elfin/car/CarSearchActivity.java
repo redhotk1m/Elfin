@@ -188,6 +188,11 @@ public class CarSearchActivity extends AppCompatActivity {
             // allCarsList.get(0).setModelYear(exactModelYear);
 
             Intent intent = new Intent(this, CarInfoActivity.class);
+            String regNr2 = editTextSearchRegNr.getText().toString();
+
+            regNr2 = regNr2.replaceAll("\\s+","");
+            regNr2 = regNr2.toUpperCase();
+            intent.putExtra("regNr", regNr2);
             intent.putExtra("Elbil", mElbilList.get(0));
             intent.putParcelableArrayListExtra("AllCarsList", new ArrayList<>(allCarsList));
 
