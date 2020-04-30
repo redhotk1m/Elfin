@@ -154,11 +154,13 @@ public class CarSelectionActivity extends AppCompatActivity {
                 if (mCarList.size() == 1) {
                     Intent intent = new Intent(CarSelectionActivity.this, CarInfoActivity.class);
                     intent.putExtra("Elbil", mCarList.get(0));
+                    intent.putExtra("manualSelection", true);
                     startActivity(intent);
                 } else {
                     //todo: HANDLE THIS!
                     Intent intent = new Intent(CarSelectionActivity.this, CarInfoActivity.class);
                     intent.putParcelableArrayListExtra("CarList", new ArrayList<>(mCarList));
+                    intent.putExtra("manualSelection", true);
                     startActivity(intent);
                 }
                 /*

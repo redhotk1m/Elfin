@@ -238,6 +238,10 @@ public class CarSearchActivity extends AppCompatActivity {
             } else {
                 System.out.println("FIRESTORE CARS ALREADY FETCHED!");
                 //todo: Handle if something goes wrong
+                Intent intent = new Intent(this, CarSelectionActivity.class);
+                intent.putParcelableArrayListExtra("AllCarsList", new ArrayList<>(allCarsList));
+                // startActivity(intent);
+                startActivityDialogBox(0, intent);
             }
         }
     }

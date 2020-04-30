@@ -60,7 +60,7 @@ public class CarInfoActivity extends AppCompatActivity {
     private ArrayAdapter adapter;
     private Elbil elbil;
 
-    private boolean elbilFound, carInfo;
+    private boolean elbilFound, carInfo, manualSelection;
 
     private SharedPreferences sharedPreferences;
     private SharedCarPreferences sharedCarPreferences;
@@ -108,13 +108,15 @@ public class CarInfoActivity extends AppCompatActivity {
             setSpinnerSelection(spinnerModelYear, MODELYEAR, elbilFound);
             setSpinnerSelection(spinnerBattery, BATTERY, elbilFound);
             setSpinnerSelection(spinnerFastCharge, FASTCHARGE, elbilFound);
-        } else if (!carInfo) {
+        } else if (!carInfo && !manualSelection) {
             setSpinnerSelection(spinnerBrand, BRAND, found[0]);
             setSpinnerSelection(spinnerModel, MODEL, found[1]);
             setSpinnerSelection(spinnerModelYear, MODELYEAR, found[2]);
             setSpinnerSelection(spinnerBattery, BATTERY, found[3]);
             setSpinnerSelection(spinnerFastCharge, FASTCHARGE, false);
         }
+
+        //todo: handle if multiple car from manual selection received
 
 
         saveCarBtn.setOnClickListener(myOnClickListener);
@@ -216,6 +218,8 @@ public class CarInfoActivity extends AppCompatActivity {
             textView2.setText("Tilbake");
             imageView2.setImageResource(R.drawable.ic_arrow_back_black_24dp);
         }
+
+        manualSelection = intent.getBooleanExtra("manualSelection", false);
     }
 
 
@@ -274,7 +278,7 @@ public class CarInfoActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.btnLoadCar:
-                    if (!carInfo) {
+                    if (!carInfo && !manualSelection) {
                         Intent intent = new Intent(CarInfoActivity.this, CarSelectionActivity.class);
                         intent.putParcelableArrayListExtra("AllCarsList", new ArrayList<>(allElbils));
                         startActivityDialogBox(0, intent);
