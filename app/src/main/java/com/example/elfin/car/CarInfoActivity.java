@@ -1,15 +1,15 @@
 package com.example.elfin.car;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -20,13 +20,11 @@ import com.example.elfin.MainActivity;
 import com.example.elfin.R;
 import com.example.elfin.Utils.DialogBox;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class CarInfoActivity extends AppCompatActivity {
 
@@ -46,16 +44,28 @@ public class CarInfoActivity extends AppCompatActivity {
     private ImageButton saveCarBtn, loadCarBtn;
     private ImageView imageView, imageView2;
     // private EditText editTextFastCharge, editTextBattery;
-    private TextView textView, textView2;
+    private TextView textView, textView2, textViewAddCar;
     private TextView editTextBrand, editTextModel, editTextModelYear, editTextFastCharge, editTextBattery;
     private TextView editTextBrand2, editTextModel2, editTextModelYear2, editTextFastCharge2, editTextBattery2;
     private Spinner spinner;
+
+
+    private ArrayAdapter<String> adapterBrand, adapterModel, adapterModelYear, adapterFastCharge, adapterBattery;
+    private List<String> brands, models, modelYears, fastCharges, batteries;
+    private Spinner spinnerBrand, spinnerModel, spinnerModelYear, spinnerFastCharge, spinnerBattery;
+    private String selectedBrand, selectedModel, selectedModelYear, selectedFastCharge, selectedBattery,
+            regNr, exactModelYear;
+
     private ArrayAdapter adapter;
     private Elbil elbil;
 
     private boolean elbilFound, carInfo;
 
+    private SharedPreferences sharedPreferences;
     private SharedCarPreferences sharedCarPreferences;
+
+    private CarFilteredList carFilteredList;
+    private List<Elbil> filteredElbils;
 
     private DialogBox dialogBox, dialogBox1, dialogBox2, dialogBox3, dialogBox4;
 
@@ -68,10 +78,71 @@ public class CarInfoActivity extends AppCompatActivity {
 
         initDisplayFields();
 
-        System.out.println("ELBIL FOUND BOOLEAN: " + elbilFound);
+        sharedCarPreferences = new SharedCarPreferences();
 
         Intent intent = getIntent();
+        getAllIntent(intent);
 
+        getCarAttributes(elbil, elbilFound);
+
+        mCarList = new ArrayList<>();
+
+        carFilteredList = new CarFilteredList();
+
+        initCarSpinnerSelection(spinnerBrand, BRAND);
+        initCarSpinnerSelection(spinnerModel, MODEL);
+        initCarSpinnerSelection(spinnerModelYear, MODELYEAR);
+        initCarSpinnerSelection(spinnerBattery, BATTERY);
+        initCarSpinnerSelection(spinnerFastCharge, FASTCHARGE);
+
+        //todo: midlertidig; må håndteres riktig
+        if (!carInfo) {
+            setSpinnerSelection(spinnerBrand, BRAND, found[0]);
+            setSpinnerSelection(spinnerModel, MODEL, found[1]);
+            setSpinnerSelection(spinnerModelYear, MODELYEAR, found[2]);
+            setSpinnerSelection(spinnerBattery, BATTERY, found[3]);
+            setSpinnerSelection(spinnerFastCharge, FASTCHARGE, false);
+        }
+
+
+        saveCarBtn.setOnClickListener(myOnClickListener);
+        loadCarBtn.setOnClickListener(myOnClickListener);
+    }
+
+
+    private void findViewsById() {
+        editTextBrand = findViewById(R.id.text_view_brand);
+        editTextModel = findViewById(R.id.text_view_model);
+        editTextModelYear = findViewById(R.id.text_view_model_year);
+        editTextFastCharge = findViewById(R.id.text_view_fast_charge);
+        editTextBattery = findViewById(R.id.text_view_battery);
+
+        // editTextBrand2 = findViewById(R.id.text_view_brand2);
+        // editTextModel2 = findViewById(R.id.text_view_model2);
+        // editTextModelYear2 = findViewById(R.id.text_view_model_year2);
+        // editTextFastCharge2 = findViewById(R.id.text_view_fast_charge2);
+        // editTextBattery2 = findViewById(R.id.text_view_battery2);
+
+        textViewAddCar = findViewById(R.id.text_view_add_car);
+
+        textView = findViewById(R.id.textView);
+        textView2 = findViewById(R.id.textView2);
+        imageView = findViewById(R.id.imageView);
+        imageView2 = findViewById(R.id.imageView2);
+
+        spinner = findViewById(R.id.spinner_all_cars);
+
+        spinnerBrand = findViewById(R.id.spinner_brand);
+        spinnerModel = findViewById(R.id.spinner_model);
+        spinnerModelYear = findViewById(R.id.spinner_model_year);
+        spinnerFastCharge = findViewById(R.id.spinner_fast_charge);
+        spinnerBattery = findViewById(R.id.spinner_battery);
+
+        saveCarBtn = findViewById(R.id.btnSaveCar);
+        loadCarBtn = findViewById(R.id.btnLoadCar);
+    }
+
+    private void getAllIntent(Intent intent) {
         //AllCarsList
         allElbils = intent.getParcelableArrayListExtra("AllCarsList");
         System.out.println("#####################################################################");
@@ -81,14 +152,17 @@ public class CarInfoActivity extends AppCompatActivity {
         System.out.println("#####################################################################");
 
 
+        //Exact elbil found
         elbil = intent.getParcelableExtra("Elbil");
         if (elbil != null) {
             elbilFound = true;
             System.out.println("getParcelable Elbil: " + elbil.toString() + " ; " + elbilFound);
             // getCarAttributes(elbil, elbilFound);
         } else System.out.println("getParcelable Elbil not received");
+        System.out.println("ELBIL FOUND BOOLEAN: " + elbilFound);
 
 
+        //Missing Elbil fields
         found = intent.getBooleanArrayExtra("Missing");
         if (found != null) {
             // Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
@@ -96,34 +170,23 @@ public class CarInfoActivity extends AppCompatActivity {
         } else System.out.println("FOUND FIELDS[] NOT RECEIVED");
 
 
+        //Found Elbil fields
         fieldMap = (HashMap<String, String>) intent.getSerializableExtra("FieldMap");
         if (fieldMap != null) {
             System.out.println("INTENT HASH MAP: " + fieldMap);
-            //  Toast.makeText(this, "INTENT HASH MAP: " + fieldMap, Toast.LENGTH_LONG).show();
-            /*
-            Toast.makeText(this, "EXACT FIELDS FOUND:\n\n"
-                            + BRAND + " ; " + fieldMap.get(BRAND) + "\n\n"
-                            + MODEL + " ; " + fieldMap.get(MODEL) + "\n\n"
-                            + MODELYEAR + " ; " + fieldMap.get(MODELYEAR) + "\n\n"
-                            + BATTERY + " ; " + fieldMap.get(BATTERY) + "\n\n"
-                    , Toast.LENGTH_LONG).show();
-             */
             System.out.println("INTENT EXACT FIELDS: \n\n"
                     + BRAND + " ; " + fieldMap.get(BRAND) + "\n\n"
                     + MODEL + " ; " + fieldMap.get(MODEL) + "\n\n"
                     + MODELYEAR + " ; " + fieldMap.get(MODELYEAR) + "\n\n"
                     + BATTERY + " ; " + fieldMap.get(BATTERY) + "\n\n"
             );
+            regNr = fieldMap.get("regNr");
+            if (regNr != null) textViewAddCar.setText(regNr);
+            exactModelYear = fieldMap.get("exactModelYear");
+            if (exactModelYear == null) exactModelYear = "";
         } else System.out.println("getParcelable fieldMap not received");
-        /*
 
-        foundFieldsMap = (HashMap<String, List<String>>) intent.getSerializableExtra("FoundFieldsMap");
-        System.out.println("INTENT HASH MAP 2: " + foundFieldsMap);
-        Toast.makeText(this, "INTENT HASH MAP: " + foundFieldsMap, Toast.LENGTH_LONG).show();
-
-         */
-
-
+        //Matching elbils found
         elbils = getIntent().getParcelableArrayListExtra("CarList");
         if (elbils != null && elbils.size() > 0) {
             System.out.println("ELBILS RECEIVED: " + elbils.get(0).toString());
@@ -131,9 +194,7 @@ public class CarInfoActivity extends AppCompatActivity {
         } else System.out.println("NO ELBILS RECEIVED!");
 
 
-        sharedCarPreferences = new SharedCarPreferences();
-
-
+        //If "Car Info" selected from Main Activity
         carInfo = intent.getBooleanExtra("CarInfo", false);
         if (carInfo) {
             saveCarBtn.setVisibility(View.GONE);
@@ -141,102 +202,340 @@ public class CarInfoActivity extends AppCompatActivity {
             imageView.setVisibility(View.GONE);
             textView2.setText("Tilbake");
         }
-       // carInfo = getIntent().getExtras().getBoolean("CarInfo");
-       // Toast.makeText(this, "CAR INFO ; " + carInfo, Toast.LENGTH_SHORT).show();
-
-
-        // clearSharedPrefferences();
-
-        // loadCar();
-
-        getCarAttributes(elbil, elbilFound);
-
-
-        mCarList = new ArrayList<>();
-        /*
-        if (mCarList.size() == 0) Toast.makeText(this, "EMPTY CAR LIST!", Toast.LENGTH_SHORT).show();
-        else {
-            for (Elbil elbil : mCarList) {
-                Toast.makeText(this, "BRAND: " + elbil.getBrand(), Toast.LENGTH_SHORT).show();
-            }
-        }
-        */
-
-
-        initDialog();
-        /*
-        if (elbilFound) {
-            dialogBox1.createDialogBox();
-        } else {
-            dialogBox3.createDialogBox();
-        }
-        */
-
-
-        saveCarBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-               // Toast.makeText(CarInfoActivity.this, "LEGG TIL BIL!", Toast.LENGTH_SHORT).show();
-
-                if (elbilFound) {
-                    mCarList.add(elbil);
-
-                    //  dialogBox1.createDialogBox();
-
-                    saveCar();
-                    // clearAttributes();
-                } else {
-
-                    // dialogBox3.createDialogBox();
-
-                    Intent intent = new Intent(CarInfoActivity.this, CarSelectionActivity.class);
-                    intent.putParcelableArrayListExtra("CarList", new ArrayList<>(elbils));
-                    intent.putExtra("Missing", found);
-                    intent.putExtra("FieldMap", fieldMap);
-
-                    startActivityDialogBox(1, intent);
-
-                    // startActivity(intent);
-                   // finish();
-                }
-            }
-        });
-
-        loadCarBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //  Toast.makeText(CarInfoActivity.this, "IKKE LEGG TIL BIL", Toast.LENGTH_SHORT).show();
-                finish();
-                /*
-                if (elbilFound) {
-                    dialogBox2.createDialogBox();
-                    finish();
-                } else {
-                    dialogBox4.createDialogBox();
-                    finish();
-                }
-
-
-
-
-                // mCarList.clear();
-
-                // initSpinner();
-
-                /*
-                Toast.makeText(CarInfoActivity.this, "SIZE: " + mCarListAll.size(), Toast.LENGTH_LONG).show();
-                for (Elbil elbil : mCarListAll)
-                    System.out.println("\nINFO MERKE : " + elbil.getBrand());
-
-                 */
-
-                //display spinner item
-                // getSelectedCar(view);
-            }
-        });
     }
+
+
+    private View.OnClickListener myOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btnSaveCar:
+                    // Toast.makeText(CarInfoActivity.this, "LEGG TIL BIL!", Toast.LENGTH_SHORT).show();
+
+                    if (elbilFound) {
+                        mCarList.add(elbil);
+
+                        //  dialogBox1.createDialogBox();
+
+                        saveCar();
+                        // clearAttributes();
+                    } else {
+
+                        // dialogBox3.createDialogBox();
+
+                        System.out.println("SELECTED ELBIL: \n" +
+                                "\nSELECTED BRAND: " + selectedBrand +
+                                "\nSELECTED MODEL: " + selectedModel +
+                                "\nSELECTED MODEL YEAR: " + selectedModelYear +
+                                "\nSELECTED FAST CHARGE: " + selectedFastCharge +
+                                "\nSELECTED BATTERY: " + selectedBattery);
+
+                        //TODO: SAVE CAR WITH SELECTED SPINNER VALUES
+                        // validate if "UKJENT" & inform user
+
+                        //  Elbil selectedElbil;
+                        mCarList = searchCar();
+                        System.out.println("SEARCHED CAR LIST SIZE: " + mCarList.size());
+                        if (mCarList.size() == 1) saveCar();
+
+
+                        /*
+                        Intent intent = new Intent(CarInfoActivity.this, CarSelectionActivity.class);
+                        intent.putParcelableArrayListExtra("CarList", new ArrayList<>(elbils));
+                        intent.putExtra("Missing", found);
+                        intent.putExtra("FieldMap", fieldMap);
+
+                        startActivityDialogBox(1, intent);
+
+                         */
+
+
+                        // startActivity(intent);
+                        // finish();
+                    }
+                    break;
+                case R.id.btnLoadCar:
+                    finish();
+                    /*
+                    if (elbilFound) {
+                        dialogBox2.createDialogBox();
+                        finish();
+                    } else {
+                        dialogBox4.createDialogBox();
+                        finish();
+                    }
+                    */
+                    break;
+                default:
+                    Toast.makeText(CarInfoActivity.this, "CLICKABLE ID NOT FOUND..", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener myOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            // ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(CarInfoActivity.this, R.color.backGroundColor));
+            switch (adapterView.getId()) {
+                case R.id.spinner_brand:
+                    selectedBrand = spinnerBrand.getSelectedItem().toString();
+                    System.out.println("SELECTED BRAND: " + selectedBrand);
+                    // clickableSelection(spinnerBrand, found[0]);
+                    break;
+                case R.id.spinner_model:
+                    selectedModel = spinnerModel.getSelectedItem().toString();
+                    System.out.println("SELECTED MODEL: " + selectedModel);
+                    break;
+                case R.id.spinner_model_year:
+                    selectedModelYear = spinnerModelYear.getSelectedItem().toString();
+                    System.out.println("SELECTED MODEL YEAR: " + selectedModelYear);
+                    break;
+                case R.id.spinner_fast_charge:
+                    selectedFastCharge = spinnerFastCharge.getSelectedItem().toString();
+                    System.out.println("SELECTED EFFECT: " + selectedFastCharge);
+                    // filteredSelection(spinnerBattery);
+                    break;
+                case R.id.spinner_battery:
+                    selectedBattery = spinnerBattery.getSelectedItem().toString();
+                    System.out.println("SELECTED BATTERY: " + selectedBattery);
+                    break;
+                default:
+                    Toast.makeText(adapterView.getContext(), "NO SUCH SPINNER LISTENER..", Toast.LENGTH_SHORT).show();
+            }
+            ((TextView) adapterView.getChildAt(0)).setTypeface(null, Typeface.BOLD);
+            ((TextView) adapterView.getChildAt(0)).setTextSize(18);
+            ((TextView) adapterView.getChildAt(0)).setEms(10);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private void initCarSpinnerSelection(Spinner spinner, String dataField) {
+        spinner.setOnItemSelectedListener(myOnItemSelectedListener);
+        switch (dataField) {
+            case BRAND:
+                brands = new ArrayList<>();
+                adapterBrand = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, brands);
+                adapterBrand.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapterBrand);
+                break;
+            case MODEL:
+                models = new ArrayList<>();
+                adapterModel = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, models);
+                adapterModel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapterModel);
+                break;
+            case MODELYEAR:
+                modelYears = new ArrayList<>();
+                adapterModelYear = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, modelYears);
+                adapterModelYear.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapterModelYear);
+                // if (found) {
+                // modelYears.add(fieldMap.get(MODELYEAR));
+                break;
+            case BATTERY:
+                batteries = new ArrayList<>();
+                adapterBattery = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, batteries);
+                adapterBattery.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapterBattery);
+                break;
+            case FASTCHARGE:
+                fastCharges = new ArrayList<>();
+                // spinnerSelection.initSpinnerList(spinnerCharges, fastCharges, FASTCHARGE);
+                adapterFastCharge = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fastCharges);
+                adapterFastCharge.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(adapterFastCharge);
+                break;
+            default:
+                System.out.println("NO SUCH SPINNER..");
+        }
+
+
+        // clickableSelection(spinner, found);
+    }
+
+    private void setSpinnerSelection(Spinner spinner, String dataField, boolean foundField) {
+        switch (dataField) {
+            case BRAND:
+                if (foundField) {
+                    brands.add(fieldMap.get(BRAND));
+                    //  clickableSelection(spinnerBrand, true);
+                    adapterBrand.notifyDataSetChanged();
+                }
+                break;
+            case MODEL:
+                if (foundField) {
+                    models.add(fieldMap.get(MODEL));
+                    // clickableSelection(spinnerModel, true);
+                    adapterModel.notifyDataSetChanged();
+                }
+                break;
+            case MODELYEAR:
+                if (!exactModelYear.isEmpty()) {
+                    modelYears.add(fieldMap.get("exactModelYear"));
+                    // clickableSelection(spinnerModelYear, true);
+                    foundField = true;
+                    adapterModelYear.notifyDataSetChanged();
+                }
+                break;
+            case FASTCHARGE:
+                if (foundField) {
+                    fastCharges.add(fieldMap.get(BATTERY));
+                    // clickableSelection(spinnerFastCharge, true);
+                    adapterBattery.notifyDataSetChanged();
+                }
+                break;
+            case BATTERY:
+                if (foundField) {
+                    batteries.add(fieldMap.get(BATTERY));
+                    // clickableSelection(spinnerBattery, true);
+                    adapterBattery.notifyDataSetChanged();
+                }
+                break;
+        }
+
+        clickableSelection(spinner, foundField);
+    }
+
+    private void clickableSelection(Spinner spinner, boolean foundField) {
+        if (foundField) {
+            spinner.setSelection(0, false);
+            spinner.setBackgroundColor(ContextCompat.getColor(this, R.color.backGroundColor));
+            spinner.setClickable(false);
+        } else {
+            filteredSelection(spinner);
+        }
+    }
+
+
+    private void filteredSelection(Spinner spinner) {
+        getSelectedSpinnerFiled();
+        //  carFilteredList.filteredCars(filteredElbils);
+        filteredElbils = new ArrayList<>();
+        List<String> fields = new ArrayList<>();
+
+        String modelYear = fieldMap.get(MODELYEAR);
+        if (modelYear == null) modelYear = "";
+
+        //todo: handle if model year not in database
+
+        switch (spinner.getId()) {
+            case R.id.spinner_brand:
+                // String selectedBrand = spinnerBrand.getSelectedItem().toString();
+                carFilteredList.filterFields(BRAND, selectedBrand, brands);
+                break;
+            case R.id.spinner_model:
+                //selectedBrand
+                // String selectedModel = spinnerModel.getSelectedItem().toString();
+                break;
+            case R.id.spinner_fast_charge:
+                fastCharges.clear();
+                for (Elbil elbil : elbils) {
+                    if (!modelYear.isEmpty()) {
+                        if (selectedBrand.equals(elbil.getBrand())
+                                && selectedModel.equals(elbil.getModel())
+                                && modelYear.equals(elbil.getModelYear())
+                                && !fastCharges.contains(elbil.getFastCharge())) {
+                            fastCharges.add(elbil.getFastCharge());
+                        }
+                    } else {
+                        if (selectedBrand.equals(elbil.getBrand())
+                                && selectedModel.equals(elbil.getModel())
+                                && !fastCharges.contains(elbil.getFastCharge())) {
+                            fastCharges.add(elbil.getFastCharge());
+                        }
+                    }
+                }
+                if (fastCharges.size() == 1) clickableSelection(spinnerFastCharge, true);
+                else {
+                    fastCharges.add("UKJENT");
+                    spinnerFastCharge.setSelection(fastCharges.size() - 1);
+                }
+                adapterFastCharge.notifyDataSetChanged();
+                break;
+            case R.id.spinner_battery:
+                batteries.clear();
+                for (Elbil elbil : elbils) {
+                    if (!modelYear.isEmpty()) {
+                        if (selectedBrand.equals(elbil.getBrand())
+                                && selectedModel.equals(elbil.getModel())
+                                && modelYear.equals(elbil.getModelYear())) {
+                            batteries.add(elbil.getBattery());
+                        }
+                    } else {
+                        if (selectedBrand.equals(elbil.getBrand())
+                                && selectedModel.equals(elbil.getModel())
+                                && !batteries.contains(elbil.getBattery())) {
+                            batteries.add(elbil.getBattery());
+                        }
+                    }
+                }
+                if (batteries.size() == 1) clickableSelection(spinnerBattery, true);
+                else {
+                    batteries.add("UKJENT");
+                    spinnerBattery.setSelection(batteries.size() - 1);
+                }
+                adapterBattery.notifyDataSetChanged();
+                break;
+        }
+    }
+
+
+    private void getSelectedSpinnerFiled() {
+        if (spinnerBrand.getSelectedItem() != null)
+            selectedBrand = spinnerBrand.getSelectedItem().toString();
+        else selectedBrand = "";
+
+        if (spinnerModel.getSelectedItem() != null)
+            selectedModel = spinnerModel.getSelectedItem().toString();
+        else selectedModel = "";
+
+        if (spinnerModelYear.getSelectedItem() != null)
+            selectedModelYear = spinnerModelYear.getSelectedItem().toString();
+        else selectedModelYear = "";
+
+        if (spinnerBattery.getSelectedItem() != null)
+            selectedBattery = spinnerBattery.getSelectedItem().toString();
+        else selectedBattery = "";
+
+        if (spinnerFastCharge.getSelectedItem() != null)
+            selectedFastCharge = spinnerFastCharge.getSelectedItem().toString();
+        else selectedFastCharge = "";
+    }
+
+
+    private ArrayList<Elbil> searchCar() {
+        mCarList = new ArrayList<>();
+        //todo: get allCarsList from CAR INFO!!!
+        String modelYear = fieldMap.get(MODELYEAR);
+        if (modelYear == null) modelYear = "";
+        for (Elbil elbil : elbils) {
+            if (!modelYear.isEmpty()) {
+                if (selectedBrand.equals(elbil.getBrand())
+                        && selectedModel.equals(elbil.getModel())
+                        && modelYear.equals(elbil.getModelYear())
+                        // && selectedModelYear.equals(elbil.getModelYear())
+                        // && selectedFastCharge.equals(elbil.getFastCharge())
+                        && selectedBattery.equals(elbil.getBattery())) {
+                    mCarList.add(elbil);
+                }
+            } else {
+                if (selectedBrand.equals(elbil.getBrand())
+                        && selectedModel.equals(elbil.getModel())
+                        // && modelYear.equals(elbil.getModelYear())
+                        // && selectedModelYear.equals(elbil.getModelYear())
+                        // && selectedFastCharge.equals(elbil.getFastCharge())
+                        && selectedBattery.equals(elbil.getBattery())) {
+                    mCarList.add(elbil);
+                }
+            }
+        }
+        return mCarList;
+    }
+
 
     private void initSpinner() {
         loadCar();
@@ -263,72 +562,14 @@ public class CarInfoActivity extends AppCompatActivity {
         editor.putString("car list", json);
         editor.apply();
 
-       // Toast.makeText(this, "CAR SAVED!", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "CAR SAVED!", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, MainActivity.class));
     }
 
     private void loadCar() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("car list", null);
-        Type type = new TypeToken<ArrayList<Elbil>>() {
-        }.getType();
-        mCarListAll = gson.fromJson(json, type);
-
-        if (mCarListAll == null) mCarListAll = new ArrayList<>();
-    }
-
-
-    private void findViewsById() {
-        editTextBrand = findViewById(R.id.text_view_brand);
-        editTextModel = findViewById(R.id.text_view_model);
-        editTextModelYear = findViewById(R.id.text_view_model_year);
-        editTextFastCharge = findViewById(R.id.text_view_fast_charge);
-        editTextBattery = findViewById(R.id.text_view_battery);
-        editTextBrand2 = findViewById(R.id.text_view_brand2);
-        editTextModel2 = findViewById(R.id.text_view_model2);
-        editTextModelYear2 = findViewById(R.id.text_view_model_year2);
-        editTextFastCharge2 = findViewById(R.id.text_view_fast_charge2);
-        editTextBattery2 = findViewById(R.id.text_view_battery2);
-
-
-        textView = findViewById(R.id.textView);
-        textView2 = findViewById(R.id.textView2);
-        imageView = findViewById(R.id.imageView);
-        imageView2 = findViewById(R.id.imageView2);
-
-        spinner = findViewById(R.id.spinner_all_cars);
-
-        saveCarBtn = findViewById(R.id.btnSaveCar);
-        loadCarBtn = findViewById(R.id.btnLoadCar);
-    }
-
-    private AdapterView.OnItemSelectedListener myOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-
-            /*
-            Toast.makeText(adapterView.getContext(),
-                    "OnItemSelectedListener : " + adapterView.getItemAtPosition(position).toString(),
-                    Toast.LENGTH_SHORT).show();
-            */
-
-            getSelectedCar();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-
-        }
-    };
-
-    private void getSelectedCar() {
-        Elbil elbil = (Elbil) spinner.getSelectedItem();
-
-        if (elbil.getBrand().equals("LEGG TIL BIL"))
-            Toast.makeText(this, "NO CAR SELECTED!\n" + elbil.getBrand(), Toast.LENGTH_SHORT).show();
-        else getCarAttributes(elbil, elbilFound);
+        sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        mCarListAll = sharedCarPreferences.loadCars(sharedPreferences);
+        System.out.println("SHARED CAR PREFERENCES LOAD SIZE: " + mCarListAll.size());
     }
 
 
@@ -343,7 +584,7 @@ public class CarInfoActivity extends AppCompatActivity {
             fastCharge2 = elbil.getFastCharge();
 
             //todo: lag popup dialog ==> "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT? "
-           // loadCarBtn.setText("IKKE MIN BIL");
+            // loadCarBtn.setText("IKKE MIN BIL");
         } else if (fieldMap != null) {
 
             if (found[0]) brand2 = fieldMap.get(BRAND);
@@ -356,7 +597,7 @@ public class CarInfoActivity extends AppCompatActivity {
             else modelYear2 = "[IKKE FUNNET]";
 
             if (found[3]) battery2 = fieldMap.get(BATTERY);
-            else{
+            else {
                 battery2 = "UKJENT";
                 fastCharge2 = "UKJENT";
             }
@@ -373,34 +614,16 @@ public class CarInfoActivity extends AppCompatActivity {
         }
 
 
+
+        /*
         editTextBrand2.setText(brand2);
         editTextModel2.setText(model2);
         editTextModelYear2.setText(modelYear2);
         editTextFastCharge2.setText(fastCharge2);
         editTextBattery2.setText(battery2);
-    }
-
-
-    private void getSpecs(Map<String, Double> specs) {
-
-        if (specs == null) System.out.println("NO SPECS");
-        else System.out.println(specs.get("battery"));
-
-//            String spec = specs.keySet().toString();
-
-        //    System.out.println(spec + " ; " + specs.get(spec));
-
-
-
-        /*
-        for(Map.Entry entry:specs.entrySet()){
-            System.out.print(entry.getKey() + " : " + entry.getValue());
-            //String s = entry.getKey() + " : " + entry.getValue() + "\n";
-            //editTextFastCharge.setText(s);
-        }
-
          */
     }
+
 
     private void initDisplayFields() {
         brand = "Bilmerke: ";
@@ -416,23 +639,6 @@ public class CarInfoActivity extends AppCompatActivity {
         editTextBattery.setText(battery);
     }
 
-    private void initDialog() {
-        dialogBox1 = new DialogBox(this, "ER DETTE DIN BIL?",
-                "Vil du legge til denne bilen i appen?",
-                "LEGG TIL", "SØK IGJEN", 2);
-
-        dialogBox2 = new DialogBox(this, "ER DETTE IKKE DIN BIL?",
-                "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT?",
-                "VELG MANUELT", "SØK IGJEN", 2);
-
-        dialogBox3 = new DialogBox(this, "ER DETTE DIN BIL?",
-                "Vi mangler noen opplysninger om bilen din, vennligst velg blant de opplysningen som passer din bil",
-                "FYLL IN MANGLER", "SØK IGJEN", 2);
-
-        dialogBox4 = new DialogBox(this, "ER DETTE IKKE DIN BIL?",
-                "VIL DU PRØVE MED ET ANNET REG NR ELLER VELGE BILEN DIN MANUELT?",
-                "VELG MANUELT", "SØK IGJEN", 2);
-    }
 
     private void startActivityDialogBox(int identifier, Intent intent) {
         String title, msg, yesBtn, noBtn;
@@ -463,7 +669,6 @@ public class CarInfoActivity extends AppCompatActivity {
 
         System.out.println("<SHOWING DIALOG BOX>");
         dialogBox.setIntent(intent);
-        // dialogBox.simpleDialogBox();
         dialogBox.createDialogBox();
     }
 

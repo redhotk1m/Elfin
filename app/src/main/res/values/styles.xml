@@ -7,4 +7,11 @@
         <item name="colorPrimaryDark">@color/backGroundColor</item>
     </style>
 
+    <style name="SpinnerTextViewItem" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/blackColor</item>
+        <item name="android:ems">10</item>
+    </style>
+
 </resources>

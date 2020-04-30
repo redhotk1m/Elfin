@@ -42,6 +42,7 @@ public class CarSearchActivity extends AppCompatActivity {
     private BitSet bitSet;
     private boolean[] found;
     private String brand, model, modelYear, battery;
+    private String exactModelYear;
     private HashMap<String, String> foundHashMap;
 
     private Elbil mElbil;
@@ -125,6 +126,7 @@ public class CarSearchActivity extends AppCompatActivity {
         foundHashMap.put(MODELYEAR, modelYear);
         foundHashMap.put(BATTERY, battery);
         // foundHashMap.put(FASTCHARGE, fastCharge);
+        foundHashMap.put("exactModelYear", exactModelYear);
         System.out.println("INIT FIELDS MAP: " + foundHashMap);
 
         if (found == null)
@@ -139,7 +141,8 @@ public class CarSearchActivity extends AppCompatActivity {
         carInfoAPI.setCarSearchActivity(CarSearchActivity.this);
         //todo: validate regNr input from user
         String regNr = editTextSearchRegNr.getText().toString();
-        carInfoAPI.execute(regNr.replaceAll("\\s","").toLowerCase());
+        foundHashMap.put("regNr", regNr.replaceAll("\\s", "").toLowerCase());
+        carInfoAPI.execute(regNr.replaceAll("\\s", "").toLowerCase());
     }
 
     public void loadApiInfo(Elbil elbil) {
@@ -154,7 +157,7 @@ public class CarSearchActivity extends AppCompatActivity {
         if (elbil.getModelYear() != null) modelYearResponse = elbil.getModelYear();
 
         if (modelYearResponse.isEmpty())
-            System.out.println("MODEL YEAR RESPONSE IS EMPTY: " + modelResponse);
+            System.out.println("MODEL YEAR RESPONSE IS EMPTY: " + modelYearResponse);
         else checkFilteredCars(MODELYEAR, elbil, modelYearResponse);
 
         if (modelResponse.isEmpty())
@@ -180,6 +183,10 @@ public class CarSearchActivity extends AppCompatActivity {
             System.out.println("EXACT MATCH FOUND: " + mElbilList.get(0).toString()
                     + "[ " + mElbilList.size() + " / " + allCarsList.size() + " ]");
             System.out.println("#################################################################");
+
+            System.out.println("EXACT MODEL YEAR FROM API VS DATABASE: " + exactModelYear + " <==> " + allCarsList.get(0).getModelYear());
+            // allCarsList.get(0).setModelYear(exactModelYear);
+
             Intent intent = new Intent(this, CarInfoActivity.class);
             intent.putExtra("Elbil", mElbilList.get(0));
 
@@ -188,7 +195,7 @@ public class CarSearchActivity extends AppCompatActivity {
             // dialogBox.setIntent(intent);
             // dialogBox.createDialogBox();
 
-             startActivity(intent);
+            startActivity(intent);
         } else if (mElbilList.size() == allCarsList.size() && allCarsList.size() != 0) {
             //todo: popup dialog: if "manual selection" ; else "try different regNr"
             System.out.println("#################################################################");
@@ -202,6 +209,10 @@ public class CarSearchActivity extends AppCompatActivity {
             System.out.println("#################################################################");
             System.out.println("MATCHES FOUND: [ " + mElbilList.size() + " / " + allCarsList.size() + " ]");
             System.out.println("#################################################################");
+
+            System.out.println("EXACT MODEL YEAR FROM API VS DATABASE: " + exactModelYear + " <==> " + allCarsList.get(0).getModelYear());
+            // allCarsList.get(0).setModelYear(exactModelYear);
+
             Intent intent = new Intent(this, CarInfoActivity.class);
             intent.putParcelableArrayListExtra("AllCarsList", new ArrayList<>(allCarsList));
             intent.putParcelableArrayListExtra("CarList", new ArrayList<>(mElbilList));
@@ -315,11 +326,14 @@ public class CarSearchActivity extends AppCompatActivity {
             case MODELYEAR:
                 if (response != null) {
                     modelYear = response;
+                    exactModelYear = response;
                     if (!modelYear.isEmpty()) {
                         //todo: remove found[2] ==> checkModelYear()
-                        found[2] = true;
-                        foundHashMap.put(MODELYEAR, modelYear);
+                       // found[2] = true;
+                        foundHashMap.put("exactModelYear", exactModelYear);
+                        // foundHashMap.put(MODELYEAR, modelYear);
                     }
+
 
                     //todo: check model year response with cars in database
                     /*
@@ -444,6 +458,29 @@ public class CarSearchActivity extends AppCompatActivity {
 
     }
 
+    private void checkModelYearRange(Elbil elbil) {
+        String[] modelYearResponse = elbil.getModelYear().split("-");
+        int value = Integer.parseInt(modelYear);
+        if (modelYearResponse.length == 1) {
+            int min = Integer.parseInt(modelYearResponse[0]);
+            if (value == min) {
+                System.out.println(value + " == " + min);
+                modelYear = elbil.getModelYear();
+                foundHashMap.put(MODELYEAR, modelYear);
+                found[2] = true;
+            }
+        } else if (modelYearResponse.length == 2) {
+            int min = Integer.parseInt(modelYearResponse[0]);
+            int max = Integer.parseInt(modelYearResponse[1]);
+            if (min <= value && value <= max) {
+                System.out.println(value + " in in between: " + min + " - " + max);
+                modelYear = elbil.getModelYear();
+                foundHashMap.put(MODELYEAR, modelYear);
+                found[2] = true;
+            }
+        }
+    }
+
     private void startActivityDialogBox(int identifier, Intent intent) {
         String title, msg, yesBtn, noBtn;
 
@@ -472,26 +509,6 @@ public class CarSearchActivity extends AppCompatActivity {
         dialogBox.createDialogBox();
     }
 
-    private void checkModelYearRange(Elbil elbil) {
-        String[] modelYearResponse = elbil.getModelYear().split("-");
-        int value = Integer.parseInt(modelYear);
-        if (modelYearResponse.length == 1) {
-            int min = Integer.parseInt(modelYearResponse[0]);
-            if (value == min) {
-                System.out.println(value + " == " + min);
-                modelYear = elbil.getModelYear();
-                found[2] = true;
-            }
-        } else if (modelYearResponse.length == 2) {
-            int min = Integer.parseInt(modelYearResponse[0]);
-            int max = Integer.parseInt(modelYearResponse[1]);
-            if (min <= value && value <= max) {
-                System.out.println(value + " in in between: " + min + " - " + max);
-                modelYear = elbil.getModelYear();
-                found[2] = true;
-            }
-        }
-    }
 
     private void initFields() {
         brand = "";

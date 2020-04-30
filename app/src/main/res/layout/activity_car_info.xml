@@ -11,6 +11,7 @@
         android:id="@+id/spinner_all_cars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -119,11 +120,14 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="Er dette din bil?"
-        android:textSize="24sp"
         android:textColor="@color/blackColor"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_all_cars" />
+
+
+    <!-- CAR INFO: BRAND SELECTION -->
 
     <TextView
         android:id="@+id/text_view_brand"
@@ -141,6 +145,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_add_car" />
 
+
+    <Spinner
+        android:id="@+id/spinner_brand"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_brand"
+        app:layout_constraintTop_toTopOf="@+id/text_view_brand" />
+
+    <!--
     <TextView
         android:id="@+id/text_view_brand2"
         android:layout_width="0dp"
@@ -156,6 +172,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_view_brand"
         app:layout_constraintTop_toTopOf="@+id/text_view_brand" />
+        -->
+
+    <!-- CAR INFO: MODEL SELECTION -->
 
     <TextView
         android:id="@+id/text_view_model"
@@ -166,13 +185,24 @@
         android:layout_marginEnd="200dp"
         android:ems="10"
         android:hint="Modell"
-        android:inputType="textPersonName"
         android:textColor="@color/blackColor"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_brand" />
 
+
+    <Spinner
+        android:id="@+id/spinner_model"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_model"
+        app:layout_constraintTop_toTopOf="@+id/text_view_model" />
+
+    <!--
     <TextView
         android:id="@+id/text_view_model2"
         android:layout_width="0dp"
@@ -188,6 +218,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_view_model"
         app:layout_constraintTop_toTopOf="@+id/text_view_model" />
+    -->
+
+
+    <!-- CAR INFO: MODEL YEAR SELECTION -->
 
     <TextView
         android:id="@+id/text_view_model_year"
@@ -206,6 +240,18 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_model" />
 
 
+    <Spinner
+        android:id="@+id/spinner_model_year"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_model_year"
+        app:layout_constraintTop_toBottomOf="@+id/lineTourCar3" />
+
+    <!--
     <TextView
         android:id="@+id/text_view_model_year2"
         android:layout_width="0dp"
@@ -222,6 +268,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_view_model_year"
         app:layout_constraintTop_toBottomOf="@+id/lineTourCar3" />
+        -->
+
+
+    <!-- CAR INFO: FAST CHARGE SELECTION -->
 
     <TextView
         android:id="@+id/text_view_fast_charge"
@@ -239,6 +289,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_model_year" />
 
+
+    <Spinner
+        android:id="@+id/spinner_fast_charge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_fast_charge"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_model_year" />
+
+    <!--
     <TextView
         android:id="@+id/text_view_fast_charge2"
         android:layout_width="0dp"
@@ -255,6 +318,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_view_fast_charge"
         app:layout_constraintTop_toBottomOf="@+id/text_view_model_year" />
+    -->
+
+
+    <!-- CAR INFO: BATTERY SELECTION -->
 
     <TextView
         android:id="@+id/text_view_battery"
@@ -263,16 +330,27 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="200dp"
-        android:textColor="@color/blackColor"
         android:ems="10"
         android:hint="Battery"
         android:inputType="textPersonName"
+        android:textColor="@color/blackColor"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_fast_charge" />
 
+    <Spinner
+        android:id="@+id/spinner_battery"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_battery"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_fast_charge" />
 
+    <!--
     <TextView
         android:id="@+id/text_view_battery2"
         android:layout_width="0dp"
@@ -289,6 +367,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_view_battery"
         app:layout_constraintTop_toBottomOf="@+id/text_view_fast_charge" />
+    -->
 
     <ImageButton
         android:id="@+id/btnSaveCar"

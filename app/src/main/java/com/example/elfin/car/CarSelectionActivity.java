@@ -305,7 +305,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 // spinnerSelection.spinnerBrandOnItemSelected(spinnerBrands, spinnerModels, brands, models);
                 String selectedBrand = spinnerBrands.getSelectedItem().toString();
                 if (spinnerBrands.getSelectedItem().equals(getString(R.string.choose_none))) {
-                    // ((TextView)view).setText(null);  // hide selection text
+                    //  ((TextView) view).setText(null);  // hide selection text
                     // ((TextView) view).setText(getString(R.string.choose_brand));
                     makeSpinnerDisplay(BRAND, selectedBrand, view);
                     // disableSpinner(MODEL);

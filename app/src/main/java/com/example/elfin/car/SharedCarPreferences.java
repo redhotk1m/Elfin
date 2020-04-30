@@ -18,6 +18,21 @@ public class SharedCarPreferences {
 
     private ArrayList<Elbil> mCarList;
 
+
+    public ArrayList<Elbil> loadCars(SharedPreferences sharedPreferences) {
+        // SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("car list", null);
+        Type type = new TypeToken<ArrayList<Elbil>>() {
+        }.getType();
+        mCarList = gson.fromJson(json, type);
+
+        if (mCarList == null) mCarList = new ArrayList<>();
+
+        return mCarList;
+    }
+
+
     public ArrayList<Elbil> getSavedCars(SharedPreferences sharedPreferences) {
         // SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
