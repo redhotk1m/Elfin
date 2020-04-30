@@ -22,6 +22,11 @@ import java.util.ArrayList;
 
 import io.grpc.internal.SharedResourceHolder;
 
+/**
+ * Class for displaying the information on the about charger site,
+ * also opens google maps navigate if the button is pressed
+ */
+
 public class AboutCharger extends AppCompatActivity implements OnMapReadyCallback {
     TextView textViewTitel;
     TextView textViewAdress;
@@ -90,13 +95,10 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         textViewPayMethod = findViewById(R.id.textViewPayMethod);
         textViewDescription = findViewById(R.id.textViewDescription);
         textViewHelp = findViewById(R.id.textViewHelp);
-
         payMethodTitel = findViewById(R.id.textViewPayTittel);
-
         lineDescription = findViewById(R.id.line3_about);
         linePayMethod = findViewById(R.id.line2_about);
         lineInfo = findViewById(R.id.line3);
-
         textViewHowToPay = findViewById(R.id.textViewHowToPay);
         textViewHowToPayText = findViewById(R.id.textViewHowToPayText);
         lineHowToPay = findViewById(R.id.lineHowToPay);
@@ -123,8 +125,6 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
-
-
     }
 
     @Override
@@ -134,26 +134,13 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-/*
-    public void getInfo(){
-
-        NobilInfo nobilInfo = new NobilInfo(this);
-        //tjeldstø --> 2 chademo, 2 ccs, 2 trege
-        //LatLng latLng = new LatLng(60.58991, 4.84047);
-        //en plass cirkle k ---> 63.32481,10.30589 ... 2 hurtig -- 2 chademo
-        // Esso loddefjord 60.58991, 4.84047 --> 1 lyn, 2 hurti -- 2 chademo
-        LatLng latLng2 = new LatLng(60.36144, 5.23441);
-        nobilInfo.execute(latLng2);
-
-    }
-
- */
 
 
     public void setInfo(){
 
+
         /**
-         * Sette alle verdiene som ikke er i den neste forloopen først, frodi resten fosvinner når den breakes.
+         * Settes the needed information for each charger station
          *
          */
 
@@ -167,6 +154,10 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
                 + "Drop inn kunde:     NOK 2,50 per minutt + NOK 2,90 per kWh";
         String paymentMethodCirkleK = "Hurtiglading med ladebrikke eller mobilapp: 4,49 kr per kWh\n\n" +
                 "Lynlading med ladebrikke eller mobilapp: 4,99 kr per kWh";
+        String paymentBKK = "Hurtiglading 1,25 kr per minutt + 2,90 kr per kWh\n\n"+
+                "Lynlading 1,25 kr per minutt + 2,90 kr per kWh";
+
+        String paymentIonity = "Lynlading 8,40 kr per kWh (drop-in)";
 
 
         String paymentOtherStations = "Se informasjon på ladepunktet";
@@ -190,6 +181,10 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
                 "(3) Start lading (ved hjelp av app/ladebrikke og evt. start-knapp). \n\n" +
                 "Når du skal avslutte så gjøres dette ved å stoppe ladingen " +
                 "(ved hjelp av samme app/ladebrikke og evt. stopp-knapp) og sette tilbake ladepluggen. ";
+
+        String howtoCHargeBkk = "Last ned appen fra BKK eller ladebrikk\n\n" + "Stop og start betaling via app";
+
+        String howtoChargeIonity = "Skann strekkode på ladested legg inn nødvendig informasjon og bekreft betaling eller last ned IONITY appen";
 
 
         System.out.println(infoFromList.get(5));
@@ -251,6 +246,21 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
             textViewPayMethod.setText(paymentMethodGreenContact);
         }
 
+        else if(infoFromList.get(0).toUpperCase().equals("BKK")) {
+            textViewHowToPayText.setTextColor(Color.BLACK);
+            textViewPayMethod.setTextColor(Color.BLACK);
+            textViewHowToPayText.setText(howtoCHargeBkk);
+            payMethodTitel.setText("Priser for BKK");
+            textViewPayMethod.setText(paymentBKK);
+        }
+        else if(infoFromList.get(0).toUpperCase().equals("IONITY")) {
+            textViewHowToPayText.setTextColor(Color.BLACK);
+            textViewPayMethod.setTextColor(Color.BLACK);
+            textViewHowToPayText.setText(howtoChargeIonity);
+            payMethodTitel.setText("Priser for IONITY");
+            textViewPayMethod.setText(paymentIonity);
+        }
+
         else if(infoFromList.get(0).toUpperCase().equals("CIRCLE K")){
             textViewHowToPayText.setTextColor(Color.BLACK);
             textViewPayMethod.setTextColor(Color.BLACK);
@@ -267,97 +277,6 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
             lineHowToPay.setVisibility(View.GONE);
             payMethodTitel.setText("Priser");
         }
-
-
-
-
-        /*
-        1) Koble ladekabel til bil (og ladestasjon ved mellomrask lading)
-        2) Send SMS med teksten «Start ladenr» til 2430. (Eks. Start 123a)
-        Du finner riktig ladenummer ved ladeuttakene/ladekablene.
-        3) Følg eventuelle instrukser i displayet For å avslutte lading, send SMS «avslutt ladenr» til 2430 (Eks. Avslutt 123a).
-        Du finner riktig ladenummer ved ladeuttakene/ladekablene. Når du lader med SMS betaler du litt mer enn når du lader med app eller ladebrikke.
-         */
-
-
-
-        // Grønn kontakt
-
-
-
-
-
-        /*
-
-        textViewAvaiable.setText(info.get(7));
-        textViewChargerType2.setText(info.get(8));
-        textViewAvaiable2.setText(info.get(9));
-        textViewChargerType3.setText(info.get(10));
-        textViewAvaiable3.setText(info.get(11));
-
-         */
-        /*
-
-//        textViewCompany.setText(ownedby);
-        textViewPayMethod.setText(info.get(3));
-        textViewDescriptionText.setText(info.get(4));
-        textViewInfoText.setText(info.get(5));
-        textViewPayMethod.setText("Hurtig --> 4 kr per minutt" + "\n" + "\n"  + "\n"+ "Lyn ---->4 kr per minutt + 2,50 kr per kWh");
-
-         */
-
-
-
-
-
-        /*
-        if(textViewCompany.getText().toString().equals("Fortum")&& textViewPayMethod.getText().toString().
-                equals("Cellular phone and Charging card")){
-            textViewPayMethod.setText("Hurtig --> 4 kr per minutt" + "\n" + "\n"  + "\n"+ "Lyn ---->4 kr per minutt + 2,50 kr per kWh");
-        }
-
-        /*
-        // Bare testing av det funeket for betalling
-        textViewPayMethod.setText("");
-        if(textViewPayMethod.getText().toString().equals("")){
-            payMethodTitel.setVisibility(View.GONE);
-            textViewPayMethod.setVisibility(View.GONE);
-            linePayMethod.setVisibility(View.GONE);
-        }
-
-         */
-
-        /*
-        if(info.get(3).equals("")){
-            payMethodTitel.setVisibility(View.GONE);
-            textViewPayMethod.setVisibility(View.GONE);
-            linePayMethod.setVisibility(View.GONE);
-        }
-
-         */
-        /*
-
-        if(info.get(4).equals("")){
-            textViewDescription.setVisibility(View.GONE);
-            textViewDescriptionText.setVisibility(View.GONE);
-            lineDescription.setVisibility(View.GONE);
-        }
-
-
-        /**
-         * Verdier inni forloopen
-         */
-
-        /*
-        textViewChargerType.setText(info.get(6));
-        textViewAvaiable.setText(info.get(7));
-        textViewChargerType2.setText(info.get(8));
-        textViewAvaiable2.setText(info.get(9));
-        textViewChargerType3.setText(info.get(10));
-        textViewAvaiable3.setText(info.get(11));
-
-         */
-
     }
 
 

@@ -12,6 +12,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for converting Json to String and putting them intp a Arraylist of Arraylist. One for
+ * the adress and one for placesId(Coordinates)
+ */
 
 public class JsonToString {
 

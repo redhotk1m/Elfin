@@ -76,11 +76,15 @@ public class CarInfoActivity extends AppCompatActivity {
 
         findViewsById();
 
+
+
         initDisplayFields();
 
         sharedCarPreferences = new SharedCarPreferences();
 
         Intent intent = getIntent();
+
+
         getAllIntent(intent);
 
         getCarAttributes(elbil, elbilFound);
@@ -157,6 +161,7 @@ public class CarInfoActivity extends AppCompatActivity {
             System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: " + allElbils.size());
         else System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: NULL");
         System.out.println("#####################################################################");
+        textViewAddCar.setText(intent.getStringExtra("regNr"));
 
 
         //Exact elbil found

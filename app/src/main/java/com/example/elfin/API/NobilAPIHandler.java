@@ -82,10 +82,10 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 for (int i = 0; i < latlngJSONArray.length(); i++) {
                     JSONObject object = latlngJSONArray.getJSONObject(i).getJSONObject("csmd");
                     JSONObject objectConnectors = latlngJSONArray.getJSONObject(i).getJSONObject("attr").getJSONObject("conn");
-                    ligtning = "Lyn Ladning";
+                    ligtning = "Lynlading";
                     chademoName = "CHAdeMO";
                     CCSName = "CCS/Combo";
-                    fast = "Hurtig ladning";
+                    fast = "Hurtiglading";
                     ligtningTime = "Ladetid ukjent";
                     fastTime = "Ladetid ukjent";
 
@@ -203,7 +203,7 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                             counterCHademoString = "1 ladepunkt";
                         }
 
-                        fast = "Hurtig ladning";
+                        fast = "Hurtiglading";
                         imageFast = R.drawable.ic_charger;
                         fastTime = "Ladetid ukjent";
                     }

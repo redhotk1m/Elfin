@@ -22,6 +22,8 @@ public class EditTextFunctions {
 
     /**
      * Class for setting the different functionalities for editText --> focuse changed, textchanged
+     * When the edittext is bigger than 3 letters is calles the displaySuggestion method from main.
+     * For every letter bigger than 3 it runs the method to display tje mew suggestions based on your search.
      *
      */
 
