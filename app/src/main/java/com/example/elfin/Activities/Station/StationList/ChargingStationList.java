@@ -148,7 +148,7 @@ public class ChargingStationList extends Fragment {
 
 
         if (drivenMetersSoFar > drivenMetersFromLast) {
-
+            //TODO: Husk at bilen er i full bevegelse, får nullpointer mens vi kalkulerer rute!
             double chargerItemMeters = Double.parseDouble(chargeritems.get(0).getMFromStartLocation());
             double chargerItemMeters2 = Double.parseDouble(chargeritems.get(1).getMFromStartLocation());
             double chargerItemMeters3 = Double.parseDouble(chargeritems.get(2).getMFromStartLocation());

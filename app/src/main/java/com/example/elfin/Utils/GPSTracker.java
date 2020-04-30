@@ -182,7 +182,7 @@ public class GPSTracker extends Service implements LocationListener {
                             closestPolyPoint.setLatitude(pointz.get(idx).getLatitude());
                             if (arg0.distanceTo(closestPolyPoint) > 2000)
                                 sendDrivenTooFarOffRoute();
-                            return;
+                            return; //TODO: Code cleanup, fiks duplikat, evt continue
                         }
                     }
                 }
@@ -191,7 +191,7 @@ public class GPSTracker extends Service implements LocationListener {
                 Location closestPolyPoint = new Location("this");
                 closestPolyPoint.setLongitude(pointz.get(idx).getLongditude());
                 closestPolyPoint.setLatitude(pointz.get(idx).getLatitude());
-                if (arg0.distanceTo(closestPolyPoint) > 4000)
+                if (arg0.distanceTo(closestPolyPoint) > 2000)
                     sendDrivenTooFarOffRoute();
             }
         }
