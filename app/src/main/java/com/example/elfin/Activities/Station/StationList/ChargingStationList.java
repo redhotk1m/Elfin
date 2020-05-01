@@ -151,7 +151,7 @@ public class ChargingStationList extends Fragment {
         if (drivenMetersSoFar > drivenMetersFromLast && !chargeritems.isEmpty()) {
 
             for (ChargerItem oneChargerItem : chargeritems ){
-                double distance = Double.parseDouble(oneChargerItem.getMFromStartLocation());
+                double distance = Double.parseDouble(oneChargerItem.getmFromCar());
                 double meterFromPoint = Double.parseDouble(oneChargerItem.getMFromStartLocation()) - (drivenMetersSoFar-drivenMetersFromLast);
                 oneChargerItem.setmFromCar((float) meterFromPoint);
                 if(distance + 2000 < drivenMetersSoFar){
@@ -163,7 +163,10 @@ public class ChargingStationList extends Fragment {
             drivenMetersFromLast = drivenMetersSoFar;
 
 
-        } else {
+
+        }
+        /*
+        else {
             System.out.println("Size  -->  " + chargeritems.size());
             double drivingBack = drivenMetersFromLast-drivenMetersSoFar;
 
@@ -184,6 +187,8 @@ public class ChargingStationList extends Fragment {
 
 
         }
+        
+         */
 
         setAllValidStations(chargeritems);
 
