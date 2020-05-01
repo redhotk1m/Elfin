@@ -142,54 +142,38 @@ public class ChargingStationList extends Fragment {
     double metersFromLastChargerRemove = 0;
 
     public void updateListKM(double drivenMetersSoFar) {
+        if (chargeritems == null || chargeritems.size() <= 0)
+            return;
 
-
-
-
-
-        if (drivenMetersSoFar > drivenMetersFromLast) {
-
-            double chargerItemMeters = Double.parseDouble(chargeritems.get(0).getMFromStartLocation());
-            double chargerItemMeters2 = Double.parseDouble(chargeritems.get(1).getMFromStartLocation());
-            double chargerItemMeters3 = Double.parseDouble(chargeritems.get(2).getMFromStartLocation());
-
-
+        System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+        ArrayList<Integer> integerArrayList = new ArrayList<>();
+        System.out.println(drivenMetersSoFar);
+        if (drivenMetersSoFar > drivenMetersFromLast && !chargeritems.isEmpty()) {
+            int i = 0;
+            for (ChargerItem oneChargerItem : chargeritems ){
+                double distance = Double.parseDouble(oneChargerItem.getmFromCar());
+                double meterFromPoint = Double.parseDouble(oneChargerItem.getMFromStartLocation()) - (drivenMetersSoFar-drivenMetersFromLast);
+                oneChargerItem.setmFromCar((float) meterFromPoint);
+                if(distance + 2000 < drivenMetersSoFar){
+                    drivenPastCHargerItems.add(oneChargerItem);
+                    //chargeritems.remove(oneChargerItem);
+                    integerArrayList.add(i);
+                    System.out.println("Her skal vi snart slette no jaaa");
+                }
+                i++;
+            }
+            for (Integer integer : integerArrayList){
+                System.out.println("Skal slette element nr: " + integer + " " + integer.intValue());
+                chargeritems.remove(integer.intValue());
+            }
 
             drivenMetersFromLast = drivenMetersSoFar;
 
 
-            if (chargerItemMeters < drivenMetersSoFar) {
 
-                drivenPastCHargerItems.add(chargeritems.get(0));
-                chargeritems.remove(0);
-                metersFromLastChargerRemove=drivenMetersSoFar;
-
-                if (chargerItemMeters2 < drivenMetersSoFar) {
-                    drivenPastCHargerItems.add(chargeritems.get(0));
-                    chargeritems.remove(0);
-                    metersFromLastChargerRemove=drivenMetersSoFar;
-
-                }
-
-                if (chargerItemMeters3 < drivenMetersSoFar) {
-                    drivenPastCHargerItems.add(chargeritems.get(0));
-                    chargeritems.remove(0);
-                    metersFromLastChargerRemove=drivenMetersSoFar;
-                }
-
-            }
-
-            if (!chargeritems.isEmpty()) {
-                for (ChargerItem chargerItems : chargeritems) {
-                    double meterFromPoint = Double.parseDouble(chargerItems.getMFromStartLocation()) - drivenMetersSoFar;
-                    chargerItems.setMFromStartLocation((float) meterFromPoint);
-                }
-            }
-
-            drivenMetersFromLast=drivenMetersSoFar;
-
-
-        } else {
+        }
+        /*
+        else {
             System.out.println("Size  -->  " + chargeritems.size());
             double drivingBack = drivenMetersFromLast-drivenMetersSoFar;
 
@@ -210,6 +194,8 @@ public class ChargingStationList extends Fragment {
 
 
         }
+        
+         */
 
         setAllValidStations(chargeritems);
 

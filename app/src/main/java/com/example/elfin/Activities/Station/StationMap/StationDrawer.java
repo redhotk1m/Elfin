@@ -42,10 +42,6 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
         Location currLocation = new Location("this");
         PolyPoint lastPoint;
         Location lastLocation = new Location("this");
-        currLocation.setLatitude(0);
-        currLocation.setLongitude(1);
-        lastLocation.setLatitude(1);
-        lastLocation.setLongitude(0);
         points.get(0).setDrivenKM(totalDistance);
 
         for (int k = 1; k < points.size(); k++){
@@ -71,11 +67,11 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
             }
             validLatStations.sort(new LongditudeComparator());
             int validLatStationSize = validLatStations.size();
+            float distance;
             for (int i = 0; i < validLatStationSize; i++) {
                 ChargerItem found = StMethods.search(currPoint.getLongditude(), validLatStations, false);
-                if (StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.getLatitude(),currPoint.getLongditude()) <= 1){
-                    found.setMFromStartLocation(totalDistance);
-                    System.out.println("Ladestasjon: " + found.getStreet() + " er" + (totalDistance + 500)/1000 + "km ifra startpunkt");
+                if ((distance = StMethods.distanceBetweenKM(found.getLatLng().latitude,found.getLatLng().longitude,currPoint.getLatitude(),currPoint.getLongditude())) <= 1){
+                    found.setMFromStartLocation(totalDistance + (distance * 1000));
                     validStations.add(found);
                     validLatStations.remove(found);
                 }else{
@@ -84,7 +80,6 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
                 //TODO: Kanskje gjøre ditanceBetweenKM om til å bruke location.DistanceTo();
             }
         }
-        System.out.println("STØRRELSE ER: " + points.size());
         logger.addSplit("B");
         logger.dumpToLog();
         return validStations;

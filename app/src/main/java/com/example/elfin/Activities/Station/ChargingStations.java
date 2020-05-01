@@ -20,6 +20,7 @@ import com.example.elfin.Activities.Station.StationList.ChargerItem;
 import com.example.elfin.Activities.Station.StationList.ChargingStationList;
 import com.example.elfin.R;
 import com.example.elfin.Utils.App;
+import com.example.elfin.Utils.DialogBox;
 import com.example.elfin.Utils.GPSTracker;
 import com.example.elfin.adapter.PageAdapter;
 import com.google.android.material.tabs.TabLayout;
@@ -156,10 +157,25 @@ public class ChargingStations extends AppCompatActivity {
         }
     };
 
+    boolean hasCheckedIfCreateNewRoute = false;
+
     private void handleDrivenTooFarOffRoute() {
-        System.out.println("Handling driven too far!");
+        if (!hasCheckedIfCreateNewRoute){
+            hasCheckedIfCreateNewRoute = true;
+            DialogBox dialogBox = new DialogBox(this,"Ny rute?","Vi ser at du har kjørt en annen vei enn hva vi har planlagt for deg. Vil du at vi skal lage en ny rute for deg, der du kjører nå?","Ja","Nei",2);
+            dialogBox.setChargingStations(this);
+            dialogBox.createDialogBox();
+        }
+    }
+
+    public void setHasCheckedIfCreateNewRoute(boolean hasCheckedIfCreateNewRoute) {
+        this.hasCheckedIfCreateNewRoute = hasCheckedIfCreateNewRoute;
+    }
+
+    public void createNewRoute(){
         Location lastKnownLocation = GPSTracker.getLastKnownLocation();
         startRequestDirections(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
+        hasCheckedIfCreateNewRoute = false;
     }
 
     public void handleUpdateKMList(double drivenMetersSoFar){

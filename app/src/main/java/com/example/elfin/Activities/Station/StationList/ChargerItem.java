@@ -39,14 +39,13 @@ public class ChargerItem implements Parcelable {
     private int imageSlow;
     private double[] pointLatLng;
     private String MFromStartLocation;
+    private String mFromCar;
     private String lightningCCS;
     private String numberOflightningCCS;
     private String fastText;
     private String lightningText;
     private String everyCharger;
-
-
-
+    private String distanceFromCar;
 
     public ChargerItem(String street, String houseNumber, String city,
                        String descriptionOfLocation,
@@ -79,6 +78,7 @@ public class ChargerItem implements Parcelable {
         this.lightningTime = lightningTime;
         this.fastText=fastText;
         this.lightningText = lightningText;
+
     }
 
 
@@ -203,6 +203,14 @@ public class ChargerItem implements Parcelable {
 
     public void setNumberOfChademo(String numberOfChademo) {
         this.numberOfChademo = numberOfChademo;
+    }
+
+    public String getmFromCar() {
+        return getMFromStartLocation();
+    }
+
+    public void setmFromCar(float KMFromStartLocation) {
+        this.MFromStartLocation = String.valueOf(KMFromStartLocation);
     }
 
     public int getImageSlow() {

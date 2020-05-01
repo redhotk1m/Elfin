@@ -171,19 +171,6 @@ public class GPSTracker extends Service implements LocationListener {
                     if (resultNext[0] < result[0]) {
                         idx = i;
                         result[0] = resultNext[0];
-                    }else{
-                        counter ++;
-                        if (counter > 20) {
-                            double currentDrivenKM = pointz.get(idx).getDrivenKM();
-                            System.out.println("Return med ca " + currentDrivenKM);
-                            sendKMDrivenSoFar(currentDrivenKM);
-                            Location closestPolyPoint = new Location("this");
-                            closestPolyPoint.setLongitude(pointz.get(idx).getLongditude());
-                            closestPolyPoint.setLatitude(pointz.get(idx).getLatitude());
-                            if (arg0.distanceTo(closestPolyPoint) > 2000)
-                                sendDrivenTooFarOffRoute();
-                            return;
-                        }
                     }
                 }
                 double currentDrivenKM = pointz.get(idx).getDrivenKM();
@@ -191,7 +178,7 @@ public class GPSTracker extends Service implements LocationListener {
                 Location closestPolyPoint = new Location("this");
                 closestPolyPoint.setLongitude(pointz.get(idx).getLongditude());
                 closestPolyPoint.setLatitude(pointz.get(idx).getLatitude());
-                if (arg0.distanceTo(closestPolyPoint) > 4000)
+                if (arg0.distanceTo(closestPolyPoint) > 2000)
                     sendDrivenTooFarOffRoute();
             }
         }
@@ -213,13 +200,12 @@ public class GPSTracker extends Service implements LocationListener {
         localBroadcastManager.sendBroadcast(intent);
     }
 
-    private void initializeDriving(){
-
-    }
 
     @Override
     public void onProviderDisabled(String arg0) {
         // TODO Auto-generated method stub
+        DialogBox dialogBox = new DialogBox(context,"GPS må være på", "Vi ser dessverre at du har skrudd av GPSen. Vi må derfor lukke appen, da appen trenger GPS for å fungere.","Avslutt");
+        dialogBox.createDialogBox();
         System.out.println("Slått av");
     }
 
@@ -232,7 +218,6 @@ public class GPSTracker extends Service implements LocationListener {
     @Override
     public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
