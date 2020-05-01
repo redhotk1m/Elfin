@@ -263,7 +263,7 @@ public class CarInfoActivity extends AppCompatActivity {
 
                         //  Elbil selectedElbil;
                         mCarList = searchCar();
-                        System.out.println("SEARCHED CAR LIST SIZE: " + mCarList.size());
+                       // System.out.println("SEARCHED CAR LIST SIZE: " + mCarList.size());
                         if (mCarList.size() == 1) saveCar();
 
                         if (selectedFastCharge.equals(getString(R.string.unknown))) {
@@ -295,7 +295,7 @@ public class CarInfoActivity extends AppCompatActivity {
                     } else finish();
                     break;
                 default:
-                    Toast.makeText(CarInfoActivity.this, "CLICKABLE ID NOT FOUND..", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(CarInfoActivity.this, "CLICKABLE ID NOT FOUND..", Toast.LENGTH_SHORT).show();
             }
         }
     };

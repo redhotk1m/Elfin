@@ -85,7 +85,7 @@ public class CarSearchActivity extends AppCompatActivity {
         // or use .hide() method to hide buttonAddCar
         FloatingActionButton buttonAddCar = findViewById(R.id.button_add_car);
         buttonAddCar.setOnClickListener(myOnClickListener);
-        // buttonAddCar.hide();
+        buttonAddCar.hide();
         // System.out.println("ALL CARS LIST SIZE: " + allCarsList.size());
     }
 
@@ -447,7 +447,7 @@ public class CarSearchActivity extends AppCompatActivity {
             query = firestoreQuery.makeCompoundQuery(elbilReference, BRAND + BATTERY, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
         } else if (found[1] && found[3]) {
-           // System.out.println("(FOUND_MODEL && FOUND_BATTERY) == TRUE ; " + model + " && " + battery + " [" + modelYear + "]");
+            // System.out.println("(FOUND_MODEL && FOUND_BATTERY) == TRUE ; " + model + " && " + battery + " [" + modelYear + "]");
             query = firestoreQuery.makeCompoundQuery(elbilReference, MODEL + BATTERY, foundHashMap);
             firestoreQuery.executeCompoundQuery(query);
         } else if (found[0]) {
