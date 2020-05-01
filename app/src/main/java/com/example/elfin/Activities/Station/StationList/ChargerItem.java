@@ -45,9 +45,6 @@ public class ChargerItem implements Parcelable {
     private String lightningText;
     private String everyCharger;
 
-
-
-
     public ChargerItem(String street, String houseNumber, String city,
                        String descriptionOfLocation,
                        String ownedBy, String userComment, String contactInfo,

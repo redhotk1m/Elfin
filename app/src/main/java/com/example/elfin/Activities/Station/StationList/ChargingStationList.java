@@ -142,6 +142,8 @@ public class ChargingStationList extends Fragment {
     double metersFromLastChargerRemove = 0;
 
     public void updateListKM(double drivenMetersSoFar) {
+        if (chargeritems == null || chargeritems.size() <= 0)
+            return;
 
 
 
@@ -156,7 +158,6 @@ public class ChargingStationList extends Fragment {
 
 
             drivenMetersFromLast = drivenMetersSoFar;
-
 
             if (chargerItemMeters < drivenMetersSoFar) {
 
@@ -186,7 +187,7 @@ public class ChargingStationList extends Fragment {
                 }
             }
 
-            drivenMetersFromLast=drivenMetersSoFar;
+            drivenMetersFromLast = drivenMetersSoFar;
 
 
         } else {
