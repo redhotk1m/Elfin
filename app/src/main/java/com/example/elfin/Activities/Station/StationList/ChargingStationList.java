@@ -187,7 +187,7 @@ public class ChargingStationList extends Fragment {
 
 
         }
-        
+
          */
 
         setAllValidStations(chargeritems);
