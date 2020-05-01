@@ -159,11 +159,13 @@ public class CarInfoActivity extends AppCompatActivity {
     private void getAllIntent(Intent intent) {
         //AllCarsList
         allElbils = intent.getParcelableArrayListExtra("AllCarsList");
-        System.out.println("#####################################################################");
+      //  System.out.println("#####################################################################");
+        /*
         if (allElbils != null)
             System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: " + allElbils.size());
         else System.out.println("(CAR INFO ACTIVITY) ALL CAR LIST SIZE: NULL");
-        System.out.println("#####################################################################");
+         */
+       // System.out.println("#####################################################################");
         textViewAddCar.setText(intent.getStringExtra("regNr"));
 
 
@@ -171,23 +173,26 @@ public class CarInfoActivity extends AppCompatActivity {
         elbil = intent.getParcelableExtra("Elbil");
         if (elbil != null) {
             elbilFound = true;
-            System.out.println("getParcelable Elbil: " + elbil.toString() + " ; " + elbilFound);
+           // System.out.println("getParcelable Elbil: " + elbil.toString() + " ; " + elbilFound);
             // getCarAttributes(elbil, elbilFound);
         } else System.out.println("getParcelable Elbil not received");
-        System.out.println("ELBIL FOUND BOOLEAN: " + elbilFound);
+       // System.out.println("ELBIL FOUND BOOLEAN: " + elbilFound);
 
 
         //Missing Elbil fields
         found = intent.getBooleanArrayExtra("Missing");
+        /*
         if (found != null) {
             // Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
             System.out.println("INTEN MISSING[]: " + Arrays.toString(found));
         } else System.out.println("FOUND FIELDS[] NOT RECEIVED");
+         */
 
 
         //Found Elbil fields
         fieldMap = (HashMap<String, String>) intent.getSerializableExtra("FieldMap");
         if (fieldMap != null) {
+            /*
             System.out.println("INTENT HASH MAP: " + fieldMap);
             System.out.println("INTENT EXACT FIELDS: \n\n"
                     + BRAND + " ; " + fieldMap.get(BRAND) + "\n\n"
@@ -195,18 +200,22 @@ public class CarInfoActivity extends AppCompatActivity {
                     + MODELYEAR + " ; " + fieldMap.get(MODELYEAR) + "\n\n"
                     + BATTERY + " ; " + fieldMap.get(BATTERY) + "\n\n"
             );
+
+             */
             regNr = fieldMap.get("regNr");
             if (regNr != null) textViewAddCar.setText(regNr);
             exactModelYear = fieldMap.get("exactModelYear");
             if (exactModelYear == null) exactModelYear = "";
-        } else System.out.println("getParcelable fieldMap not received");
+        }// else System.out.println("getParcelable fieldMap not received");
 
         //Matching elbils found
         elbils = getIntent().getParcelableArrayListExtra("CarList");
+        /*
         if (elbils != null && elbils.size() > 0) {
             System.out.println("ELBILS RECEIVED: " + elbils.get(0).toString());
             // for (Elbil elbil : elbils) System.out.println(elbil.getModel());
         } else System.out.println("NO ELBILS RECEIVED!");
+         */
 
 
         //If "Car Info" selected from Main Activity
@@ -240,13 +249,14 @@ public class CarInfoActivity extends AppCompatActivity {
                     } else {
 
                         // dialogBox3.createDialogBox();
-
+                        /*
                         System.out.println("SELECTED ELBIL: \n" +
                                 "\nSELECTED BRAND: " + selectedBrand +
                                 "\nSELECTED MODEL: " + selectedModel +
                                 "\nSELECTED MODEL YEAR: " + selectedModelYear +
                                 "\nSELECTED FAST CHARGE: " + selectedFastCharge +
                                 "\nSELECTED BATTERY: " + selectedBattery);
+                         */
 
                         //TODO: SAVE CAR WITH SELECTED SPINNER VALUES
                         // validate if "UKJENT" & inform user
@@ -297,26 +307,26 @@ public class CarInfoActivity extends AppCompatActivity {
             switch (adapterView.getId()) {
                 case R.id.spinner_brand:
                     selectedBrand = spinnerBrand.getSelectedItem().toString();
-                    System.out.println("SELECTED BRAND: " + selectedBrand);
+                   // System.out.println("SELECTED BRAND: " + selectedBrand);
                     // clickableSelection(spinnerBrand, found[0]);
                     if (!selectedBrand.equals(getString(R.string.unknown)))
                         editTextBrand.setTextColor(Color.BLACK);
                     break;
                 case R.id.spinner_model:
                     selectedModel = spinnerModel.getSelectedItem().toString();
-                    System.out.println("SELECTED MODEL: " + selectedModel);
+                  //  System.out.println("SELECTED MODEL: " + selectedModel);
                     if (!selectedModel.equals(getString(R.string.unknown)))
                         editTextModel.setTextColor(Color.BLACK);
                     break;
                 case R.id.spinner_model_year:
                     selectedModelYear = spinnerModelYear.getSelectedItem().toString();
-                    System.out.println("SELECTED MODEL YEAR: " + selectedModelYear);
+                  //  System.out.println("SELECTED MODEL YEAR: " + selectedModelYear);
                     if (!selectedModelYear.equals(getString(R.string.unknown)))
                         editTextModelYear.setTextColor(Color.BLACK);
                     break;
                 case R.id.spinner_fast_charge:
                     selectedFastCharge = spinnerFastCharge.getSelectedItem().toString();
-                    System.out.println("SELECTED FAST CHARGE: " + selectedFastCharge);
+                  //  System.out.println("SELECTED FAST CHARGE: " + selectedFastCharge);
                     if (!selectedFastCharge.equals(getString(R.string.unknown)))
                         editTextFastCharge.setTextColor(Color.BLACK);
 
@@ -335,7 +345,7 @@ public class CarInfoActivity extends AppCompatActivity {
                     break;
                 case R.id.spinner_battery:
                     selectedBattery = spinnerBattery.getSelectedItem().toString();
-                    System.out.println("SELECTED BATTERY: " + selectedBattery);
+                  //  System.out.println("SELECTED BATTERY: " + selectedBattery);
                     if (!selectedBattery.equals(getString(R.string.unknown)))
                         editTextBattery.setTextColor(Color.BLACK);
                     /*
@@ -347,7 +357,7 @@ public class CarInfoActivity extends AppCompatActivity {
                      */
                     break;
                 default:
-                    Toast.makeText(adapterView.getContext(), "NO SUCH SPINNER LISTENER..", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(adapterView.getContext(), "NO SUCH SPINNER LISTENER..", Toast.LENGTH_SHORT).show();
             }
 
             ((TextView) adapterView.getChildAt(0)).setTypeface(null, Typeface.BOLD);
@@ -399,7 +409,7 @@ public class CarInfoActivity extends AppCompatActivity {
                 spinner.setAdapter(adapterBattery);
                 break;
             default:
-                System.out.println("NO SUCH SPINNER..");
+               // System.out.println("NO SUCH SPINNER..");
         }
 
 
@@ -615,7 +625,7 @@ public class CarInfoActivity extends AppCompatActivity {
     private void loadCar() {
         sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         mCarListAll = sharedCarPreferences.loadCars(sharedPreferences);
-        System.out.println("SHARED CAR PREFERENCES LOAD SIZE: " + mCarListAll.size());
+      //  System.out.println("SHARED CAR PREFERENCES LOAD SIZE: " + mCarListAll.size());
     }
 
 
@@ -713,7 +723,7 @@ public class CarInfoActivity extends AppCompatActivity {
                 break;
         }
 
-        System.out.println("<SHOWING DIALOG BOX>");
+       // System.out.println("<SHOWING DIALOG BOX>");
         dialogBox.setIntent(intent);
         dialogBox.createDialogBox();
     }

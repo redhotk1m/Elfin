@@ -67,14 +67,17 @@ public class CarSelectionActivity extends AppCompatActivity {
 
 
         allCarsList = intent.getParcelableArrayListExtra("AllCarsList");
-        System.out.println("#####################################################################");
+        if (allCarsList == null) allCarsList = new ArrayList<>();
+        /*
+        // System.out.println("#####################################################################");
         if (allCarsList != null)
-            System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE: " + allCarsList.size());
+            // System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE: " + allCarsList.size());
         else {
-            System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE IS NULL!");
+            // System.out.println("(CAR SELECTION ACTIVITY) ALL CAR LIST SIZE IS NULL!");
             allCarsList = new ArrayList<>();
         }
-        System.out.println("#####################################################################");
+         */
+        // System.out.println("#####################################################################");
         // setAllCarsList(allCarsList);
 
 
@@ -102,33 +105,35 @@ public class CarSelectionActivity extends AppCompatActivity {
 
         found = intent.getBooleanArrayExtra("Missing");
         // Toast.makeText(this, "INTEN MISSING[]: " + Arrays.toString(found), Toast.LENGTH_LONG).show();
-        System.out.println("INTEN MISSING[]: " + Arrays.toString(found));
+        //  System.out.println("INTEN MISSING[]: " + Arrays.toString(found));
 
         ArrayList<Elbil> elbils = getIntent().getParcelableArrayListExtra("CarList");
+        /*
         if (elbils != null) {
-            System.out.println("ELBILS RECEIVED: " + elbils.get(0).toString());
+           // manualSelection = false;
+           // elbils = new ArrayList<>();
+            //  System.out.println("ELBILS RECEIVED: " + elbils.get(0).toString());
             // for (Elbil elbil : elbils) System.out.println(elbil.getModel());
             // manualSelection = false;
         } else {
-            System.out.println("NO ELBILS RECEIVED!");
+            // System.out.println("NO ELBILS RECEIVED!");
             manualSelection = true;
         }
-
+         */
+        if (elbils == null) manualSelection = true;
 
         //todo: handle this a bit better:
-        System.out.println("#####################################################################");
+        // System.out.println("#####################################################################");
         if (elbils != null) {
-            System.out.println("(CAR SELECTION ACTIVITY) ELBILS LIST SIZE: " + elbils.size());
-            ;
+            // System.out.println("(CAR SELECTION ACTIVITY) ELBILS LIST SIZE: " + elbils.size());
             setAllCarsList(elbils);
-        } else System.out.println("(CAR SELECTION ACTIVITY) ELBILS LIST SIZE IS NULL");
-        System.out.println("#####################################################################");
+        }// else System.out.println("(CAR SELECTION ACTIVITY) ELBILS LIST SIZE IS NULL");
+        // System.out.println("#####################################################################");
 
 
         //    if (fieldMap.isEmpty()) manualSelection = true;
         //todo: fjern etter testing
         // manualSelection = true;
-
 
 
         if (manualSelection) {
@@ -215,7 +220,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                     spinnerOnItemSelection(FASTCHARGE, view);
                     break;
                 default:
-                    Toast.makeText(adapterView.getContext(), "NO SUCH SPINNER LISTENER..", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(adapterView.getContext(), "NO SUCH SPINNER LISTENER..", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -283,7 +288,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 spinner.setAdapter(adapterFastCharge);
                 break;
             default:
-                System.out.println("NO SUCH SPINNER..");
+                // System.out.println("NO SUCH SPINNER..");
         }
     }
 
@@ -378,7 +383,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 }
                 break;
             default:
-                System.out.println("UNKNOWN ITEM SELECTION...");
+                // System.out.println("UNKNOWN ITEM SELECTION...");
         }
     }
 
@@ -402,7 +407,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 spinnerCharges.setVisibility(View.GONE);
                 break;
             default:
-                Toast.makeText(this, "NO SUCH SPINNER FOUND..", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "NO SUCH SPINNER FOUND..", Toast.LENGTH_SHORT).show();
         }
         //  }
     }

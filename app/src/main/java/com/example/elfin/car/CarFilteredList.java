@@ -23,8 +23,8 @@ public class CarFilteredList {
 
     public String filterExactMatch(String dataField, String matchingField) {
         if (dataField.equals(matchingField)) { //&& dataField.length() == matchingField.length()
-            System.out.println("DATA FIELD: " + dataField + " EQUALS " + matchingField +
-                    " ; LENGTH: " + dataField.length() + " == " + matchingField.length());
+            //  System.out.println("DATA FIELD: " + dataField + " EQUALS " + matchingField +
+            //        " ; LENGTH: " + dataField.length() + " == " + matchingField.length());
             dataField = matchingField;
             // missing[0] = true;
         }
@@ -34,16 +34,16 @@ public class CarFilteredList {
 
     public List<Elbil> filteredCars(List<Elbil> elbils, List<String> fields) {
         filteredElbils = new ArrayList<>();
-       // filteredFieldsList = new ArrayList<>();
+        // filteredFieldsList = new ArrayList<>();
 
-        System.out.println("ELBILS LIST SIZE; " + elbils.size());
-        System.out.println("FIELDS LIST SIZE; " + fields.size());
+        //  System.out.println("ELBILS LIST SIZE; " + elbils.size());
+        //  System.out.println("FIELDS LIST SIZE; " + fields.size());
         for (Elbil elbil : elbils) {
             switchFields(fields, elbil);
         }
 
-        System.out.println("FILTERED ELBILS LIST SIZE; " + filteredElbils.size());
-       // return filteredFieldsList;
+        //  System.out.println("FILTERED ELBILS LIST SIZE; " + filteredElbils.size());
+        // return filteredFieldsList;
         return filteredElbils;
     }
 

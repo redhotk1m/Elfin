@@ -41,16 +41,19 @@ public class CarSpinnerSelection {
         allElbilList = carSelectionActivity.getAllCars();
 
         if (allElbilList == null) {
-            System.out.println("ALL ELBIL LIST IS NULL!");
+            // System.out.println("ALL ELBIL LIST IS NULL!");
             allElbilList = new ArrayList<>();
-        } else {
+        }
+        /*
+        else {
             System.out.println("#####################################################################");
             System.out.println("(CAR SPINNER SELECTION CLASS) SELECTION ELBILS LIST SIZE: " + allElbilList.size());
             System.out.println("#####################################################################");
         }
+         */
 
         selectedMap = carSelectionActivity.getFieldMap();
-        System.out.println("SELECTED MAP: " + selectedMap);
+        // System.out.println("SELECTED MAP: " + selectedMap);
 
         if (selectedMap != null) {
             selectedBrand = selectedMap.get(BRAND);
@@ -68,21 +71,22 @@ public class CarSpinnerSelection {
             selectedBattery = "";
             selectedEffect = "";
         }
-
+        /*
         System.out.println("SELECTED FIELDS: "
                 + "\nSELECTED BRAND: " + selectedBrand
                 + "\nSELECTED MODEL: " + selectedModel
                 + "\nSELECTED MODEL YEAR: " + selectedModelYear
                 + "\nSELECTED BATTERY: " + selectedBattery
                 + "\nSELECTED FAST CHARGE: " + selectedEffect);
+         */
 
-        System.out.println("-----------------------------------------------------------------------"
-                + "\nEMPTY FIELD: ");
+        /*
         if (selectedBrand.isEmpty()) System.out.println("BRAND FIELD IS EMPTY!");
         if (selectedModel.isEmpty()) System.out.println("MODEL FIELD IS EMPTY");
         if (selectedModelYear.isEmpty()) System.out.println("MODEL_YEAR FIELD IS EMPTY");
         if (selectedBattery.isEmpty()) System.out.println("BATTERY FIELD IS EMPTY!");
         if (selectedEffect.isEmpty()) System.out.println("EFFECT FIELD IS EMPTY!");
+         */
 
         // selectedBrand = carSelectionActivity.get
 
@@ -104,12 +108,12 @@ public class CarSpinnerSelection {
         switch (dataField) {
             case BRAND:
                 // filteredList.add(getString(R.string.choose_brand));
-                System.out.println("SPINNER CARS LIST SIZE: " + allElbilList.size());
+               // System.out.println("SPINNER CARS LIST SIZE: " + allElbilList.size());
                 for (Elbil elbil : allElbilList) {
                     if (!filteredList.contains(elbil.getBrand()))
                         filteredList.add(elbil.getBrand());
                 }
-                System.out.println("SPINNER FILTERED LIST: " + filteredList.size());
+              //  System.out.println("SPINNER FILTERED LIST: " + filteredList.size());
 
                 // addCarActivity.setBrands(filteredList);
 
@@ -162,7 +166,7 @@ public class CarSpinnerSelection {
                 // filteredList.add(spinnerFields[1]);
                 break;
             default:
-                System.out.println("NOTHING TO FILTER..");
+               // System.out.println("NOTHING TO FILTER..");
                 // filteredList.add(getString(R.string.choose_nothing));
         }
         Collections.sort(filteredList);
@@ -182,7 +186,7 @@ public class CarSpinnerSelection {
                                          List<String> spinnerList, boolean manualSelection) {
         switch (dataField) {
             case BRAND:
-                System.out.println("SpinnerBrands OnItemSelected!");
+               // System.out.println("SpinnerBrands OnItemSelected!");
 
                 if (thisSpinner.getSelectedItem().equals(spinnerPrompts[0])
                         || thisSpinner.getSelectedItem().equals(spinnerFields[0])) {
@@ -225,16 +229,16 @@ public class CarSpinnerSelection {
                 } else {
                     getFilteredCars(thisSpinner, FASTCHARGE, spinnerList, manualSelection);
                     setSpinnerSelection(nextSpinenr, spinnerList);
-                   // carSelectionActivity.disableSpinner(FASTCHARGE);
+                    // carSelectionActivity.disableSpinner(FASTCHARGE);
                 }
 
 
                 break;
             case FASTCHARGE:
-                System.out.println("(CAR SPINNER SELECTION CLASS) FAST CHARGE SPINNER ON ITEM SELECTED");
+               // System.out.println("(CAR SPINNER SELECTION CLASS) FAST CHARGE SPINNER ON ITEM SELECTED");
                 break;
             default:
-                System.out.println("No SPINNER OnItemSelected");
+               // System.out.println("No SPINNER OnItemSelected");
 
         }
     }
@@ -286,12 +290,12 @@ public class CarSpinnerSelection {
                 if (!selectedBrand.isEmpty()) filteredList.add(selectedBrand);
                 else {
                     // filteredList.add(getString(R.string.choose_brand));
-                    System.out.println("SPINNER CARS LIST SIZE: " + allElbilList.size());
+                  //  System.out.println("SPINNER CARS LIST SIZE: " + allElbilList.size());
                     for (Elbil elbil : allElbilList) {
                         if (!filteredList.contains(elbil.getBrand()))
                             filteredList.add(elbil.getBrand());
                     }
-                    System.out.println("SPINNER FILTERED LIST: " + filteredList.size());
+                   // System.out.println("SPINNER FILTERED LIST: " + filteredList.size());
                     setSpinnerSelection(spinner, filteredList);
                 }
                 break;
@@ -359,7 +363,7 @@ public class CarSpinnerSelection {
                 // filteredList.add(spinnerFields[1]);
                 break;
             default:
-                System.out.println("NOTHING TO FILTER..");
+               // System.out.println("NOTHING TO FILTER..");
                 // filteredList.add(getString(R.string.choose_nothing));
         }
         Collections.sort(filteredList);

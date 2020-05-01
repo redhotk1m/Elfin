@@ -81,30 +81,30 @@ public class CustomCarSpinner extends AppCompatSpinner implements OnSpinnerEvent
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
-        System.out.println("DROP DOWN WINDOW STATE;");
+        // System.out.println("DROP DOWN WINDOW STATE;");
         if (hasBeenOpened()) setOnClickState(1);
         if (hasBeenOpened() && hasWindowFocus) {
             performClosedEvent();
-            System.out.println("DROP DOWN WINDOW CLOSED");
+            //  System.out.println("DROP DOWN WINDOW CLOSED");
             setOnClickState(0);
-           // ((MainActivity) getContext()).registerForContextMenu();
+            // ((MainActivity) getContext()).registerForContextMenu();
         }
     }
 
     private void setOnClickState(int state) {
         if (getContext() instanceof MainActivity) {
-            System.out.println("MAIN ACTIVITY WINDOW ON CLICK STATE: " + state);
+            //  System.out.println("MAIN ACTIVITY WINDOW ON CLICK STATE: " + state);
             ((MainActivity) getContext()).setAdapterOnClickState(state);
         }
     }
 
     @Override
     public void onSpinnerOpened(Spinner spin) {
-        System.out.println("ON SPINNER OPENED");
+        // System.out.println("ON SPINNER OPENED");
     }
 
     @Override
     public void onSpinnerClosed(Spinner spin) {
-        System.out.println("ON SPINNER CLOSED");
+        // System.out.println("ON SPINNER CLOSED");
     }
 }
