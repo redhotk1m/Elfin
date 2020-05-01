@@ -69,14 +69,14 @@ public class CarAdapter extends ArrayAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("CAR ADAPTER ON CLICKED: " + currentCarItem.toString());
+                //  System.out.println("CAR ADAPTER ON CLICKED: " + currentCarItem.toString());
                 if (mContext instanceof MainActivity) {
                     if (onClick == 0) {
-                        System.out.println("FIRST CLICK");
+                        //  System.out.println("FIRST CLICK");
                         ((MainActivity) mContext).performSpinnerClick(currentCarItem, onClick);
                         onClick++;
                     } else if (onClick == 1) {
-                        System.out.println("SECOND CLICK");
+                        //  System.out.println("SECOND CLICK");
                         ((MainActivity) mContext).performSpinnerClick(currentCarItem, onClick);
                         onClick = 0;
                     }
@@ -87,15 +87,15 @@ public class CarAdapter extends ArrayAdapter {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                System.out.println("(CAR ADAPTER) ON LONG CLICKED: " + currentCarItem.toString());
+                //  System.out.println("(CAR ADAPTER) ON LONG CLICKED: " + currentCarItem.toString());
                 if (mContext instanceof MainActivity) {
                     //  ((MainActivity) mContext).showPopup(view, currentCarItem);
                     if (onClick == 1) {
-                        System.out.println("SHOW POPUP MENU ; ON CLICK == " + onClick);
+                        //    System.out.println("SHOW POPUP MENU ; ON CLICK == " + onClick);
 //                        ((MainActivity) mContext).showPopupMenu(view, currentCarItem);
                         ((MainActivity) mContext).setOnLongClicked(currentCarItem);
                         // onClick = 0;
-                    } else System.out.println("NOT SHOW POPUP MENU ; ON CLICK == " + onClick);
+                    } // else System.out.println("NOT SHOW POPUP MENU ; ON CLICK == " + onClick);
                     onClick = 0;
                 }
                 return false;

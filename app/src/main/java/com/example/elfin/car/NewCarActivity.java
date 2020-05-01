@@ -88,7 +88,7 @@ public class NewCarActivity extends AppCompatActivity {
         //elbilRef.document(modell).
 
         //elbilRef.document().collection(modell).add(new Elbil(modelYear, hurtiglader, specs));
-        Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
     }
 
 
