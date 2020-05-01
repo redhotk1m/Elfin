@@ -81,10 +81,9 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         return myViewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
-
         holder.stationName.setText(chargerItems.get(position).getOwnedBy());
 
         //holder.stationName.setText(chargerItems.get(position).getStreet() + " " + chargerItems.get(position).getHouseNumber());

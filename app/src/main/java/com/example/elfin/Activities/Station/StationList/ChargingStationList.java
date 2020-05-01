@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ProgressBar;
 
 import com.example.elfin.Activities.Station.ChargingStations;
@@ -97,7 +98,7 @@ public class ChargingStationList extends Fragment {
         //TODO: Denne blir kalt når alle stasjonene er FUNNET!
         if (spinner != null)
             spinner.setVisibility(View.GONE);
-
+        chargeritems = validStations;
 
         /*Location selected_location=new Location("locationA");
         selected_location.setLatitude(59.9139);
@@ -123,31 +124,42 @@ public class ChargingStationList extends Fragment {
                 chargerListDistance.add(""+df2.format(distance) + " km");
         }*/
 
+        updateList(validStations);
+    }
+
+    private void updateList(ArrayList<ChargerItem> validStations){
         validStations.sort(new MetersComparator());
-        chargeritems = validStations;
         recyleViewAdapter = new RecyleViewAdapter(getContext(), validStations);
         recyclerView3.setLayoutManager(new LinearLayoutManager(chargingStations.getContext())); //IKKE BRUK GETCONTEXT
         recyclerView3.setAdapter(recyleViewAdapter);
         recyclerView3.setVisibility(View.VISIBLE);
-
-        chargerItem = chargeritems.get(0);
-
-
-
     }
 
 
     double drivenMetersFromLast = 0;
     ArrayList<ChargerItem> drivenPastCHargerItems = new ArrayList<>();
     double metersFromLastChargerRemove = 0;
-
     public void updateListKM(double drivenMetersSoFar) {
+        ArrayList<ChargerItem> listOfChargers = new ArrayList<>();
         if (chargeritems == null || chargeritems.size() <= 0)
             return;
 
         System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-        ArrayList<Integer> integerArrayList = new ArrayList<>();
         System.out.println(drivenMetersSoFar);
+        double metersFromStartLocation = 0;
+        for(ChargerItem c : chargeritems){
+            if (!(drivenMetersSoFar > (metersFromStartLocation = Double.parseDouble(c.getMFromStartLocation())))){
+                System.out.println("m from start: " + metersFromStartLocation);
+                listOfChargers.add(c);
+                c.setmFromCar(metersFromStartLocation - drivenMetersSoFar);
+            }
+        }
+        updateList(listOfChargers);
+
+        /*for (Integer integer : integerArrayList){
+            System.out.println("Skal slette element nr: " + integer + " " + integer.intValue());
+            chargeritems.remove(integer.intValue());
+        }
         if (drivenMetersSoFar > drivenMetersFromLast && !chargeritems.isEmpty()) {
             int i = 0;
             for (ChargerItem oneChargerItem : chargeritems ){
@@ -197,7 +209,7 @@ public class ChargingStationList extends Fragment {
         
          */
 
-        setAllValidStations(chargeritems);
+        //setAllValidStations(listOfChargers);
 
     }
 }

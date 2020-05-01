@@ -78,7 +78,6 @@ public class ChargerItem implements Parcelable {
         this.lightningTime = lightningTime;
         this.fastText=fastText;
         this.lightningText = lightningText;
-
     }
 
 
@@ -206,11 +205,11 @@ public class ChargerItem implements Parcelable {
     }
 
     public String getmFromCar() {
-        return getMFromStartLocation();
+        return mFromCar;
     }
 
-    public void setmFromCar(float KMFromStartLocation) {
-        this.MFromStartLocation = String.valueOf(KMFromStartLocation);
+    public void setmFromCar(double KMFromStartLocation) {
+        this.mFromCar = String.valueOf(KMFromStartLocation);
     }
 
     public int getImageSlow() {
@@ -444,7 +443,8 @@ public class ChargerItem implements Parcelable {
         this.MFromStartLocation = KMFromStartLocation;
     }
 
-    public void setMFromStartLocation(float KMFromStartLocation) {
+    public void setMFromStartLocation(double KMFromStartLocation) {
         this.MFromStartLocation = String.valueOf(KMFromStartLocation);
+        this.mFromCar = String.valueOf(KMFromStartLocation);
     }
 }
