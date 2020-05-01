@@ -146,18 +146,25 @@ public class ChargingStationList extends Fragment {
             return;
 
         System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-
+        ArrayList<Integer> integerArrayList = new ArrayList<>();
         System.out.println(drivenMetersSoFar);
         if (drivenMetersSoFar > drivenMetersFromLast && !chargeritems.isEmpty()) {
-
+            int i = 0;
             for (ChargerItem oneChargerItem : chargeritems ){
                 double distance = Double.parseDouble(oneChargerItem.getmFromCar());
                 double meterFromPoint = Double.parseDouble(oneChargerItem.getMFromStartLocation()) - (drivenMetersSoFar-drivenMetersFromLast);
                 oneChargerItem.setmFromCar((float) meterFromPoint);
                 if(distance + 2000 < drivenMetersSoFar){
                     drivenPastCHargerItems.add(oneChargerItem);
-                    chargeritems.remove(oneChargerItem);
+                    //chargeritems.remove(oneChargerItem);
+                    integerArrayList.add(i);
+                    System.out.println("Her skal vi snart slette no jaaa");
                 }
+                i++;
+            }
+            for (Integer integer : integerArrayList){
+                System.out.println("Skal slette element nr: " + integer + " " + integer.intValue());
+                chargeritems.remove(integer.intValue());
             }
 
             drivenMetersFromLast = drivenMetersSoFar;

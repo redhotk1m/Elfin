@@ -78,7 +78,7 @@ public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
     @Override
     protected void onPostExecute(Elbil reponse) {
         //if (isError(reponse.get(0))) return; //Gi beskjed til bruker om at feil har oppstått
-        System.out.println(reponse.getModel() + " ; " + reponse.getModelYear() + " er responsen vi fikk");
+       // System.out.println(reponse.getModel() + " ; " + reponse.getModelYear() + " er responsen vi fikk");
 
        // addCarActivity.loadApiInfo(reponse);
         carSearchActivity.loadApiInfo(reponse);

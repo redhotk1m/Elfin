@@ -171,19 +171,6 @@ public class GPSTracker extends Service implements LocationListener {
                     if (resultNext[0] < result[0]) {
                         idx = i;
                         result[0] = resultNext[0];
-                    }else{
-                        counter ++;
-                        if (counter > 20) {
-                            double currentDrivenKM = pointz.get(idx).getDrivenKM();
-                            System.out.println("Return med ca " + currentDrivenKM);
-                            sendKMDrivenSoFar(currentDrivenKM);
-                            Location closestPolyPoint = new Location("this");
-                            closestPolyPoint.setLongitude(pointz.get(idx).getLongditude());
-                            closestPolyPoint.setLatitude(pointz.get(idx).getLatitude());
-                            if (arg0.distanceTo(closestPolyPoint) > 2000)
-                                sendDrivenTooFarOffRoute();
-                            return; //TODO: Code cleanup, fiks duplikat, evt continue
-                        }
                     }
                 }
                 double currentDrivenKM = pointz.get(idx).getDrivenKM();

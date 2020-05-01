@@ -66,7 +66,7 @@ public class SharedCarPreferences {
         // ArrayList<Elbil> elbils = new ArrayList<>();
         // elbils = getSavedCars(sharedPreferences);
         // elbils.add(elbil);
-        System.out.println("mCarList: " + elbils);
+      //  System.out.println("mCarList: " + elbils);
         // elbils.remove(elbil);
         // System.out.println("REMOVED LIST: " + elbils);
         mCarList = new ArrayList<>();

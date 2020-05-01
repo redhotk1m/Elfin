@@ -50,13 +50,15 @@ public class FirestoreQuery {
                     }
                     // addCarActivity.setAllCarsList(allElbilList);
                     carSearchActivity.setAllCarsList(allElbilList);
-                } else {
+                }
+                /*
+                else {
                     System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
                     System.out.println("UNABLE TO FETCH INIT FIRESTORE DATA...!");
                     System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
                   //  Toast.makeText(addCarActivity, "UNABLE TO FETCH FIRESTORE DATA..!", Toast.LENGTH_LONG).show();
                 }
-
+                 */
             }
         });
     }
@@ -71,11 +73,11 @@ public class FirestoreQuery {
                         Elbil elbil = documentSnapshot.toObject(Elbil.class);
                         elbil.setDocumentId(documentSnapshot.getId());
 
-                        System.out.println("FIRESTORE ELBIL: " + elbil.toString());
+                        // System.out.println("FIRESTORE ELBIL: " + elbil.toString());
 
                         mElbilList.add(elbil);
                     }
-                } else System.out.println("TASK FAILED, UNABLE TO FETCH FIRESTORE DATA..!");
+                } // else System.out.println("TASK FAILED, UNABLE TO FETCH FIRESTORE DATA..!");
 
                 carSearchActivity.handleFirestoreQuery(mElbilList);
             }
@@ -84,62 +86,62 @@ public class FirestoreQuery {
 
     protected Query makeCompoundQuery(CollectionReference reference, String modelResponse,
                                       HashMap<String, String> fieldsMap) {
-        System.out.println("\n\nMAKING COMPOUND FIRESTORE QUERY>\n");
+        //  System.out.println("\n\nMAKING COMPOUND FIRESTORE QUERY>\n");
         query = reference;
         switch (modelResponse) {
             case BRAND + MODEL + BATTERY:
-                System.out.println(modelResponse + " == " + BRAND + MODEL + BATTERY);
+                //  System.out.println(modelResponse + " == " + BRAND + MODEL + BATTERY);
                 query = query
                         .whereEqualTo(BRAND, fieldsMap.get(BRAND))
                         .whereEqualTo(MODEL, fieldsMap.get(MODEL))
                         .whereEqualTo(BATTERY, fieldsMap.get(BATTERY));
                 break;
             case BRAND + MODEL:
-                System.out.println(modelResponse + " == " + BRAND + MODEL);
+                //  System.out.println(modelResponse + " == " + BRAND + MODEL);
                 query = query
                         .whereEqualTo(BRAND, fieldsMap.get(BRAND))
                         .whereEqualTo(MODEL, fieldsMap.get(MODEL));
                 break;
             case BRAND + BATTERY:
-                System.out.println(modelResponse + " == " + BRAND + BATTERY);
+                // System.out.println(modelResponse + " == " + BRAND + BATTERY);
                 query = query
                         .whereEqualTo(BRAND, fieldsMap.get(BRAND))
                         .whereEqualTo(BATTERY, fieldsMap.get(BATTERY));
                 break;
             case MODEL + BATTERY:
-                System.out.println(modelResponse + " == " + MODEL + BATTERY);
+                //  System.out.println(modelResponse + " == " + MODEL + BATTERY);
                 query = query
                         .whereEqualTo(MODEL, fieldsMap.get(MODEL))
                         .whereEqualTo(BATTERY, fieldsMap.get(BATTERY));
                 break;
             case BRAND:
-                System.out.println(modelResponse + " == " + BRAND);
+                // System.out.println(modelResponse + " == " + BRAND);
                 query = query
                         .whereEqualTo(BRAND, fieldsMap.get(BRAND));
                 break;
             case MODEL:
-                System.out.println(modelResponse + " == " + MODEL);
+                //  System.out.println(modelResponse + " == " + MODEL);
                 query = query.whereEqualTo(MODEL, fieldsMap.get(MODEL));
                 break;
             case BATTERY:
-                System.out.println(modelResponse + " == " + BATTERY);
+                // System.out.println(modelResponse + " == " + BATTERY);
                 query = query
                         .whereEqualTo(BATTERY, fieldsMap.get(BATTERY));
                 break;
             default:
-                System.out.println("...");
+                // System.out.println("...");
         }
 
 
         //todo: handle if FOUND MODEL YEAR IS NOT IN DATABASE
 
 
+        if (fieldsMap.get(MODELYEAR) == null) fieldsMap.put(MODELYEAR, "");
         if (!fieldsMap.get(MODELYEAR).isEmpty()) {
             query = query
                     .whereEqualTo(MODELYEAR, fieldsMap.get(MODELYEAR));
-            System.out.println("(FIRESTORE QUERY) FOUND MODEL YEAR: " + fieldsMap.get(MODELYEAR));
-        } else System.out.println("(FIRESTORE QUERY) EMPTY MODEL YEAR: " + fieldsMap.get(MODELYEAR));
-
+            // System.out.println("(FIRESTORE QUERY) FOUND MODEL YEAR: " + fieldsMap.get(MODELYEAR));
+        } // else System.out.println("(FIRESTORE QUERY) EMPTY MODEL YEAR: " + fieldsMap.get(MODELYEAR));
 
         return query;
     }
