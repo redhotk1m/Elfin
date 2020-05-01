@@ -213,13 +213,12 @@ public class GPSTracker extends Service implements LocationListener {
         localBroadcastManager.sendBroadcast(intent);
     }
 
-    private void initializeDriving(){
-
-    }
 
     @Override
     public void onProviderDisabled(String arg0) {
         // TODO Auto-generated method stub
+        DialogBox dialogBox = new DialogBox(context,"GPS må være på", "Vi ser dessverre at du har skrudd av GPSen. Vi må derfor lukke appen, da appen trenger GPS for å fungere.","Avslutt");
+        dialogBox.createDialogBox();
         System.out.println("Slått av");
     }
 
@@ -232,7 +231,6 @@ public class GPSTracker extends Service implements LocationListener {
     @Override
     public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
