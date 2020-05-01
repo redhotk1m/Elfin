@@ -2,6 +2,7 @@ package com.example.elfin.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.elfin.Activities.AboutCharger;
@@ -112,8 +114,13 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
 
 
         //TODO: Vise med decimaltall, dersom vi har mindre enn 100KM i lengde, bare teksthåndtering
-        long KM = Math.round(Double.parseDouble(chargerItems.get(position).getMFromStartLocation()) / 1000);
-        holder.distanceKm.setText(String.valueOf(KM) + " KM");
+        long KM = Math.round(Double.parseDouble(chargerItems.get(position).getmFromCar()) / 1000);
+        if(KM>2){
+            holder.distanceKm.setText(String.valueOf(KM) + " KM");
+        } else {
+            holder.distanceKm.setTextColor(ContextCompat.getColor(context, R.color.darkGreen));
+            holder.distanceKm.setText("I NÆRHETEN");
+        }
 
     }
 

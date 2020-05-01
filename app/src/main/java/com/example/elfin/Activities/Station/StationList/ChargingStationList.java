@@ -145,45 +145,18 @@ public class ChargingStationList extends Fragment {
         if (chargeritems == null || chargeritems.size() <= 0)
             return;
 
+        System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 
+        System.out.println(drivenMetersSoFar);
+        if (drivenMetersSoFar > drivenMetersFromLast && !chargeritems.isEmpty()) {
 
-
-
-        if (drivenMetersSoFar > drivenMetersFromLast) {
-            //TODO: Husk at bilen er i full bevegelse, får nullpointer mens vi kalkulerer rute!
-            double chargerItemMeters = Double.parseDouble(chargeritems.get(0).getMFromStartLocation());
-            double chargerItemMeters2 = Double.parseDouble(chargeritems.get(1).getMFromStartLocation());
-            double chargerItemMeters3 = Double.parseDouble(chargeritems.get(2).getMFromStartLocation());
-
-
-
-            drivenMetersFromLast = drivenMetersSoFar;
-
-            if (chargerItemMeters < drivenMetersSoFar) {
-
-                drivenPastCHargerItems.add(chargeritems.get(0));
-                chargeritems.remove(0);
-                metersFromLastChargerRemove=drivenMetersSoFar;
-
-                if (chargerItemMeters2 < drivenMetersSoFar) {
-                    drivenPastCHargerItems.add(chargeritems.get(0));
-                    chargeritems.remove(0);
-                    metersFromLastChargerRemove=drivenMetersSoFar;
-
-                }
-
-                if (chargerItemMeters3 < drivenMetersSoFar) {
-                    drivenPastCHargerItems.add(chargeritems.get(0));
-                    chargeritems.remove(0);
-                    metersFromLastChargerRemove=drivenMetersSoFar;
-                }
-
-            }
-
-            if (!chargeritems.isEmpty()) {
-                for (ChargerItem chargerItems : chargeritems) {
-                    double meterFromPoint = Double.parseDouble(chargerItems.getMFromStartLocation()) - drivenMetersSoFar;
-                    chargerItems.setMFromStartLocation((float) meterFromPoint);
+            for (ChargerItem oneChargerItem : chargeritems ){
+                double distance = Double.parseDouble(oneChargerItem.getMFromStartLocation());
+                double meterFromPoint = Double.parseDouble(oneChargerItem.getMFromStartLocation()) - (drivenMetersSoFar-drivenMetersFromLast);
+                oneChargerItem.setmFromCar((float) meterFromPoint);
+                if(distance + 2000 < drivenMetersSoFar){
+                    drivenPastCHargerItems.add(oneChargerItem);
+                    chargeritems.remove(oneChargerItem);
                 }
             }
 
