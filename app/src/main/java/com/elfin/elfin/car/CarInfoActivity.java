@@ -325,8 +325,11 @@ public class CarInfoActivity extends AppCompatActivity {
                 case R.id.spinner_fast_charge:
                     selectedFastCharge = spinnerFastCharge.getSelectedItem().toString();
                   //  System.out.println("SELECTED FAST CHARGE: " + selectedFastCharge);
-                    if (!selectedFastCharge.equals(getString(R.string.unknown)))
-                        editTextFastCharge.setTextColor(Color.BLACK);
+                    editTextFastCharge.setTextColor(Color.BLACK);
+                    if (selectedFastCharge.equals(getString(R.string.unknown))) {
+                        editTextFastCharge.setTextColor(Color.RED);
+                        ((TextView) spinnerBattery.getChildAt(0)).setTextColor(Color.RED);
+                    }
 
                     /*
                     if (selectedFastCharge.equals("UKJENT")) {
@@ -344,8 +347,11 @@ public class CarInfoActivity extends AppCompatActivity {
                 case R.id.spinner_battery:
                     selectedBattery = spinnerBattery.getSelectedItem().toString();
                   //  System.out.println("SELECTED BATTERY: " + selectedBattery);
-                    if (!selectedBattery.equals(getString(R.string.unknown)))
-                        editTextBattery.setTextColor(Color.BLACK);
+                    editTextBattery.setTextColor(Color.BLACK);
+                    if (selectedBattery.equals(getString(R.string.unknown))) {
+                        editTextBattery.setTextColor(Color.RED);
+                        ((TextView) spinnerBattery.getChildAt(0)).setTextColor(Color.RED);
+                    }
                     /*
                     if (selectedBattery.equals("UKJENT")) {
                         ((TextView) adapterView.getChildAt(0)).setError("ERROR MESSAGE...");

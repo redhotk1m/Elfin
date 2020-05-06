@@ -175,7 +175,8 @@ public class CarSpinnerSelection {
 
     protected void setSpinnerSelection(Spinner spinner, List<String> spinnerList) {
         // spinner.setSelection(list.size());
-        spinner.setSelection(spinnerList.size() - 1); // - 1
+        if (spinnerList.size() <= 2) spinner.setSelection(0);
+        else spinner.setSelection(spinnerList.size() - 1); // - 1
         spinner.setEnabled(true);
         spinner.setVisibility(View.VISIBLE);
     }
@@ -233,6 +234,7 @@ public class CarSpinnerSelection {
 
                 break;
             case FASTCHARGE:
+                
                // System.out.println("(CAR SPINNER SELECTION CLASS) FAST CHARGE SPINNER ON ITEM SELECTED");
                 break;
             default:

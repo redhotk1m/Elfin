@@ -322,13 +322,19 @@ public class CarSelectionActivity extends AppCompatActivity {
                     makeSpinnerDisplay(BRAND, selectedBrand, view);
                     // disableSpinner(MODEL);
                     // spinnerModels.setVisibility(View.GONE);
-                    if (manualSelection) spinnerBrands.performClick();
+                    if (manualSelection) {
+                        if (brands.size() <= 2) spinnerBrands.setSelection(0);
+                        else spinnerBrands.performClick();
+                    }
                     else clickableSelection(spinnerBrands, found[0]);
                 } else {
                     makeSpinnerDisplay(BRAND, selectedBrand, view);
                     // ((TextView) view).setText(spinnerBrandsDisplay);
                     tvModelSelection.setVisibility(View.VISIBLE);
-                    if (manualSelection) spinnerModels.performClick();
+                    if (manualSelection) {
+                        if (models.size() <= 2) spinnerModels.setSelection(0);
+                        else spinnerModels.performClick();
+                    }
                     else clickableSelection(spinnerModels, found[1]);
                     adapterModels.notifyDataSetChanged();
                     // disableSpinner(MODELYEAR);
@@ -341,7 +347,12 @@ public class CarSelectionActivity extends AppCompatActivity {
                 makeSpinnerDisplay(MODEL, selectedModel, view);
                 if (!selectedModel.equals(getString(R.string.choose_none))) {
                     tvModelYearSelection.setVisibility(View.VISIBLE);
-                    if (manualSelection) spinnerModelYears.performClick();
+                    if (manualSelection) {
+                        if (models.size() <= 2)
+                            spinnerModels.setSelection(0);
+                        else
+                            spinnerModelYears.performClick();
+                    }
                     else clickableSelection(spinnerModelYears, found[2]);
                     adapterModelYears.notifyDataSetChanged();
                 }
@@ -353,7 +364,12 @@ public class CarSelectionActivity extends AppCompatActivity {
                 makeSpinnerDisplay(MODELYEAR, selectedModelYear, view);
                 if (!selectedModelYear.equals(getString(R.string.choose_none))) {
                     tvBatterySelection.setVisibility(View.VISIBLE);
-                    if (manualSelection) spinnerBatteries.performClick();
+                    if (manualSelection) {
+                        if (modelYears.size() <= 2)
+                            spinnerModelYears.setSelection(0);
+                        else
+                            spinnerBatteries.performClick();
+                    }
                     else clickableSelection(spinnerBatteries, found[3]);
                     adapterBattery.notifyDataSetChanged();
                 }
@@ -366,7 +382,12 @@ public class CarSelectionActivity extends AppCompatActivity {
                 makeSpinnerDisplay(BATTERY, selectedBattery, view);
                 if (!selectedBattery.equals(getString(R.string.choose_none))) {
                     tvFastChargeSelection.setVisibility(View.VISIBLE);
-                    if (manualSelection) spinnerCharges.performClick();
+                    if (manualSelection) {
+                        if (batteries.size() <= 2)
+                            spinnerBatteries.setSelection(0);
+                        else
+                            spinnerCharges.performClick();
+                    }
                     adapterFastCharge.notifyDataSetChanged();
                 }
                 break;
@@ -376,7 +397,11 @@ public class CarSelectionActivity extends AppCompatActivity {
                 String selectedFastCharge = spinnerCharges.getSelectedItem().toString();
                 makeSpinnerDisplay(FASTCHARGE, selectedFastCharge, view);
                 if (!selectedFastCharge.equals(getString(R.string.choose_none))) {
-                    // if (manualSelection) spinnerCharges.performClick();
+                    if (manualSelection) {
+                        if (fastCharges.size() <= 2) {
+                            spinnerCharges.setSelection(0);
+                        }
+                    }
                     adapterFastCharge.notifyDataSetChanged();
                 }
                 break;
