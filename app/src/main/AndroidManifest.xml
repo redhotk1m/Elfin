@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.elfin">
+    package="com.elfin.elfin">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,7 +13,7 @@
 
     <application
         tools:ignore="LockedOrientationActivity"
-        android:name=".Utils.App"
+        android:name="com.elfin.elfin.Utils.App"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,19 +21,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".car.CarSearchActivity"
+        <activity android:name="com.elfin.elfin.car.CarSearchActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".car.CarSelectionActivity"
+        <activity android:name="com.elfin.elfin.car.CarSelectionActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".car.CarInfoActivity"
+        <activity android:name="com.elfin.elfin.car.CarInfoActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".car.NewCarActivity"
+        <activity android:name="com.elfin.elfin.car.NewCarActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AboutCharger"
+        <activity android:name="com.elfin.elfin.Activities.AboutCharger"
             android:screenOrientation="portrait"/>
-        <activity android:name=".testing.FilterTestActivity"
+        <activity android:name="com.elfin.elfin.testing.FilterTestActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity"
+        <activity android:name="com.elfin.elfin.MainActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">    <!-- CLOSES ALL ACTIVITIES ON TOP OF THIS ONE BY USING startActivity THE STANDARD WAY-->
             <intent-filter>
@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.Station.ChargingStations"
+        <activity android:name="com.elfin.elfin.Activities.Station.ChargingStations"
             android:screenOrientation="portrait"/>
 
         <uses-library
