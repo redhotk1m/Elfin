@@ -234,7 +234,7 @@ public class CarSpinnerSelection {
 
                 break;
             case FASTCHARGE:
-                
+
                // System.out.println("(CAR SPINNER SELECTION CLASS) FAST CHARGE SPINNER ON ITEM SELECTED");
                 break;
             default:

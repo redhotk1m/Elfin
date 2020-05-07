@@ -211,7 +211,7 @@ public class ChargingStations extends AppCompatActivity {
         String googleURLDirection = "https://maps.googleapis.com/maps/api/directions/json?";
         String origin = latitude + "," + longditude;
         String destination = ID;
-        String key = "AIzaSyDskTx9G4bXFvfz2T2jMiBtG8UWa5KX3KU";
+        String key = getString(R.string.google_map_api_key);
         String mode = "driving";
         String departureTime = "now";
         String region = "no";
