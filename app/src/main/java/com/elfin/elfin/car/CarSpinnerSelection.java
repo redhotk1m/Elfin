@@ -355,7 +355,7 @@ public class CarSpinnerSelection {
                             filteredCars.add(elbil);
                     }
                     for (Elbil elbil : filteredCars) {
-                        if (!filteredList.contains(elbil.getEffect()))
+                        if (!filteredList.contains(elbil.getFastCharge() + " " + elbil.getEffect()))
                             filteredList.add(elbil.getFastCharge() + " " + elbil.getEffect());
                     }
                 }
