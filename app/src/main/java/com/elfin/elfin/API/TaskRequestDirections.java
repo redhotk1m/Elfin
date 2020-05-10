@@ -22,11 +22,9 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     private LocalBroadcastManager localBroadcastManager;
     private App applicationContext;
-    private Activity context;
     public TaskRequestDirections(Activity activity){
         this.localBroadcastManager = LocalBroadcastManager.getInstance(activity);
         this.applicationContext = (App)activity.getApplication();
-        this.context = activity;
     }
 
 
