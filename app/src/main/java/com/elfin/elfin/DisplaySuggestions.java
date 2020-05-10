@@ -23,7 +23,7 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
     private String adress;
 
     ArrayList<ArrayList<String>> lists= new ArrayList<>();
-    public DisplaySuggestions(Context context, String adress, AsyncResponse asyncResponse){
+    DisplaySuggestions(Context context, String adress, AsyncResponse asyncResponse){
         this.asyncResponse = asyncResponse;
         this.context = context;
         this.adress=adress;

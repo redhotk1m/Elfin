@@ -11,11 +11,11 @@ import com.elfin.elfin.MainActivity;
 
 public class EditTextFunctions {
 
-    MainActivity mainActivity;
-    EditText editText;
-    ListView listViewSuggest;
-    TextView destinacionTextView;
-    Boolean isSelected;
+    private MainActivity mainActivity;
+    private EditText editText;
+    private ListView listViewSuggest;
+    private TextView destinacionTextView;
+    private Boolean isSelected;
     int temp = 0;
 
     /**

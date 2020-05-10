@@ -118,7 +118,6 @@ public class CarInfoActivity extends AppCompatActivity {
         loadCarBtn.setOnClickListener(myOnClickListener);
     }
 
-
     private void findViewsById() {
         editTextBrand = findViewById(R.id.text_view_brand);
         editTextModel = findViewById(R.id.text_view_model);

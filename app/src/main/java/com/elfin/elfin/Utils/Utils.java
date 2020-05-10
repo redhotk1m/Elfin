@@ -18,10 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
-    /** * Default log tag name for log message. */
     private static final String LOG_TAG = ChargingStationMap.class.getName();
-    /** * Keyword constants for reading values from polylines.csv. I
-     * mportant: these keywords values must be exactly the same as ones in polylines.csv file in raw folder. */
     public static final String ENCODED_POINTS = "encodedPoints";
     public static final String LAT_LNG_POINT = "latLngPoint";
     public static final String MARKER = "marker";

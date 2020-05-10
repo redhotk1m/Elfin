@@ -49,7 +49,6 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
         String fastTime = "";
         double CCSChargerEffect = 0;
 
-
         try {
             JSONArray latlngJSONArray = new JSONObject(jsonString[0])
                     .getJSONArray("chargerstations");

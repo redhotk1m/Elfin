@@ -32,6 +32,7 @@ public class SharedCarPreferences {
         Gson gson = new Gson();
         String json = sharedPreferences.getString("car list", null);
         Type type = new TypeToken<ArrayList<Elbil>>() {
+
         }.getType();
         mCarList = gson.fromJson(json, type);
 
@@ -43,8 +44,6 @@ public class SharedCarPreferences {
             String display = elbil.getBrand() + " " + elbil.getModel() + " (" + elbil.getModelYear() + ")";
             elbil.setSpinnerDisplay(display);
         }
-
-
 
         String addCar = "Legg til bil";
         mCarList.add(new Elbil(R.drawable.ic_add_box_black_24dp, addCar));

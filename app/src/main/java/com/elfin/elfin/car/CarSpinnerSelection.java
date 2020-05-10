@@ -179,7 +179,7 @@ public class CarSpinnerSelection {
         }
     }
 
-    protected void getFilteredCars(Spinner spinner, String dataField, List<String> filteredList, boolean manualSelection) {
+    private void getFilteredCars(Spinner spinner, String dataField, List<String> filteredList, boolean manualSelection) {
         ArrayList<Elbil> filteredCars = new ArrayList<>();
         filteredList.clear();
         switch (dataField) {

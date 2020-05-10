@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.TimingLogger;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     TextView headerText;
 
-    TimingLogger logger;
     public ImageButton imageButton;
     GPSTracker gpsTracker;
 
@@ -107,11 +105,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         editTextFunctions.setText();
 
         //Henter JSON fra Nobil APIet
-        logger = new TimingLogger("MyTag", "MethodA");
         RetrieveJSON a = new RetrieveJSON(this, NobilAPIHandler.class);
-        logger.addSplit("Retrieve Create");
-        a.execute("https://nobil.no/api/server/datadump.php?apikey=64138b17020c3ab35706a48902171429&file=false&countrycode=NOR&format=json");
-        logger.addSplit("Retrieve Execute");
+        String key = getString(R.string.nobil_use);
+        a.execute("https://nobil.no/api/server/datadump.php?apikey=" + key + "&file=false&countrycode=NOR&format=json");
         a = null;
         //Lager en broadcastmanager som mottar JSON fra API ved ferdig utførelse.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("allStations"));
@@ -122,8 +118,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            logger.addSplit("finished");
-            logger.dumpToLog();
             String message = intent.getStringExtra("case");
             if ("error".equals(message))
                 System.out.println("error i main receiver");

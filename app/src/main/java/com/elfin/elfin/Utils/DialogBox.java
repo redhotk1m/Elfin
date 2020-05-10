@@ -15,13 +15,13 @@ import com.elfin.elfin.car.CarInfoActivity;
 
 public class DialogBox {
 
-    Context context;
-    String title;
-    String message;
-    String yesButton;
-    String noButton;
-    int option;
-    AlertDialog.Builder alertDialog;
+    private Context context;
+    private String title;
+    private String message;
+    private String yesButton;
+    private String noButton;
+    private int option;
+    private AlertDialog.Builder alertDialog;
 
     private Intent intent;
     private ChargingStations chargingStations;

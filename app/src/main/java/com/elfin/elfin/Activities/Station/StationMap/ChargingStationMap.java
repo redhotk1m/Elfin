@@ -109,7 +109,7 @@ public class ChargingStationMap extends Fragment {
     };
 
     private PolylineOptions polylineOptions;
-    public void setPolyLineOptions(PolylineOptions polyLineOptions){
+    private void setPolyLineOptions(PolylineOptions polyLineOptions){
         this.polylineOptions = polyLineOptions;
         //TODO: Kanskje sette til false etterpå?
         chargingStations.routeCreated = true;

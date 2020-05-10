@@ -50,9 +50,10 @@ public class RetrieveJSON extends AsyncTask<String, Void, String>{
             return result;
         }finally {
             urlConnection.disconnect();
-
         }
     }
+
+
 
     @Override
     protected void onPostExecute(String jsonString) {
