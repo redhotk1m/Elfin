@@ -11,13 +11,8 @@ import com.elfin.elfin.listener.OnSpinnerEventsListener;
 
 public class CustomCarSpinner extends AppCompatSpinner implements OnSpinnerEventsListener {
 
-    private static final String TAG = "CustomCarSpinner";
     private OnSpinnerEventsListener mListener;
     private boolean mOpenInitiated = false;
-
-    public CustomCarSpinner(Context context, AttributeSet attrs, int defStyleAttr, int mode) {
-        super(context, attrs, defStyleAttr, mode);
-    }
 
     public CustomCarSpinner(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -27,23 +22,10 @@ public class CustomCarSpinner extends AppCompatSpinner implements OnSpinnerEvent
         super(context, attrs);
     }
 
-    public CustomCarSpinner(Context context, int mode) {
-        super(context, mode);
-    }
-
     public CustomCarSpinner(Context context) {
         super(context);
     }
 
-    /*
-    public interface OnSpinnerEventsListener {
-
-        void onSpinnerOpened(Spinner spin);
-
-        void onSpinnerClosed(Spinner spin);
-
-    }
-    */
 
     @Override
     public boolean performClick() {
@@ -53,10 +35,6 @@ public class CustomCarSpinner extends AppCompatSpinner implements OnSpinnerEvent
             mListener.onSpinnerOpened(this);
         }
         return super.performClick();
-    }
-
-    public void setSpinnerEventsListener(OnSpinnerEventsListener onSpinnerEventsListener) {
-        mListener = onSpinnerEventsListener;
     }
 
     /**
@@ -81,30 +59,24 @@ public class CustomCarSpinner extends AppCompatSpinner implements OnSpinnerEvent
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
-        // System.out.println("DROP DOWN WINDOW STATE;");
         if (hasBeenOpened()) setOnClickState(1);
         if (hasBeenOpened() && hasWindowFocus) {
             performClosedEvent();
-            //  System.out.println("DROP DOWN WINDOW CLOSED");
-            setOnClickState(0);
-            // ((MainActivity) getContext()).registerForContextMenu();
+           setOnClickState(0);
         }
     }
 
     private void setOnClickState(int state) {
         if (getContext() instanceof MainActivity) {
-            //  System.out.println("MAIN ACTIVITY WINDOW ON CLICK STATE: " + state);
             ((MainActivity) getContext()).setAdapterOnClickState(state);
         }
     }
 
     @Override
     public void onSpinnerOpened(Spinner spin) {
-        // System.out.println("ON SPINNER OPENED");
     }
 
     @Override
     public void onSpinnerClosed(Spinner spin) {
-        // System.out.println("ON SPINNER CLOSED");
     }
 }

@@ -61,13 +61,10 @@ public class RetrieveJSON extends AsyncTask<String, Void, String>{
             NobilAPIHandler a = new NobilAPIHandler(localBroadcastManager,applicationContext);
             a.execute(jsonString);
             //TODO: Bør kjøres en løkke som sjekker om noen har mottat broadcastet, før asynctask avsluttes
-            //localBroadcastManager.sendBroadcast(intent);
-        }
+            }
         if (className == TaskRequestDirections.class){
             TaskParser taskParser = new TaskParser(localBroadcastManager,applicationContext);
             taskParser.execute(jsonString);
-            //TaskRequestDirections a = new TaskRequestDirections(localBroadcastManager,applicationContext);
-            //a.execute(jsonString);
         }
     }
 }

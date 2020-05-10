@@ -12,11 +12,6 @@ public class PolyPoint {
         this.latitude = latLng.latitude;
     }
 
-    public PolyPoint(double latitude, double longditude){
-        this.latitude = latitude;
-        this.longditude = longditude;
-    }
-
     public void setDrivenKM(double drivenKM) {
         this.drivenKM = drivenKM;
     }

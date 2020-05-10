@@ -49,28 +49,6 @@ public class Elbil implements Parcelable {
         battery = in.readString();
         fastCharge = in.readString();
         effect = in.readString();
-        //specs = in.readHashMap();
-    }
-
-    public boolean[] exists() {
-        boolean[] exists = new boolean[5];
-        if (!this.brand.equals("")) {
-            exists[0] = true;
-        }
-        if (!this.model.equals("")) {
-            exists[1] = true;
-        }
-        if (!this.modelYear.equals("")) {
-            exists[2] = true;
-        }
-        if (!this.battery.equals("")) {
-            exists[3] = true;
-        }
-        if (!this.fastCharge.equals("")) {
-            exists[4] = true;
-        }
-
-        return exists;
     }
 
     public static final Creator<Elbil> CREATOR = new Creator<Elbil>() {
@@ -85,13 +63,6 @@ public class Elbil implements Parcelable {
         }
     };
 
-    /*
-    Boolean isError = false;
-
-    public Elbil(String error) {
-        isError = true;
-    }
-     */
 
 
     @Exclude
@@ -191,7 +162,6 @@ public class Elbil implements Parcelable {
         parcel.writeString(battery);
         parcel.writeString(fastCharge);
         parcel.writeString(effect);
-        //parcel.writeMap(specs);
     }
 
     @Override
@@ -206,14 +176,4 @@ public class Elbil implements Parcelable {
                 '}';
     }
 
-    /*
-    @NonNull
-    @Override
-    public String toString() {
-        if (documentId == null) return spinnerDisplay;
-        spinnerDisplay = brand + " " + model + " ( " + modelYear + ")";
-        return spinnerDisplay;
-        //return super.toString();
-    }
-    */
 }

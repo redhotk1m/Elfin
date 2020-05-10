@@ -3,7 +3,6 @@ package com.elfin.elfin.Activities.Station.StationMap;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.util.TimingLogger;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -27,8 +26,6 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
 
     @Override
     protected ArrayList<ChargerItem> doInBackground(ArrayList<ChargerItem>... allChargingStationsArr) {
-        TimingLogger logger = new TimingLogger("MyTag", "MethodAAA");
-        logger.addSplit("Start");
         ArrayList<ChargerItem>
                 allChargingStations = allChargingStationsArr[0],
                 validLatStations = new ArrayList<>(),
@@ -79,8 +76,6 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
                 //TODO: Kanskje gjøre ditanceBetweenKM om til å bruke location.DistanceTo();
             }
         }
-        logger.addSplit("B");
-        logger.dumpToLog();
         return validStations;
         //TODO: Bruke sett, feil høyde/lengde dersom punkt er innenfor i høyde,
         // men ikke i bredde vil det fjernes i fra array,

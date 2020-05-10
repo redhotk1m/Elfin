@@ -19,37 +19,21 @@ import java.util.ArrayList;
 
 public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem>> {
     private ArrayList<ChargerItem> chargingStationCoordinates = new ArrayList<>();
-    LocalBroadcastManager localBroadcastManager;
+    private LocalBroadcastManager localBroadcastManager;
     private App applicationContext;
-    private Elbil elbil;
 
     NobilAPIHandler(LocalBroadcastManager localBroadcastManager, App applicationContext){
         this.localBroadcastManager = localBroadcastManager;
         this.applicationContext = applicationContext;
-        //this.elbil = applicationContext.getElbil();
-
     }
-
-    // chademo --> EV79022
-    // etron --> EV40513
-
-    public ArrayList<ChargerItem> getChargingStationCoordinates() {
-        return chargingStationCoordinates;
-    }
-
-
 
     @Override
     protected ArrayList<ChargerItem> doInBackground(String... jsonString) {
 
-
-
-        String CCS = "";
         String CCSName = "CCS/Combo";
 
         String CCSLighning = "";
 
-        String chademo = "";
         String chademoName = "CHAdeMO";
 
         String lightCharger = "150 kW DC";
@@ -61,10 +45,8 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
 
         String ligtning = "";
         String fast = "";
-        String fastTimeCCS= "";
         String ligtningTime = "";
         String fastTime = "";
-        String everyone = "everyone";
         double CCSChargerEffect = 0;
 
 
@@ -81,13 +63,11 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 ligtningTime = "Ladetid ukjent";
                 fastTime = "Ladetid ukjent";
 
-
                 try {
                     for (int j = 1; j < 20; j++) {
                         if (objectConnectors.getJSONObject("" + j).getJSONObject("4").
                                 getString("trans").equals(chademoName) && objectConnectors.getJSONObject("" + j).getJSONObject("5").
                                 getString("trans").equals(fastCharger)) {
-                            chademo = "CHAdeMO\n" + fastCharger;
                             counterChademo++;
                         }
 
@@ -97,13 +77,11 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                             String str = objectConnectors.getJSONObject("" + j).getJSONObject("5").
                                     getString("trans");
                             String sub = str.substring(0, 3);
-                            ;
                             sub = sub.replaceAll("\\s", "");
                             sub = sub.replaceAll(",", ".");
                             CCSChargerEffect = Double.parseDouble(sub);
 
                             if (CCSChargerEffect >= 50 && CCSChargerEffect < 150) {
-                                CCS = "CCS/Combo\n" + fastCharger;
                                 counterCCS++;
                             }
                             if (CCSChargerEffect == 150) {
@@ -121,41 +99,11 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
 
                             }
 
-
                         }
-
-
-
-
-
-
-
-
-                            /*
-                            if (objectConnectors.getJSONObject("" + j).getJSONObject("4").
-                                    getString("trans").equals(CCSName) && objectConnectors.getJSONObject("" + j).getJSONObject("5").
-                                    getString("trans").equals(fastCharger)) {
-                                CCS = "CCS/Combo\n" + fastCharger;
-                                counterCCS++;
-                            }
-
-
-
-                            if (objectConnectors.getJSONObject("" + j).getJSONObject("4").
-                                    getString("trans").equals(CCSName) &&
-                                    objectConnectors.getJSONObject("" + j).getJSONObject("5").
-                                            getString("trans").equals(lightCharger)) {
-                                CCSLighning = "CCS/Combo\n" + lightCharger;
-                                counterLightning++;
-                            }
-
-                             */
-
 
                     }
                 } catch (JSONException e) {
                     //TODO: Popup beskjed til bruker
-                    //System.out.println("ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ");
                 }
 
                 int imageFast = R.drawable.ic_charger;
@@ -174,7 +122,6 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 }
 
                 if (counterCCS <= 0) {
-                    CCS = "";
                     CCSName = "";
                     counterFastCSS = "";
                     imageFast = 0;
@@ -182,7 +129,6 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                     fastTime = "";
                 }
                 if (counterChademo <= 0) {
-                    chademo = "";
                     chademoName = "";
                     counterCHademoString = "";
                     imageFast = 0;
@@ -221,16 +167,12 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
                 counterChademo = 0;
                 counterLightning = 0;
                 counterCCS = 0;
-                object = null;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-
-
-
-        //TODO: Endre fra CSV til Nobil API, håndter dersom man ikke finner noen stasjoner
+        //TODO: Håndter dersom man ikke finner noen ladestasjoner
         chargingStationCoordinates.sort(new LatitudeComparator());
         return chargingStationCoordinates;
     }
@@ -241,7 +183,6 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
         applicationContext.setChargerItems(chargerItems);
         Intent intent = new Intent("allStations");
         intent.putExtra("case","allStations");
-        //intent.putParcelableArrayListExtra("test",chargerItems);
         localBroadcastManager.sendBroadcast(intent);
         System.out.println("har sendt chargerItems");
     }

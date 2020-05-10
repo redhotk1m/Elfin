@@ -17,14 +17,6 @@ public class StMethods {
         return result;
     }
 
-    public static double distanceBetweenFlat(double x1, double y1, double x2, double y2){
-        double startTime = System.currentTimeMillis();
-        double a = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        double endTime = System.currentTimeMillis();
-        //System.out.println(endTime-startTime/1000 + " FLAT");
-        return a;
-    }
-
     public static ChargerItem search(double value, ArrayList<ChargerItem> a, boolean isLatitude) {
         if (isLatitude) {
             if (value < a.get(0).getLatLng().latitude) {

@@ -35,7 +35,6 @@ public class ChargingStations extends AppCompatActivity {
     App applicationContext;
     PageAdapter pagerAdapter;
     String toText ;
-    TextView textViewTo;
     public boolean
             mapCreated = false,
             routeCreated = false,
@@ -57,7 +56,7 @@ public class ChargingStations extends AppCompatActivity {
         toText = bundle.getString("destinatinasjon");
         applicationContext = (App)getApplication();
         setAllChargingItems();
-        toTextView.setText("Til: " +toText);
+        toTextView.setText("Til: " + toText);
         activity = this;
         final PageAdapter pagerAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),this);
         setPagerAdapter(pagerAdapter);
@@ -69,18 +68,9 @@ public class ChargingStations extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
                 if (tab.getPosition() == 0){
                     pagerAdapter.notifyDataSetChanged();
-                    //ChargingStationList c = (ChargingStationList)pagerAdapter.getItem(0);
-                    //getSupportFragmentManager().findFragmentById(1);
-                    //Gjør ingenting, kjører bare onResume for testing
-                    //pagerAdapter.getItem(0).onResume();//Kjører onresume i Listen,
-                    // dersom listen er valgt fra Map.
-                    // Lager ikke nytt objekt siden det allerede eksisterer
-                    // Bør skje dersom noe er blitt endret i kriterier, sharedPrefs?
                 }
                 else if (tab.getPosition() == 1){
                     pagerAdapter.notifyDataSetChanged();
-                    //Gjør ingenting, bare testing
-                   // getSupportFragmentManager().findFragmentById(0);
                 }
             }
 
@@ -103,7 +93,6 @@ public class ChargingStations extends AppCompatActivity {
     }
 
     private void registerBroadcastReceivers(){
-        System.out.println("Kjører register broadcasts");
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(
                         receiver,new IntentFilter("allStations"));
@@ -187,7 +176,8 @@ public class ChargingStations extends AppCompatActivity {
     }
 
     private void handleError(){
-
+        //TODO: Handle error
+        System.out.println("Error must be handled in ChargingStations");
     }
 
     private void handleAllValidStations(){
@@ -213,14 +203,11 @@ public class ChargingStations extends AppCompatActivity {
         String destination = ID;
         String key = getString(R.string.google_map_api_key);
         String mode = "driving";
-        String departureTime = "now";
         String region = "no";
         String parameters = googleURLDirection + "origin=" + origin + "&destination=place_id:" + destination + "&mode=" + mode + "&region=" + region + "&key=" + key;
         System.out.println(parameters);
         RetrieveJSON directionFromAPI = new RetrieveJSON(activity,TaskRequestDirections.class);
         directionFromAPI.execute(parameters);
-        //TaskRequestDirections taskRequestDirections = new TaskRequestDirections(activity);
-        //taskRequestDirections.execute(bundle.getString("destinationID"));
     }
 
     private void setPagerAdapter(PageAdapter pagerAdapter){

@@ -36,16 +36,6 @@ public class DialogBox {
         alertDialog=defaultDialog();
     }
 
-    public DialogBox(Context context, String title, String message, String okButton){
-        this.context=context;
-        this.title=title;
-        this.message=message;
-        this.yesButton=yesButton;
-        this.noButton=noButton;
-        this.option=option;
-        alertDialog=defaultDialog();
-    }
-
     public void simpleDialogBox(){
         alertDialog.setPositiveButton(yesButton, new DialogInterface.OnClickListener() {
             @Override
@@ -65,8 +55,6 @@ public class DialogBox {
 
 
     public void createDialogBox(){
-        //AlertDialog.Builder alertDialog= new AlertDialog().Builder(context);
-
         alertDialog.setPositiveButton(yesButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -77,7 +65,6 @@ public class DialogBox {
                         context.startActivity(intent);
                         break;
                     case 2:
-                        //ActivityCompat.requestPermissions();
                         chargingStations.createNewRoute();
                         break;
                     case 3:
@@ -104,16 +91,6 @@ public class DialogBox {
 
 
         alertDialog.show();
-    }
-
-    public void createOKDialogBox(){
-        alertDialog.setPositiveButton(yesButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                System.exit(0);
-                dialog.cancel();
-            }
-        });
     }
 
     public Intent getIntent() {

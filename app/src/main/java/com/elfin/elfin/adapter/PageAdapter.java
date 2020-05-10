@@ -25,7 +25,6 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        System.out.println("Pos er " + position);
         switch (position){
             case 0:
                 return this.chargingStationList = new ChargingStationList(chargingStations);

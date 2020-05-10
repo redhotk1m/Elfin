@@ -188,7 +188,6 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     private void sendDrivenTooFarOffRoute(){
-        System.out.println("Sender intent med kjør for langt");
         Intent intent = new Intent("gpsTracker");
         intent.putExtra("case","drivenTooFarOffRoute");
         localBroadcastManager.sendBroadcast(intent);

@@ -16,7 +16,6 @@ import java.net.URL;
 
 public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
 
-    private Elbil elbil;
     private CarSearchActivity carSearchActivity;
 
     @Override
@@ -28,22 +27,17 @@ public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
             JSONObject vegvesenJSON = getJSONFromURL(chassieNR)
                     .getJSONArray("entries")
                     .getJSONObject(0);
-            //return vegvesenJSON.getString("reg_aar");
 
             String model = vegvesenJSON.getString("modellbetegnelse");
             String modelYear = vegvesenJSON.getString("reg_aar");
 
-            elbil = new Elbil();
+            Elbil elbil = new Elbil();
             elbil.setModel(model);
             elbil.setModelYear(modelYear);
 
-            //mElbilList.add(new Elbil(null, model, modelYear, null, null));
-            //return mElbilList;
             return elbil;
-            //return vegvesenJSON.getString("modellbetegnelse");
         } catch (JSONException | NullPointerException | IOException e){
             e.printStackTrace();
-            //Something went wrong, cannot find the correct car
 
             return new Elbil("error");
         }
@@ -77,15 +71,7 @@ public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
 
     @Override
     protected void onPostExecute(Elbil reponse) {
-        //if (isError(reponse.get(0))) return; //Gi beskjed til bruker om at feil har oppstått
-       // System.out.println(reponse.getModel() + " ; " + reponse.getModelYear() + " er responsen vi fikk");
-
-       // addCarActivity.loadApiInfo(reponse);
         carSearchActivity.loadApiInfo(reponse);
-    }
-
-    private boolean isError(String s){
-        return s.toLowerCase().equals("error");
     }
 
     public void setCarSearchActivity(CarSearchActivity carSearchActivity) {

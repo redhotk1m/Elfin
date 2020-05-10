@@ -100,31 +100,11 @@ public class ChargingStationMap extends Fragment {
     }
 
 
-    @SuppressLint("MissingPermission")
-    public static Location getLastKnownLoaction(boolean enabledProvidersOnly, Context context) {
-        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Location utilLocation = null;
-        List<String> providers = manager.getProviders(enabledProvidersOnly);
-        for (String provider : providers) {
-
-            utilLocation = manager.getLastKnownLocation(provider);
-            if(utilLocation != null) return utilLocation;
-        }
-        return null;
-    }
-
-
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //boolean message = intent.getBooleanExtra("polyLineOptions");
-            //if ("error".equals(message))
-            //    System.out.println("error");
-                //TODO: Error message to user
-            {
                 App applicationContext = (App)chargingStations.getContext().getApplication();
                 setPolyLineOptions(applicationContext.getPolylineOptions());
-            }
         }
     };
 
@@ -215,12 +195,5 @@ public class ChargingStationMap extends Fragment {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
-    /*
-    googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
-    For zooming automatically to the location of the marker
-    CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(4).build();
-    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    */
 
 }

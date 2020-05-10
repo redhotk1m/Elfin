@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +34,10 @@ public class Utils {
         String mode = "driving";
         String depertureTime = "now";
         String parameters = googleURLDirection + "origin=" + origin + "&" + destination + "&" + mode + "&" + depertureTime + "&" + key;
-        //System.out.println(parameters);
-        //https://maps.googleapis.com/maps/api/directions/JSON?parameters
         // Create an InputStream object. From API
         InputStream is = context.getResources().openRawResource(R.raw.test);
         // Create a BufferedReader object to read values from CSV file.
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         String line = "";
         // Create a list of LatLng objects.
         List<LatLng> latLngList = new ArrayList<>();

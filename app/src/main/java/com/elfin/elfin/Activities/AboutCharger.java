@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class AboutCharger extends AppCompatActivity implements OnMapReadyCallback {
     TextView textViewTitel;
     TextView textViewAdress;
-    TextView textViewCompany;
     TextView textViewAvaiable;
     TextView textViewAvaiable2;
     TextView textViewAvaiable3;
@@ -51,7 +50,6 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
     TextView textViewPayMethod;
 
     TextView textViewHelp;
-    TextView textViewPayTittel;
 
     LatLng latLng;
     String latLngFromList;
@@ -70,8 +68,6 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         ownedby = getIntent().getStringExtra("owned");
         infoFromList = getIntent().getStringArrayListExtra("infoFromList");
 
-        //ChargerItem chargerItem = (ChargerItem) getIntent().getParcelableExtra("charger");
-
         String[] latlong =  latLngFromList.split(",");
         double latitude = Double.parseDouble(latlong[0]);
         double longitude = Double.parseDouble(latlong[1]);
@@ -81,7 +77,6 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
         Button button = findViewById(R.id.button2);
         textViewTitel= findViewById(R.id.textViewTitel);
         textViewAdress = findViewById(R.id.textViewAdress);
-//        textViewCompany = findViewById(R.id.textViewCompany);
         textViewAvaiable = findViewById(R.id.textViewChargersAvaiable);
         textViewAvaiable2 = findViewById(R.id.textViewChargersAvaiable2);
         textViewAvaiable3 = findViewById(R.id.textViewChargersAvaiable3);
@@ -143,9 +138,7 @@ public class AboutCharger extends AppCompatActivity implements OnMapReadyCallbac
          */
 
 
-        String lightCharger = "150 kW DC";
         String fastCharger = "50 kW - 500VDC max 100A";
-        String ccs = "CCS/COMBO" + "\n" + fastCharger;
 
         String paymentMethodFortum = "Hurtig lading 4 kr per minutt \n\nLyn lading 4 kr per minutt + 2,50 kr per kWh";
         String paymentMethodGreenContact = "Registrert kunde:   NOK 1,25 per minutt + NOK 2,90 per kWh \n \n"

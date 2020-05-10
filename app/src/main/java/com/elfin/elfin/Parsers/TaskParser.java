@@ -38,7 +38,6 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
         }catch (JSONException e){
             e.printStackTrace();
         }
-        //System.out.println(routes);
         return routes;
     }
 
@@ -61,16 +60,11 @@ public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String
             polylineOptions.geodesic(true);//Tegnes i 3D, tar hensyn til høyde osv
         }
         if (polylineOptions != null){
-            System.out.println("FERDIG@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            //chargingStationMap.drawPolyLines(polylineOptions);
-            //chargingStationMap.addAllChargingStations();
-            //TODO: Bruke applicationContext, notify chargingStationMap om at polyline kan tegnes
             applicationContext.setPolyLineOptions(polylineOptions);
             Intent intent = new Intent("polyLineOptions");
             boolean ready_to_use = true;
             intent.putExtra("polyLineOptions",ready_to_use);
             localBroadcastManager.sendBroadcast(intent);
-            //chargingStations.getPagerAdapter().getChargingStationMap().setPolyLineOptions(polylineOptions);
             ArrayList<PolyPoint> polyPoints = new ArrayList<>();
             for (LatLng point : points){
                 polyPoints.add(new PolyPoint(point));

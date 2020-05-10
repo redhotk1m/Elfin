@@ -27,16 +27,13 @@ public class JsonToString {
             for (int i = 0; i <jsonArrayPredictions.length() ; i++) {
                 JSONObject jsonObject1 = jsonArrayPredictions.getJSONObject(i);
                 String name = jsonObject1.getString("description");
-                //System.out.println(name);
                 names.add(name);
             }
             for (int i = 0; i <jsonArrayPredictions.length() ; i++) {
                 JSONObject jsonObject1 = jsonArrayPredictions.getJSONObject(i);
                 String placeID = jsonObject1.getString("place_id");
-                //System.out.println(placeID);
                 placesID.add(placeID);
             }
-
             arrayLists.add(names);
             arrayLists.add(placesID);
 

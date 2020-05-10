@@ -58,7 +58,6 @@ public class EditTextFunctions {
 
                 if(editable.toString().length() >= 3){
                     mainActivity.displaySuggestions(editable.toString());
-                    //listViewSuggest.setVisibility(View.INVISIBLE);
                 }
 
 

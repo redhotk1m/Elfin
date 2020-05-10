@@ -15,7 +15,6 @@ import java.util.List;
 
 public class FirestoreQuery {
 
-    private static final String TAG = "FirestoreQuery";
     private final String BRAND = "brand";
     private final String MODEL = "model";
     private final String MODELYEAR = "modelYear";
@@ -42,17 +41,8 @@ public class FirestoreQuery {
                         Elbil elbil = documentSnapshot.toObject(Elbil.class);
                         allElbilList.add(elbil);
                     }
-                    // addCarActivity.setAllCarsList(allElbilList);
                     carSearchActivity.setAllCarsList(allElbilList);
                 }
-                /*
-                else {
-                    System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
-                    System.out.println("UNABLE TO FETCH INIT FIRESTORE DATA...!");
-                    System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
-                  //  Toast.makeText(addCarActivity, "UNABLE TO FETCH FIRESTORE DATA..!", Toast.LENGTH_LONG).show();
-                }
-                 */
             }
         });
     }
@@ -66,12 +56,9 @@ public class FirestoreQuery {
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         Elbil elbil = documentSnapshot.toObject(Elbil.class);
                         elbil.setDocumentId(documentSnapshot.getId());
-
-                        // System.out.println("FIRESTORE ELBIL: " + elbil.toString());
-
                         mElbilList.add(elbil);
                     }
-                } // else System.out.println("TASK FAILED, UNABLE TO FETCH FIRESTORE DATA..!");
+                }
 
                 carSearchActivity.handleFirestoreQuery(mElbilList);
             }
@@ -80,50 +67,41 @@ public class FirestoreQuery {
 
     protected Query makeCompoundQuery(CollectionReference reference, String modelResponse,
                                       HashMap<String, String> fieldsMap) {
-        //  System.out.println("\n\nMAKING COMPOUND FIRESTORE QUERY>\n");
         query = reference;
         switch (modelResponse) {
             case BRAND + MODEL + BATTERY:
-                //  System.out.println(modelResponse + " == " + BRAND + MODEL + BATTERY);
                 query = query
                         .whereEqualTo(BRAND, fieldsMap.get(BRAND))
                         .whereEqualTo(MODEL, fieldsMap.get(MODEL))
                         .whereEqualTo(BATTERY, fieldsMap.get(BATTERY));
                 break;
             case BRAND + MODEL:
-                //  System.out.println(modelResponse + " == " + BRAND + MODEL);
                 query = query
                         .whereEqualTo(BRAND, fieldsMap.get(BRAND))
                         .whereEqualTo(MODEL, fieldsMap.get(MODEL));
                 break;
             case BRAND + BATTERY:
-                // System.out.println(modelResponse + " == " + BRAND + BATTERY);
                 query = query
                         .whereEqualTo(BRAND, fieldsMap.get(BRAND))
                         .whereEqualTo(BATTERY, fieldsMap.get(BATTERY));
                 break;
             case MODEL + BATTERY:
-                //  System.out.println(modelResponse + " == " + MODEL + BATTERY);
                 query = query
                         .whereEqualTo(MODEL, fieldsMap.get(MODEL))
                         .whereEqualTo(BATTERY, fieldsMap.get(BATTERY));
                 break;
             case BRAND:
-                // System.out.println(modelResponse + " == " + BRAND);
                 query = query
                         .whereEqualTo(BRAND, fieldsMap.get(BRAND));
                 break;
             case MODEL:
-                //  System.out.println(modelResponse + " == " + MODEL);
                 query = query.whereEqualTo(MODEL, fieldsMap.get(MODEL));
                 break;
             case BATTERY:
-                // System.out.println(modelResponse + " == " + BATTERY);
                 query = query
                         .whereEqualTo(BATTERY, fieldsMap.get(BATTERY));
                 break;
             default:
-                // System.out.println("...");
         }
 
 
@@ -134,8 +112,7 @@ public class FirestoreQuery {
         if (!fieldsMap.get(MODELYEAR).isEmpty()) {
             query = query
                     .whereEqualTo(MODELYEAR, fieldsMap.get(MODELYEAR));
-            // System.out.println("(FIRESTORE QUERY) FOUND MODEL YEAR: " + fieldsMap.get(MODELYEAR));
-        } // else System.out.println("(FIRESTORE QUERY) EMPTY MODEL YEAR: " + fieldsMap.get(MODELYEAR));
+        }
 
         return query;
     }

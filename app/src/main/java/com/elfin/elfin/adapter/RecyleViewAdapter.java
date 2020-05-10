@@ -22,9 +22,9 @@ import java.util.List;
 
 public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.MyViewHolder> {
 
-    Context context;
-    List<ChargerItem> chargerItems;
-    Intent intent;
+    private Context context;
+    private List<ChargerItem> chargerItems;
+    private Intent intent;
 
 
     public RecyleViewAdapter(Context context, List<ChargerItem> chargerItems) {
@@ -46,15 +46,6 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
                 String longLatString = latlng.latitude +"," +latlng.longitude;
                 intent = new Intent(context, AboutCharger.class);
 
-
-                System.out.println(chargerItem.getOwnedBy());
-                //intent.putExtra("charger", chargerItem);
-                /*
-                intent.getParcelableArrayExtra("charger", chargerItems);
-                intent.getParcelableArrayListExtra("charger", chargerItems);
-
-                 */
-
                 ArrayList<String> infoFromList = new ArrayList<>();
                 infoFromList.add(chargerItem.getOwnedBy());
                 infoFromList.add(chargerItem.getStreet() + " " + chargerItem.getHouseNumber());
@@ -66,7 +57,6 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
                 infoFromList.add(chargerItem.getNumberOflightningCCS());
                 infoFromList.add(chargerItem.getDescriptionOfLocation());
                 infoFromList.add(chargerItem.getContactInfo());
-
 
                 intent.putExtra("infoFromList", infoFromList);
 
@@ -84,14 +74,12 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.stationName.setText(chargerItems.get(position).getOwnedBy());
-
-        //holder.stationName.setText(chargerItems.get(position).getStreet() + " " + chargerItems.get(position).getHouseNumber());
-        holder.description.setText(chargerItems.get(position).getStreet() + " " + chargerItems.get(position).getHouseNumber()
-                + " " +chargerItems.get(position).getCity());
+        String descript = chargerItems.get(position).getStreet()
+                + " " + chargerItems.get(position).getHouseNumber()
+                + " " +chargerItems.get(position).getCity();
+        holder.description.setText(descript);
         holder.imageViewFast.setImageResource(chargerItems.get(position).getImageFast());
         holder.imageViewSlow.setImageResource(chargerItems.get(position).getImageSlow());
-        //holder.chargeTimeFast.setText(chargerItems.get(position).getFastTime());
-
 
         holder.avaiableFast.setText(chargerItems.get(position).getNumberOfChademo());
         holder.chargeTimeFast.setText(chargerItems.get(position).getChademoTime());
@@ -114,7 +102,7 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         //TODO: Vise med decimaltall, dersom vi har mindre enn 100KM i lengde, bare teksthåndtering
         long KM = Math.round(Double.parseDouble(chargerItems.get(position).getmFromCar()) / 1000);
         if(KM>2){
-            holder.distanceKm.setText(String.valueOf(KM) + " KM");
+            holder.distanceKm.setText(KM + " KM");
         } else {
             holder.distanceKm.setTextColor(ContextCompat.getColor(context, R.color.darkGreen));
             holder.distanceKm.setText("I NÆRHETEN");
@@ -129,16 +117,14 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
         return chargerItems.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    static class MyViewHolder extends RecyclerView.ViewHolder{
 
         private TextView stationName;
         private TextView description;
         private TextView chargeTimeFast;
         private TextView avaiableFast;
         private TextView chargeTimeLightning;
-        private TextView chargeTimeSlow2;
         private TextView avaiableLightning;
-        private TextView avaiableSlow2;
         private TextView distanceKm;
         private TextView textViewFast;
         private TextView textViewLigtning;
@@ -147,14 +133,10 @@ public class RecyleViewAdapter extends RecyclerView.Adapter<RecyleViewAdapter.My
 
         private ImageView imageViewFast;
         private ImageView imageViewSlow;
-        private ImageView imageViewSlow2;
-
 
         private ConstraintLayout chargeStationslistLayout;
 
-
-
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             chargeStationslistLayout = itemView.findViewById(R.id.charge_stations_list_id);
             stationName = itemView.findViewById(R.id.station_name);

@@ -24,11 +24,10 @@ public class FilterTestActivity extends AppCompatActivity {
     private ConstraintSet constraintSetNew = new ConstraintSet();
     private boolean altLayout;
 
-    private boolean isOpen = false;
-
     private FloatingActionButton floatingActionButton;
 
-    private ImageView btn1, btn2, btn3, btn4;
+    private ImageView btn1;
+    private ImageView btn3;
 
 
     @Override
@@ -53,7 +52,6 @@ public class FilterTestActivity extends AppCompatActivity {
                 }
             }
         });
-        //btn2 = findViewById(R.id.)
         btn3 = findViewById(R.id.restaurant);
 
     }
@@ -66,35 +64,11 @@ public class FilterTestActivity extends AppCompatActivity {
 
         TransitionManager.beginDelayedTransition(filter_layout, changeBounds);
 
-
-        /*
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!isOpen){
-                    TransitionManager.beginDelayedTransition(constraintLayout);
-                    layout2.applyTo(constraintLayout);
-                    isOpen = !isOpen;
-                } else {
-                    TransitionManager.beginDelayedTransition(constraintLayout);
-                    layout1.applyTo(constraintLayout);
-                    isOpen = !isOpen;
-                }
-
-            }
-        });
-        */
-
-
         if (!altLayout) {
             constraintSetNew.applyTo(filter_layout);
 
             floatingActionButton.startAnimation(
                     AnimationUtils.loadAnimation(this, R.anim.rotation) );
-
-            //floatingActionButton.setRotation(180);
-
             altLayout = true;
         } else {
             constraintSetOld.applyTo(filter_layout);

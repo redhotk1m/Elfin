@@ -42,22 +42,7 @@ public class NewCarActivity extends AppCompatActivity {
         String model = editTextModell.getText().toString().toLowerCase();
         String modelYear = editTextModelYear.getText().toString().toLowerCase();
         String battery = editTextBattery.getText().toString().toLowerCase();
-       // String fastCharge = editTextFastCharge.getText().toString();
-        String fastCharge[] = editTextFastCharge.getText().toString().split("\\s*,\\s*");
-
-       // String specInput = editTextSpecs.getText().toString().toLowerCase();
-        /*
-        Map<String, Double> specs = new HashMap<>();
-        String[] specArray = specInput.split("\\s*,\\s*");
-        for(int i = 0; i < specArray.length; i++) {
-            //specs.put(specArray[i], Double.parseDouble(specArray[s]));
-            if (i == 0) specs.put(specArray[i], Double.parseDouble(specArray[1]));
-                //System.out.println(specArray[i] + " ; " + specArray[1]);
-            if (i == 2) specs.put("battery", Double.parseDouble(specArray[i]));
-                //System.out.println("battery" + " ; " + specArray[i]);
-            //if (i == 1) specs.put("battery", Double.parseDouble(specArray[i]));
-        }
-        */
+        String[] fastCharge = editTextFastCharge.getText().toString().split("\\s*,\\s*");
 
         CollectionReference elbiler = FirebaseFirestore.getInstance()
                 .collection("elbiler");
@@ -70,24 +55,8 @@ public class NewCarActivity extends AppCompatActivity {
         elbilMap.put("battery", battery);
         elbilMap.put("fastCharge", fastCharge[0]);
         elbilMap.put("effect", fastCharge[1]);
-        //elbilMap.put("specs", Arrays.asList(specArray));
-        //elbilMap.put("specs", specs);
-
         elbiler.document().set(elbilMap);
 
-
-        //elbilRef.document(merke).set(new Elbil(model, modelYear, specs));
-
-        //elbilRef.document(merke).collection(model).add(new Elbil(modelYear, specs));
-
-        //elbilRef.add(new Elbil(merke, model, modelYear, specs));
-        //Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
-        //finish();
-
-        //elbilRef.document(modell).
-
-        //elbilRef.document().collection(modell).add(new Elbil(modelYear, hurtiglader, specs));
-       // Toast.makeText(this, "Elbil added!", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -95,8 +64,6 @@ public class NewCarActivity extends AppCompatActivity {
         CollectionReference elbilRef = FirebaseFirestore.getInstance()
                 .collection("Elbiler");
         elbilRef.whereEqualTo("model", editTextModell.getText().toString()).get()
-                //.get()
-                //whereEqualTo("specs.effect", 150).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot querySnapshot) {
@@ -135,7 +102,6 @@ public class NewCarActivity extends AppCompatActivity {
         String modelYear = elbil.getModelYear();
         String battery = elbil.getBattery();
         String fastCharge = elbil.getFastCharge();
-        //String hurtiglader = elbil.getFastCharge();
 
         data += "ID: " + documentId
                 + "\nMerke: " + merke

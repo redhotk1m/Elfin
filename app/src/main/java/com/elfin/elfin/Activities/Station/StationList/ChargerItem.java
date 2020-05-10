@@ -45,7 +45,6 @@ public class ChargerItem implements Parcelable {
     private String fastText;
     private String lightningText;
     private String everyCharger;
-    private String distanceFromCar;
 
     public ChargerItem(String street, String houseNumber, String city,
                        String descriptionOfLocation,
@@ -71,7 +70,6 @@ public class ChargerItem implements Parcelable {
         this.ccsTime = ccsTime;
         this.imageFast = imageFast;
         this.imageSlow = imageSlow;
-        this.ligtning = ligtning;
         this.lightningTime = lightningTime;
         this.lightningCCS = lightningCCS;
         this.numberOflightningCCS = numberOflightningCCS;

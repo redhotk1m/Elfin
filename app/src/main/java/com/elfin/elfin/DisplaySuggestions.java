@@ -18,44 +18,19 @@ import java.util.ArrayList;
 
 public class DisplaySuggestions extends AsyncTask<String, Void, String> {
 
-    Context context;
-    AsyncResponse asyncResponse = null;
-    String adress;
+    private Context context;
+    private AsyncResponse asyncResponse = null;
+    private String adress;
 
-    //ArrayList<> names = new ArrayList<>();
     ArrayList<ArrayList<String>> lists= new ArrayList<>();
     public DisplaySuggestions(Context context, String adress, AsyncResponse asyncResponse){
         this.asyncResponse = asyncResponse;
         this.context = context;
         this.adress=adress;
-
-    }
-    private String createTextFromCsvTrondheim() {
-        String responseString = "";
-        InputStream inputStream = context.getResources().openRawResource(R.raw.trondheim);
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        String responseText = "";
-        StringBuffer stringBuffer = new StringBuffer();
-
-        try {
-            while ((responseText = bufferedReader.readLine()) != null) {
-                stringBuffer.append(responseText);
-            }
-            responseString = stringBuffer.toString();
-            bufferedReader.close();
-            inputStreamReader.close();
-        } catch (IOException e) {
-            Log.e("error", "Error" + responseText, e);
-            e.printStackTrace();
-        }
-        return responseString;
     }
 
 
     private String createTextFromWebJson() {
-        //String adress = "Trondheim";
-        String data ="";
         String responseString = "";
         String jsonUrl= "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=";
         jsonUrl+= adress;
@@ -73,11 +48,7 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
                 line = bufferedReader.readLine();
                 responseString = responseString + line;
             }
-        }
-
-        catch (MalformedURLException e){
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException e){
             e.printStackTrace();
         }
         return responseString;
@@ -86,7 +57,6 @@ public class DisplaySuggestions extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... strings) {
         String responseString = "";
-        //responseString = createTextFromCsvTrondheim();
         responseString= createTextFromWebJson();
         return responseString;
     }

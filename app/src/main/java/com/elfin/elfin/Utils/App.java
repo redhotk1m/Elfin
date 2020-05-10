@@ -42,7 +42,7 @@ public class App extends Application {
 
     public ArrayList<ChargerItem> getAllValidChargingStations() {
         if (allValidChargingStations != null)
-        return new ArrayList<ChargerItem>(allValidChargingStations);
+        return new ArrayList<>(allValidChargingStations);
         else
             return null;
     }
@@ -61,6 +61,6 @@ public class App extends Application {
     }
 
     public void setElbil(Elbil elbil) {
-        this.elbil = elbil;
+        App.elbil = elbil;
     }
 }
