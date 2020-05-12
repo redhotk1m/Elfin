@@ -15,7 +15,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
-
+    /**
+     * This class takes in a registration number (RegNr), and searches the Biltema API for a chassienumber.
+     * This chassienumber can then be used to get all the necessary information from Vegvesen API.
+     * The reason we use Biltema API first, is because vegvesen API only uses chassie, unless you pay.
+     */
     private CarSearchActivity carSearchActivity;
 
     @Override
@@ -46,9 +50,9 @@ public class CarInfoAPI extends AsyncTask<String, Void, Elbil> {
     private JSONObject getJSONFromURL(String identifier) throws JSONException, IOException {
         int minimumChassieNumberLength = 17;
         /*
-        Checks if the identifier is a chassienumber or registrationnumber.
-        if length >= 17, it's a chassienumber, else it's a regNR
-        Creates a corresponding URL to the correct service
+         Checks if the identifier is a chassienumber or registrationnumber.
+         if length >= 17, it's a chassienumber, else it's a regNR
+         Creates a corresponding URL to the correct service
          */
         String serviceURL = identifier.length() >= minimumChassieNumberLength ?
                 "https://hotell.difi.no/api/json/vegvesen/utek?query=" + identifier

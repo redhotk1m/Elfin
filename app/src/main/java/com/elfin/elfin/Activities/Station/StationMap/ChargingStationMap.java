@@ -52,6 +52,13 @@ public class ChargingStationMap extends Fragment {
     private GoogleMap gMap;
     private ChargingStations chargingStations;
 
+    /**
+     * This class is the Map fragment, where we handle the googleMap.
+     * Here we draw all the charging stations, zoom in/out based on the charging stations we found,
+     * and draw the route.
+     * @param chargingStations
+     */
+
     public ChargingStationMap(ChargingStations chargingStations) {
         this.chargingStations = chargingStations;
     }

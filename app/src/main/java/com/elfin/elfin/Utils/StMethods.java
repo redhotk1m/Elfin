@@ -5,6 +5,16 @@ import com.elfin.elfin.Activities.Station.StationList.ChargerItem;
 import java.util.ArrayList;
 
 public class StMethods {
+
+    /**
+     * class for static methods we use throughout the app.
+     * distanceBetween two points, and a binary search algorthm.
+     * @param lat1
+     * @param lon1
+     * @param lat2
+     * @param lon2
+     * @return
+     */
     public static long distanceBetweenKM(double lat1, double lon1, double lat2, double lon2){
         double p = 0.017453292519943295;
         double a = 0.5 - Math.cos((lat2 - lat1) * p)/2 +

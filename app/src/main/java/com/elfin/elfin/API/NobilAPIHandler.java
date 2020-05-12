@@ -22,6 +22,15 @@ public class NobilAPIHandler extends AsyncTask<String,Void,ArrayList<ChargerItem
     private LocalBroadcastManager localBroadcastManager;
     private App applicationContext;
 
+    /**
+     * This is the handler for the repsonse we get from the Nobil API.
+     * Here we create all the chargers in the background, filtering out those the car can't use
+     * If no car is provided, we find all the chargers (Fast/Lightning, not normal speed).
+     * After it's done, we sort the list by Latitude, so we save some time later.
+     * @param localBroadcastManager
+     * @param applicationContext
+     */
+
     NobilAPIHandler(LocalBroadcastManager localBroadcastManager, App applicationContext){
         this.localBroadcastManager = localBroadcastManager;
         this.applicationContext = applicationContext;

@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 
 import com.elfin.elfin.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ChargingStationListFragment extends Fragment {
 
 

@@ -22,6 +22,14 @@ public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
     private LocalBroadcastManager localBroadcastManager;
     private App applicationContext;
+
+    /**
+     * This class used to do something, but we replaced all of the code. Now it just sends it's input straight to TaskParser.
+     * We're aware that we should just call TaskParser instead, but this is what we published.
+     * @param activity
+     */
+
+    //TODO: Remove this class, call TaskParser directly.
     public TaskRequestDirections(Activity activity){
         this.localBroadcastManager = LocalBroadcastManager.getInstance(activity);
         this.applicationContext = (App)activity.getApplication();

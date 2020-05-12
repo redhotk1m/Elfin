@@ -15,6 +15,13 @@ import java.util.ArrayList;
 
 public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, ArrayList<ChargerItem>> {
     private ArrayList<PolyPoint> points;
+    /**
+     * This class finds all the charging stations that are in 1km proximity radius of our route,
+     * and then draws them to the map / updates the list.
+     * It also saves information about every point of our route, and how far we've driven
+     * so we get accurate information on where a charger is compared to the users position.
+     * It works with "teleportation" and driving back and forth aswell. Error of margin should be roughly 20meters.
+     */
 
     private App applicationContext;
     private LocalBroadcastManager localBroadcastManager;
@@ -24,6 +31,20 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
         this.points = points;
     }
 
+
+    /*
+    This method takes in the array of all the chargingStations we've found from the NobilAPi which matches our car
+    This array is already sorted by latitude.
+    Then we iterate over every single point on our route (can be several thousand), and check if there's a charging station within 1km of that point.
+    To make this fast, since there's at max 3000 charging stations, we do a binary search. wchi is O(log(n))
+    Once we find one, we remove it from the array, and add it to a new array (foundLatArray), and save how long we've driven so far.
+    When we don't one, we know there's none left, since it's sorted.
+    Now we've found all the charging stations in proximity by latitude, so we do the exact same again,
+    but only for longditude.
+    Sort by long, search, remove from array, add to new array (validStation).
+    In the end, validStation array is filled with all the charging stations along our route.
+
+     */
     @Override
     protected ArrayList<ChargerItem> doInBackground(ArrayList<ChargerItem>... allChargingStationsArr) {
         ArrayList<ChargerItem>
@@ -77,9 +98,6 @@ public class StationDrawer extends AsyncTask<ArrayList<ChargerItem>, Void, Array
             }
         }
         return validStations;
-        //TODO: Bruke sett, feil høyde/lengde dersom punkt er innenfor i høyde,
-        // men ikke i bredde vil det fjernes i fra array,
-        // selv om punktet kanskje er valid i et nytt punkt senere i ruten
     }
 
     @Override

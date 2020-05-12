@@ -76,7 +76,19 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     Handler mHandler;
 
-
+    /**
+     * This is the main class, where the app starts.
+     * Here we immediately fetch all the chargingStations from the NobilAPI to save time,
+     * since calculating all the charging stations along a route, and calculation the route
+     * takes enough time on it's own.
+     * Generally lots of code here to setup how the start activity works, and how it handles
+     * certain events.
+     * Gets all the cars the users have added, and puts them into the spinner.
+     * Handles creating the correct classes and etc for when a user searches for a location
+     * Handles when a user wants to drive to that location, or when the user wants
+     * to add / change the current car.
+     * @param savedInstanceState
+     */
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -23,7 +23,12 @@ import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * This class is List fragment, where we handle the List of all the chargers on our route.
+ * Here we update the list when we've driven far enough, so the KM from our location is accurate.
+ * These are sorted by the KM from our position. Calculated with the closest point we're to,
+ * and how far that is from the start location, and how far the charging station is from the start position.
+ * Simply explained:
+ * chargingStation.distanceFromUsersCurrentPosition = chargingStation.distanceFromStartLocationInKM - closestPoint.distanceFromStartLocationInKM
  */
 public class ChargingStationList extends Fragment {
 

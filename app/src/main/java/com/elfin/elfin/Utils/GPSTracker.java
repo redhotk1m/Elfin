@@ -36,6 +36,14 @@ public class GPSTracker extends Service implements LocationListener {
 
     protected LocationManager locationManager;
 
+    /**
+     * Class to handle all GPS events.
+     * Used to get position, check how far we've driven, etc.
+     * This is then used to E.g update the list on which charging stations we show in the list,
+     * and how far they're from the user's current position.
+     * @param context
+     */
+
     public GPSTracker(Context context) {
         this.context = context;
         localBroadcastManager = LocalBroadcastManager.getInstance(context);
@@ -167,6 +175,9 @@ public class GPSTracker extends Service implements LocationListener {
                         result[0] = resultNext[0];
                     }
                 }
+                //getDrivenKM is a very accurate value on the distance between startPoint and currentPoint.
+                //We take in account all the curves of the route.
+                //This means we do point.setDrivenKM(distanceBetween(lastPoint.LatLng,currentPoint.LatLng) + lastPoint.getDrivenKM)
                 double currentDrivenKM = pointz.get(idx).getDrivenKM();
                 sendKMDrivenSoFar(currentDrivenKM);
                 Location closestPolyPoint = new Location("this");
@@ -181,6 +192,9 @@ public class GPSTracker extends Service implements LocationListener {
 
 
     private void sendKMDrivenSoFar(double currentDrivenKM){
+        //Notify the correct subscriber how far we've progressed on our route.
+        //This is accurate, not just currentDrivenKM + LastDrivenKM +... etc
+        //It depends on which point on the route we're closest to.
         Intent intent = new Intent("gpsTracker");
         intent.putExtra("case","updateKMList");
         intent.putExtra("drivenMetersSoFar",currentDrivenKM);
@@ -188,6 +202,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     private void sendDrivenTooFarOffRoute(){
+        //Notify the correct subscriber that we've driven too far off the route, so it can handle it.
         Intent intent = new Intent("gpsTracker");
         intent.putExtra("case","drivenTooFarOffRoute");
         localBroadcastManager.sendBroadcast(intent);

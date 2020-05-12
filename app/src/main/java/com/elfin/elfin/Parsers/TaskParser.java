@@ -22,6 +22,17 @@ import java.util.List;
 public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String,String>>>> {
     private App applicationContext;
     private LocalBroadcastManager localBroadcastManager;
+
+    /**
+     * Takes in the response from Google Directions API, and decodes this by using DirectionParser.
+     * This route is then interpreted, and then compiled into a polyLine which we can draw on
+     * the googleMap.
+     * Takes the point (LatLng) and makes it into a PolyPoint,
+     * so we can save the distance that point is from the start location.
+     * @param localBroadcastManager
+     * @param applicationContext
+     */
+
     public TaskParser(LocalBroadcastManager localBroadcastManager, App applicationContext) {
         this.localBroadcastManager = localBroadcastManager;
         this.applicationContext = applicationContext;

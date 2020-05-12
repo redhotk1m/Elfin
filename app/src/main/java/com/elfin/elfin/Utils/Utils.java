@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
+    /**
+     * Quite sure we don't use this class at all anymore, not sure enough to delete. Bad coding habits
+     */
     private static final String LOG_TAG = ChargingStationMap.class.getName();
     public static final String ENCODED_POINTS = "encodedPoints";
     public static final String LAT_LNG_POINT = "latLngPoint";

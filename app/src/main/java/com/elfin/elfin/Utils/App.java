@@ -17,6 +17,17 @@ public class App extends Application {
     private ArrayList<PolyPoint> polypoints;
     private static Elbil elbil;
 
+    /**
+     * Singleton class from Android, which we use to transfer large amounts of data between activities.
+     * This is because android doesn't support sending large data between two activities using intents.
+     * Primarily created for ChargerItems and allValidChargingStations, as these are very large.
+     * It's also not possible to send classes between two activities, as far as we could see, with the exception of this singleton class.
+     * Rest is used because we got lazy, and didnt refactor to use dependency injection, and instead
+     * used broadcasts (Which isn't ideal).
+     * Broadcasts is like a subscription based listener, which only sends to those interested in that *particular* event.
+     * (Only those interested in that specific intent, gets it).
+     **/
+
     public ArrayList<ChargerItem> getChargerItems() {
         if (chargerItems != null)
         return new ArrayList<>(chargerItems);

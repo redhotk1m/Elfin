@@ -17,6 +17,14 @@ public class PageAdapter extends FragmentPagerAdapter {
     private ChargingStationList chargingStationList;
     private ChargingStationMap chargingStationMap;
     private ChargingStations chargingStations;
+
+    /**
+     * This is the adapter for changing between Map/List fragments, in ChargingStations.
+     * All it does, is change between these two fragments, without destroying them.
+     * @param fm
+     * @param numberOfTabs
+     * @param chargingStations
+     */
     public PageAdapter(FragmentManager fm, int numberOfTabs, ChargingStations chargingStations) {
         super(fm, numberOfTabs);
         this.numberOfTabs = numberOfTabs;

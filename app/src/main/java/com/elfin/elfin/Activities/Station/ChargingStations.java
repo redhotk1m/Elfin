@@ -43,6 +43,19 @@ public class ChargingStations extends AppCompatActivity {
     private Activity activity;
     private double longditude, latitude;
 
+    /**
+     * This is the container of List/Map fragments.
+     * It's main job is to create the adapter to change between those fragments,
+     * and accept and handle all the broadcasts that get sent by other classes.
+     * These broadcasts are used by both the List and Map, therefore it belongs in this class.
+     * The reason we use Broadcasts is to notify all listening classes that an action is done.
+     * It's basically a global listener. We used dependency injection before, but the information
+     * we had to inject between different activities was too large for android to support, so we had
+     * to use a singleton class to "transfer" all the information. So we use broadcasts to notify
+     * when this information is ready.
+     * @param savedInstanceState
+     */
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

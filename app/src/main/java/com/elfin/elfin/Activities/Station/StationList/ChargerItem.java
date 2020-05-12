@@ -7,6 +7,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class ChargerItem implements Parcelable {
 
+    /**
+     * This class is used to keep track off all the information about a chargingStation.
+     */
     public ChargerItem() {
     }
 
